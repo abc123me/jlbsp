@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+usage() {
+	echo "Usage: $0 <operation>"
+	echo "Operations:"
+	echo "  setup <board> - Sets up a build for a given board"
+	echo "  build <board> - Builds the given board"
+	echo "  list          - Lists all available boards"
+}
+
+init_board() {
+	. "bsps/defaults"
+	. "bsps/$1"
+
+	BUILD_DIR="../builds/$1"
+	BUILDROOT_DIR="../builds/${BUILDROOT_REPO}-${BUILDROOT_VERSION}"
+
+	if [ ! -d "${BUILDROOT_DIR}/.git" ]; then
+		echo -e "\e[1;33mCloning buildroot since it didn't already exist\e[0m"
+		git clone "${BUILDROOT_URL}" "${BUILDROOT_DIR}"
+		echo -e "\e[1;31mCloned most recent buildroot ${BUILDROOT_VERSION}\e[0m"
+	else
+		local LWD="$PWD"
+		cd "$BUILDROOT_DIR"
+		echo -e "\e[1;33mFetching latest buildroot from ${BUILDROOT_VERSION}\e[0m"
+		git fetch
+		git checkout "${BUILDROOT_VERSION}"
+		git pull
+		echo -e "\e[1;32mBuildroot {BUILDROOT_VERSION} has been updated!\e[0m"
+		cd "$LWD"
+	fi
+}
+
+setup_board() {
+	init_board "$1"
+	echo -e "\e[1;33mSetting up BSP $1\e[0m"
+	mkdir -p "$BUILD_DIR"
+	rm -rf "$BUILD_DIR"
+
+	echo -e "\e[1;32mSetup completed!\e[0m"
+}
+
+build_board() {
+	setup_board "$1"
+	echo -e "\e[1;33mBuilding BSP $BSP_NAME\e[0m"
+
+
+	echo -e "\e[1;32mBuild completed!\e[0m"
+}
+
+if [ $# -lt 1 ]; then usage; exit 1; fi
+
+set -euo pipefail
+
+ORIG_DIR="$PWD"
+BSP_DIR="$(dirname "${BASH_SOURCE}")"
+cd "$BSP_DIR"
+
+case "$1" in
+	setup)
+		shift 1
+		setup_board "$1"
+		;;
+	build)
+		shift 1
+		build_board "$1"
+		;;
+	list)
+		fd '^[\w-]+\.bsp$' bsps/
+		;;
+	*)
+		usage
+		exit 1
+		;;
+esac
+
+cd "$ORIG_DIR"
+
+exit 0
