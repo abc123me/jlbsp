@@ -1,3 +1,3 @@
 #!/usr/bin/sh
 
-BSP_CONFIG="amd64_defconfig"
+BSP_CONFIG="amd64-dev.config"
