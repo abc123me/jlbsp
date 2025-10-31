@@ -6,27 +6,38 @@ usage() {
 	echo "  setup <board> - Sets up a build for a given board"
 	echo "  build <board> - Builds the given board"
 	echo "  list          - Lists all available boards"
+	echo "  help          - Shows this menu"
 }
 
-init_board() {
-	. "bsps/defaults"
-	. "bsps/$1"
+echo_cmd() { echo "$@"; "$@"; }
 
+init_board() {
+	if [ ! -f "bsps/${1}.bsp" ]; then
+		echo -e "\e[1;31mBSP $1 does not exist!\e[0m"
+		exit 1
+	fi
+
+	. "bsps/defaults"
+	. "bsps/${1}.bsp"
+
+	local BUILDROOT_STR="${BUILDROOT_REPO}-${BUILDROOT_VERSION}"
 	BUILD_DIR="../builds/$1"
-	BUILDROOT_DIR="../builds/${BUILDROOT_REPO}-${BUILDROOT_VERSION}"
+	BUILDROOT_DIR="../builds/${BUILDROOT_STR}"
+
+	BR2_EXTERNAL="$PWD"
 
 	if [ ! -d "${BUILDROOT_DIR}/.git" ]; then
 		echo -e "\e[1;33mCloning buildroot since it didn't already exist\e[0m"
 		git clone "${BUILDROOT_URL}" "${BUILDROOT_DIR}"
-		echo -e "\e[1;31mCloned most recent buildroot ${BUILDROOT_VERSION}\e[0m"
+		echo -e "\e[1;32mCloned most recent buildroot into ${BUILDROOT_STR}\e[0m"
 	else
 		local LWD="$PWD"
 		cd "$BUILDROOT_DIR"
-		echo -e "\e[1;33mFetching latest buildroot from ${BUILDROOT_VERSION}\e[0m"
+		echo -e "\e[1;33mFetching latest buildroot for ${BUILDROOT_STR}\e[0m"
 		git fetch
 		git checkout "${BUILDROOT_VERSION}"
 		git pull
-		echo -e "\e[1;32mBuildroot {BUILDROOT_VERSION} has been updated!\e[0m"
+		echo -e "\e[1;32mBuildroot ${BUILDROOT_STR} has been updated!\e[0m"
 		cd "$LWD"
 	fi
 }
@@ -34,8 +45,17 @@ init_board() {
 setup_board() {
 	init_board "$1"
 	echo -e "\e[1;33mSetting up BSP $1\e[0m"
-	mkdir -p "$BUILD_DIR"
-	rm -rf "$BUILD_DIR"
+
+	mkdir -p "${BUILD_DIR}/host" "${BUILD_DIR}/build" "${BUILD_DIR}/target"
+	rm -rf "${BUILD_DIR}/.config" "${BUILD_DIR}/.config.old"
+
+	DEFCONFIG="${BUILD_DIR}/${BSP_NAME}_defconfig"
+	cp "${BSP_CONFIG}" "${BUILD_DIR}/${BSP_NAME}_genconfig"
+	echo_cmd ./gencfg.py "$DEFCONFIG" "$BSP_CONFIG" \
+		"${PWD}/configs"                            \
+		"${BUILDROOT_DIR}/configs"
+
+	make O="${BUILD_DIR}" "${DEFCONFIG}"
 
 	echo -e "\e[1;32mSetup completed!\e[0m"
 }
@@ -66,7 +86,10 @@ case "$1" in
 		build_board "$1"
 		;;
 	list)
-		fd '^[\w-]+\.bsp$' bsps/
+		fd '^[\w-]+\.bsp$' bsps/ -x basename {} ".bsp" \;
+		;;
+	help)
+		usage
 		;;
 	*)
 		usage
