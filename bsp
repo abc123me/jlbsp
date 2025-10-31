@@ -21,11 +21,19 @@ init_board() {
 	. "bsps/${1}.bsp"
 
 	local BUILDROOT_STR="${BUILDROOT_REPO}-${BUILDROOT_VERSION}"
-	BUILD_DIR="../builds/$1"
-	BUILDROOT_DIR="../builds/${BUILDROOT_STR}"
+	BUILDS_DIR="../builds"
+	BUILD_DIR="${BUILDS_DIR}/${1}"
+	BUILDROOT_DIR="${BUILDS_DIR}/${BUILDROOT_STR}"
+	BR2_EXTERNAL="$PWD"
 	set +u; [ -z "$BSP_NAME" ] && BSP_NAME="$1"; set -u
 
-	BR2_EXTERNAL="$PWD"
+	set +u
+	if [ -z "$BR2_DL_DIR" ]; then
+		BR2_DL_DIR="$(realpath "${BUILDS_DIR}/dl")"
+		mkdir -p "$BR2_DL_DIR"
+		echo -e "\e[1;33mNo global DL dir is setup, created/using a local one at $BR2_DL_DIR\e[0m"
+	fi
+	set -u
 
 	if [ ! -d "${BUILDROOT_DIR}/.git" ]; then
 		echo -e "\e[1;33mCloning buildroot since it didn't already exist\e[0m"
@@ -51,8 +59,13 @@ setup_board() {
 	rm -rf "${BUILD_DIR}/.config" "${BUILD_DIR}/.config.old"
 
 	DEF_CONFIG="${BUILD_DIR}/${BSP_NAME}_defconfig"
-	GEN_CONFIG="configs/${BSP_CONFIG}"
-	cp "$GEN_CONFIG" "${BUILD_DIR}/${BSP_NAME}_genconfig"
+	GEN_CONFIG="${BUILD_DIR}/${BSP_NAME}_genconfig"
+	cp "configs/${BSP_CONFIG}" "$GEN_CONFIG"
+
+	printf "BR2_DEFCONFIG=\"%s\"\n"    "$(realpath "$DEF_CONFIG")"   >>"$GEN_CONFIG"
+	printf "BR2_BR2_EXTERNAL=\"%s\"\n" "$(realpath "$BR2_EXTERNAL")" >>"$GEN_CONFIG"
+	printf "BR2_DL_DIR=\"%s\"\n"       "$(realpath "$BR2_DL_DIR")"   >>"$GEN_CONFIG"
+
 	echo_cmd ./gencfg.py "$DEF_CONFIG" "$GEN_CONFIG" \
 		"${PWD}/configs" "${BUILDROOT_DIR}/configs"
 
@@ -71,8 +84,6 @@ build_board() {
 
 	make -C "$(realpath "$BUILDROOT_DIR")" \
 		O="$(realpath "$BUILD_DIR")" \
-		BR2_DEFCONFIG="$(realpath "$DEF_CONFIG")" \
-		BR2_EXTERNAL="${PWD}" \
 		all
 
 	echo -e "\e[1;32mBuild completed!\e[0m"
