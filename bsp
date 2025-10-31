@@ -23,6 +23,7 @@ init_board() {
 	local BUILDROOT_STR="${BUILDROOT_REPO}-${BUILDROOT_VERSION}"
 	BUILD_DIR="../builds/$1"
 	BUILDROOT_DIR="../builds/${BUILDROOT_STR}"
+	set +u; [ -z "$BSP_NAME" ] && BSP_NAME="$1"; set -u
 
 	BR2_EXTERNAL="$PWD"
 
@@ -49,13 +50,17 @@ setup_board() {
 	mkdir -p "${BUILD_DIR}/host" "${BUILD_DIR}/build" "${BUILD_DIR}/target"
 	rm -rf "${BUILD_DIR}/.config" "${BUILD_DIR}/.config.old"
 
-	DEFCONFIG="${BUILD_DIR}/${BSP_NAME}_defconfig"
-	cp "${BSP_CONFIG}" "${BUILD_DIR}/${BSP_NAME}_genconfig"
-	echo_cmd ./gencfg.py "$DEFCONFIG" "$BSP_CONFIG" \
-		"${PWD}/configs"                            \
-		"${BUILDROOT_DIR}/configs"
+	DEF_CONFIG="${BUILD_DIR}/${BSP_NAME}_defconfig"
+	GEN_CONFIG="configs/${BSP_CONFIG}"
+	cp "$GEN_CONFIG" "${BUILD_DIR}/${BSP_NAME}_genconfig"
+	echo_cmd ./gencfg.py "$DEF_CONFIG" "$GEN_CONFIG" \
+		"${PWD}/configs" "${BUILDROOT_DIR}/configs"
 
-	make O="${BUILD_DIR}" "${DEFCONFIG}"
+	make -C "$(realpath "$BUILDROOT_DIR")" \
+		O="$(realpath "$BUILD_DIR")" \
+		BR2_DEFCONFIG="$(realpath "$DEF_CONFIG")" \
+		BR2_EXTERNAL="${PWD}" \
+		defconfig
 
 	echo -e "\e[1;32mSetup completed!\e[0m"
 }
@@ -64,6 +69,11 @@ build_board() {
 	setup_board "$1"
 	echo -e "\e[1;33mBuilding BSP $BSP_NAME\e[0m"
 
+	make -C "$(realpath "$BUILDROOT_DIR")" \
+		O="$(realpath "$BUILD_DIR")" \
+		BR2_DEFCONFIG="$(realpath "$DEF_CONFIG")" \
+		BR2_EXTERNAL="${PWD}" \
+		all
 
 	echo -e "\e[1;32mBuild completed!\e[0m"
 }
