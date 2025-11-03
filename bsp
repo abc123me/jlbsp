@@ -29,7 +29,7 @@ init_board() {
 
 	set +u
 	if [ -z "$BR2_DL_DIR" ]; then
-		BR2_DL_DIR="$(realpath "${BUILDS_DIR}/dl")"
+		export BR2_DL_DIR="$(realpath "${BUILDS_DIR}/dl")"
 		mkdir -p "$BR2_DL_DIR"
 		echo -e "\e[1;33mNo global DL dir is setup, created/using a local one at $BR2_DL_DIR\e[0m"
 	fi
