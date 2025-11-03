@@ -31,12 +31,22 @@ def parse_config(cfg_tbl, gencfg, sources, depth):
 		# Handle config entries
 		elif '=' in line:
 			pos = line.index('=')
-			key = line[:pos]
-			val = line[pos+1:]
-			if key in cfg_tbl:
-				print("\u001B[1;33mOverwriting \"%s\" with \"%s\" (was \"%s\")\u001B[0m" % (key, val, cfg_tbl[key]))
-			print("%s set to %s" % (key, val))
-			cfg_tbl[key] = val
+			if line[pos - 1] == '+':
+				key = line[:pos-1]
+				val = line[pos+1:]
+				if key in cfg_tbl:
+					print("\u001B[1;33mAppending %s to \"%s\"\u001B[0m" % (val, key))
+					cfg_tbl[key] = cfg_tbl[key].rstrip("\"\'") + " " + val.lstrip("\"\'");
+				else:
+					print("\u001b[1;31mWarning, %s was not set, will set to %s\u001b[0m" % (key, val))
+					cfg_tbl[key] = val
+			else:
+				key = line[:pos]
+				val = line[pos+1:]
+				if key in cfg_tbl:
+					print("\u001B[1;33mOverwriting \"%s\" with \"%s\" (was \"%s\")\u001B[0m" % (key, val, cfg_tbl[key]))
+				print("%s set to %s" % (key, val))
+				cfg_tbl[key] = val
 		# Handle invalid lines
 		else:
 			print("\u001B[1;31mInvalid entry in config: \"%s\"\u001B[0m" % (line))
