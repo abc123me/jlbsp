@@ -7,3 +7,6 @@ USE AT YOUR OWN RISK
 
 Name        | Support | Description
 ------------|---------|-----------------------------------
+amd64-dev   | ✅      | X86 / AMD64 developmental image
+rpi5-dev    | ✅      | RPi 5 developmental image
+rpi-ntp     | ✅      | RPi based NTP server
