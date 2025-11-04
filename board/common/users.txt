@@ -1,0 +1,4 @@
+# Root FS user table
+
+# name uid gid groups home  shell   password comment
+root   0   0   *      /root /bin/sh -        root user

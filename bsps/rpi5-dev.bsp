@@ -1,0 +1,3 @@
+#!/usr/bin/sh
+
+BSP_CONFIG="rpi5-dev.config"

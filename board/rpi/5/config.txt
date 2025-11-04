@@ -1,0 +1,4 @@
+kernel=Image
+enable_uart=1
+dtoverlay=
+dtparam=uart0
