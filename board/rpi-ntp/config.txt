@@ -1,4 +1,4 @@
 kernel=Image
 enable_uart=1
-dtoverlay=
+dtoverlay=pps-gpio,gpiopin=18
 dtparam=uart0
