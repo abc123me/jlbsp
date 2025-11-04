@@ -1,3 +1,4 @@
 # Skeleton permissions file
 
-/etc/hostname f 644 root root - - - - -
+/etc/hostname       f 644 root root - - - - -
+/etc/init.d/S50gpsd f 755 root root - - - - -

@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# Starts the gps daemon.
+#
+
+case "$1" in
+	start)
+		/usr/sbin/gpsd -P /var/run/gpsd.pid -n -s 9600 /dev/ttyAMA0
+		;;
+	stop)
+		if [ -f /var/run/gpsd.pid ]; then
+			kill -SIGINT $(cat /var/run/gpsd.pid)
+			rm -f /var/run/gpsd.pid
+		fi
+		;;
+	restart|reload)
+		"$0" stop;
+		"$0" start;
+		;;
+	*)
+		echo "Usage: $0 {start|stop|restart}"
+		exit 1
+esac
