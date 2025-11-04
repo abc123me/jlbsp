@@ -1,4 +1,10 @@
-# Root FS user table
+# Common makeusers file for all boards
 
-# name uid gid groups home  shell   password comment
-root   0   0   *      /root /bin/sh -        root user
+#username uid group gid password home shell groups  comment
+-         -1  tty   -1  *        -    -     -       Group for accessing tty devices
+-         -1  pps   -1  *        -    -     -       Group for accessing pps devices
+-         -1  ptp   -1  *        -    -     -       Group for accessing ptp devices
+-         -1  i2c   -1  *        -    -     -       Group for accessing i2c devices
+-         -1  video -1  *        -    -     -       Group for accessing framebuffer devices
+-         -1  disk  -1  *        -    -     -       Group for accessing disk devices
+-         -1  gpio  -1  *        -    -     -       Group for accessing GPIO chips

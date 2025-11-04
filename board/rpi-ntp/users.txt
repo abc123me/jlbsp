@@ -1,0 +1,4 @@
+# Makeusers file for RPI NTP server
+
+#username uid group gid password home shell groups  comment
+gps       -1  gps   -1  *        -    -     tty     User and group for gpsd service     
