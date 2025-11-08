@@ -1,0 +1,7 @@
+kernel=Image
+enable_uart=1
+dtoverlay=
+dtparam=uart0
+start_file=start.elf
+fixup_file=fixup.dat
+arm_64bit=1
