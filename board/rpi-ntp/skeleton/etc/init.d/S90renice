@@ -1,17 +1,49 @@
 #!/usr/bin/env sh
 
+set -e
+
+init_cpuset() {
+	mkdir -p "/cpuset/$1"
+	echo "$2" >"/cpuset/$1/cpus"
+	echo 1    >"/cpuset/$1/cpu_exclusive"
+	echo 0    >"/cpuset/$1/mems"
+	echo 0    >"/cpuset/$1/sched_load_balance"
+	echo 1    >"/cpuset/$1/mem_hardwall"
+}
+
+move_pid() {
+	init_cpuset "$1" "$3"
+	local pid="$(cat "$2")"
+	for tid in $(ls /proc/$pid/task); do
+		echo "$tid" >"/cpuset/$1/tasks"
+		renice "$4" "$tid"
+	done
+	echo "Moved $1 processes to $1 cpuset"
+}
+
 case "$1" in
 	start)
-		pid="$(cat /var/run/gpsd.pid)"
-		taskset -c -pa 0 "$pid"
+		[ ! -f "/cpuset/tasks" ] && mount -t cpuset none /cpuset
+		mkdir -p "/cpuset/sys"
+		echo 0-1 >"/cpuset/sys/cpus"
+		echo 1   >"/cpuset/sys/cpu_exclusive"
+		echo 0   >"/cpuset/sys/mems"
+		if [ ! -f "/cpuset/tasks" ] && [ ! -f "/cpuset/sys/tasks" ]; then
+			echo "Failed to initialize cpuset filesystem!"
+			exit 1
+		fi
+		for task in $(cat "/cpuset/tasks"); do
+			echo $task >"/cpuset/sys/tasks" 2>/dev/null || true
+		done
+		echo "Moved normal processes to sys cpuset"
 
-		pid="$(cat /var/run/chrony/chronyd.pid)"
-		renice -9 "$pid" && taskset -c -pa 1 "$pid"
+		move_pid "gpsd" "/var/run/gpsd.pid" "2" "-20"
+		move_pid "chronyd" "/var/run/chrony/chronyd.pid" "3" "-19"
 		;;
 	stop) ;;
 	restart) "$0" stop && "$0" start ;;
 	*)
-		echo "Usage: $0 <start/stop/restart>"
+		echo "Usage: $0 <sta/cpuset/gpsdstop/restart>"
 		exit 1
 		;;
 esac
