@@ -1,7 +1,9 @@
 # Skeleton permissions file
 
+/etc/hosts                 f 644 root root - - - - -
 /etc/inittab               f 755 root root - - - - -
 /etc/mdev.conf             f 644 root root - - - - -
 /etc/network/interfaces    f 644 root root - - - - -
 /etc/ssh/authorized_keys   f 444 root root - - - - -
 /etc/ssh/sshd_config       f 444 root root - - - - -
+/root/.profile             f 755 root root - - - - -

@@ -60,6 +60,36 @@
 # CONFIG_HID_SUPPORT is not set
 # CONFIG_IIO is not set
 # CONFIG_MEDIA_SUPPORT is not set
+# CONFIG_NETCONSOLE is not set
+# CONFIG_IPVLAN is not set
+# CONFIG_VXLAN is not set
+# CONFIG_MACVLAN is not set
+# CONFIG_IFB is not set
+# CONFIG_WIREGUARD is not set
+# CONFIG_TUN is not set
+# CONFIG_INET_DIAG is not set
+# CONFIG_NETKIT is not set
+# CONFIG_NLMON is not set
+# CONFIG_NET_VRF is not set
+# CONFIG_VETH is not set
+# CONFIG_BAREUDP is not set
+# CONFIG_DUMMY is not set
+# CONFIG_BONDING is not set
+# CONFIG_HAMRADIO is not set
+# CONFIG_RFKILL is not set
+# CONFIG_WLAN is not set
+# CONFIG_PPP is not set
+# CONFIG_SLIP is not set
+# CONFIG_NET_CORE is not set
+# CONFIG_CEPH_LIB is not set
+# CONFIG_BLK_DEV_RBD is not set
+# CONFIG_INPUT_JOYDEV is not set
+# CONFIG_INPUT_KEYBOARD is not set
+# CONFIG_INPUT_JOYSTICK is not set
+# CONFIG_INPUT_TOUCHSCREEN is not set
+# CONFIG_INPUT_MISC is not set
+# CONFIG_INPUT_MOUSEDEV is not set
+# CONFIG_GAMEPORT is not set
 
 # Turn on some useful features
 CONFIG_OVERLAY_FS=y
