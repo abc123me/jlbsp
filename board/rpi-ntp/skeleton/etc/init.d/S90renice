@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+case "$1" in
+	start)
+		pid="$(cat /var/run/gpsd.pid)"
+		taskset -c -pa 0 "$pid"
+
+		pid="$(cat /var/run/chrony/chronyd.pid)"
+		renice -9 "$pid" && taskset -c -pa 1 "$pid"
+		;;
+	stop) ;;
+	restart) "$0" stop && "$0" start ;;
+	*)
+		echo "Usage: $0 <start/stop/restart>"
+		exit 1
+		;;
+esac
