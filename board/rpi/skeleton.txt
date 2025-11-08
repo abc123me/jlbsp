@@ -1,3 +1,5 @@
 # Skeleton permissions file
 
-/etc/hostname f 644 root root - - - - -
+/etc/hostname        f 644 root root - - - - -
+/etc/ssh             d 755 root root - - - - -
+/etc/ssh/sshd_config f 644 root root - - - - -

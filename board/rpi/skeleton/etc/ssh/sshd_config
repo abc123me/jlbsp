@@ -1,0 +1,6 @@
+Port 22
+AddressFamily any
+ListenAddress 0.0.0.0
+PermitRootLogin prohibit-password
+AuthorizedKeysFile /etc/ssh/authorized_keys
+Subsystem sftp /usr/libexec/sftp-server
