@@ -25,7 +25,7 @@ case "$1" in
 	start)
 		[ ! -f "/cpuset/tasks" ] && mount -t cpuset none /cpuset
 		mkdir -p "/cpuset/sys"
-		echo 0-1 >"/cpuset/sys/cpus"
+		echo 2-3 >"/cpuset/sys/cpus"
 		echo 1   >"/cpuset/sys/cpu_exclusive"
 		echo 0   >"/cpuset/sys/mems"
 		if [ ! -f "/cpuset/tasks" ] && [ ! -f "/cpuset/sys/tasks" ]; then
@@ -37,8 +37,8 @@ case "$1" in
 		done
 		echo "Moved normal processes to sys cpuset"
 
-		move_pid "gpsd" "/var/run/gpsd.pid" "2" "-20"
-		move_pid "chronyd" "/var/run/chrony/chronyd.pid" "3" "-19"
+		move_pid "gpsd" "/var/run/gpsd.pid" "0" "-20"
+		move_pid "chronyd" "/var/run/chrony/chronyd.pid" "1" "-19"
 		;;
 	stop) ;;
 	restart) "$0" stop && "$0" start ;;
