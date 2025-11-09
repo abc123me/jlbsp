@@ -1,0 +1,7 @@
+config BR2_PACKAGE_DRIVER_74HC595
+	bool "driver-74hc595"
+	help
+	  This is a kernel driver to bit-bang a shift register
+
+	  It is probably completely unecessary nowadays but since 
+	  I already wrote it I now have to use it
