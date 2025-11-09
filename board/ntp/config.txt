@@ -1,5 +1,5 @@
 kernel=zImage
-enable_uart=0
+enable_uart=1
 dtoverlay=dwc2
 dtoverlay=pps-gpio,gpiopin=18
 dtparam=uart0,uart4
