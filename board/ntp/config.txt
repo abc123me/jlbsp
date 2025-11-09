@@ -1,4 +1,4 @@
-kernel=Image
-enable_uart=1
+kernel=zImage
+enable_uart=0
 dtoverlay=pps-gpio,gpiopin=18
-dtparam=uart0
+dtparam=uart0,uart4

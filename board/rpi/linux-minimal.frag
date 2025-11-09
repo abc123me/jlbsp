@@ -90,8 +90,3 @@
 # CONFIG_INPUT_MISC is not set
 # CONFIG_INPUT_MOUSEDEV is not set
 # CONFIG_GAMEPORT is not set
-
-# Turn on some useful features
-CONFIG_OVERLAY_FS=y
-CONFIG_SQUASHFS=y
-CONFIG_UNICODE=y
