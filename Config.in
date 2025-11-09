@@ -1,1 +1,1 @@
-
+source "$BR2_EXTERNAL_JLBSP_PATH/packages/time-display/Config.in"
