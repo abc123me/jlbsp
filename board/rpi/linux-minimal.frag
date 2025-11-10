@@ -20,15 +20,9 @@
 # CONFIG_ATA is not set
 # CONFIG_SSB is not set
 # CONFIG_RC_CORE is not set
-# CONFIG_AUXDISPLAY is not set
-# CONFIG_FB is not set
-# CONFIG_LOGO is not set
-# CONFIG_ACCESSIBILITY is not set
 # CONFIG_VHOST_MENU is not set
 # CONFIG_STAGING is not set
-# CONFIG_SURFACE_PLATFORMS is not set
 # CONFIG_CAN is not set
-# CONFIG_BT is not set
 # CONFIG_NET_9P is not set
 # CONFIG_CEPH_LIB is not set
 # CONFIG_NFC is not set
@@ -51,10 +45,6 @@
 # CONFIG_NUMA is not set
 # CONFIG_SECURITY_APPARMOR is not set
 # CONFIG_DLM is not set
-# CONFIG_SOUND is not set
-# CONFIG_MEDIA is not set
-# CONFIG_INPUT is not set
-# CONFIG_DRM is not set
 # CONFIG_PTP_1588_CLOCK is not set
 # CONFIG_W1 is not set
 # CONFIG_HID_SUPPORT is not set
