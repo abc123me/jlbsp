@@ -24,7 +24,7 @@ wait_for_if() {
 	let tout=15
 	let cnt=tout
 	while true; do
-		if ! let cnt--; then echo "Interface $1 never became $2 within $tout seconds"; return 1; fi
+		if ! let cnt--; then echo "Interface $1 not found within $tout seconds"; return 1; fi
 		[ -d "/sys/class/net/$1" ] && break
 		sleep 1
 	done
