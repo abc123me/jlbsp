@@ -1,0 +1,5 @@
+config BR2_PACKAGE_BPI_WIFI_FW
+	bool "BananaPi WiFi Firmware"
+	help
+	  This is a package that adds magic firmware blobs
+	  used by the BananaPi, see github for more info
