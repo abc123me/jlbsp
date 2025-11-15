@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+
+WPA_SUPPLICANT_PID="/var/run/wpa_supplicant.pid"
+WPA_SUPPLICANT_CONF="/etc/wpa_supplicant.conf"
+
+. "/usr/share/jlbsp/utils"
+
+set -e
+
+case "$1" in
+	start)
+		# Load the wifi kernel module
+		modprobe brcmfmac && wait_for_if wlan0 15
+
+		# Start WPA supplicant in the background
+		wpa_supplicant -B -Dnl80211 -iwlan0 \
+			-P"${WPA_SUPPLICANT_PID}" -c"${WPA_SUPPLICANT_CONF}"
+		wait_for_pid "${WPA_SUPPLICANT_PID}" 15
+
+		# Bringup wlan0
+		ifup wlan0
+		;;
+	stop)
+		# Stop WPA supplicant
+		[ -f "$WPA_SUPPLICANT_PID" ] && kill -SIGINT "$(cat "$WPA_SUPPLICANT_PID")"
+
+		# Remove the wifi kernel modules
+		modprobe -r brcmfmac_wcc brcmfmac brcmutil
+		;;
+	restart)
+		stop || true
+		start
+		;;
+	*)
+		echo "Usage: $0 <start/stop/restart>"
+		exit 1
+		;;
+esac

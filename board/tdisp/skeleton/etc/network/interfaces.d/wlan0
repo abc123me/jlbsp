@@ -1,0 +1,3 @@
+# AP6212 WiFi card
+
+iface wlan0 inet dhcp
