@@ -1,0 +1,23 @@
+config BR2_PACKAGE_JL_SECRET_KEYS
+	bool "Secrets and keys"
+	help
+	  Secret keys, wifi passwords, etc used by me
+
+if BR2_PACKAGE_JL_SECRET_KEYS
+
+config BR2_PACKAGE_JL_SECRET_KEYS_TDISP
+	bool "Private keys for time display"
+	help
+	  Private keys for time display
+
+config BR2_PACKAGE_JL_SECRET_KEYS_NTP
+	bool "Private keys for NTP server"
+	help
+	  Private keys for NTP server
+
+config BR2_PACKAGE_JL_SECRET_KEYS_LESS_EVIL_WIFI
+	bool "Less evil wifi WPA supplicant"
+	help
+	  WPA supplicant files for connecting to less-evil-wifi
+
+endif
