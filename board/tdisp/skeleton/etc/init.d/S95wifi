@@ -28,8 +28,8 @@ case "$1" in
 		modprobe -r brcmfmac_wcc brcmfmac brcmutil
 		;;
 	restart)
-		stop || true
-		start
+		"$0" stop || true
+		"$0" start
 		;;
 	*)
 		echo "Usage: $0 <start/stop/restart>"
