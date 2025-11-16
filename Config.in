@@ -1,3 +1,4 @@
 source "$BR2_EXTERNAL_JLBSP_PATH/packages/bpi-wifi-fw/Config.in"
 source "$BR2_EXTERNAL_JLBSP_PATH/packages/driver-74hc595/Config.in"
 source "$BR2_EXTERNAL_JLBSP_PATH/packages/time-display/Config.in"
+source "$BR2_EXTERNAL_JLBSP_PATH/packages/jl-secret-keys/Config.in"
