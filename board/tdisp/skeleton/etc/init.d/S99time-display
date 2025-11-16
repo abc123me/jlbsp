@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+
+case "$1" in
+	start)
+		# Install the 74HC595 kernel module
+		modprobe mod595
+
+		# Start the display daemon
+		/usr/bin/time-display 2>&1 >/var/log/time-display.log &
+		;;
+	stop)
+		# Stop the display daemon
+		[ -f "/var/run/time-display.pid" ] && kill -SIGINT "$(cat "/var/run/time-display.pid")"
+
+		# Remove the 74HC595 kernel module
+		modprobe -r mod595
+		;;
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+	*)
+		echo "Usage: $0 <start/stop/restart>"
+		exit 1
+		;;
+esac
