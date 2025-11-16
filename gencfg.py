@@ -32,7 +32,7 @@ def parse_config(cfg_tbl, gencfg, sources, depth):
 				if len(arr) != 5:
 					pass
 				cfg_tbl[arr[0]] = None
-				print("\u001B[1;33mUnsetting %s\u001B[0m" % (key))
+				print("\u001B[1;33mUnsetting %s\u001B[0m" % (arr[0]))
 			else:
 				pass
 		# Handle config entries
