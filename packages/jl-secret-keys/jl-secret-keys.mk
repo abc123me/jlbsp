@@ -3,7 +3,7 @@ JL_SECRET_KEYS_SITE = ssh://git@192.168.1.10:30009/jeremiah/jl-secret-keys.git
 JL_SECRET_KEYS_SITE_METHOD = git
 
 ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_LESS_EVIL_WIFI),y)
-	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/less-evil-wifi.psk $(TARGET_DIR)/etc/wpa/secrets ;
+	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/less-evil-wifi.psk $(TARGET_DIR)/etc/wpa_supplicant.psk ;
 endif
 
 ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_TDISP),y)

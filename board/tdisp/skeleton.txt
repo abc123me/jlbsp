@@ -6,4 +6,3 @@
 /etc/modprobe.d/mod595.conf     f 644 root root - - - - -
 /etc/network/interfaces.d/eth0  f 644 root root - - - - -
 /etc/network/interfaces.d/wlan0 f 644 root root - - - - -
-/etc/wpa_supplicant.conf        f 644 root root - - - - -

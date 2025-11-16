@@ -6,6 +6,7 @@
 /etc/network/interfaces        f 644 root root - - - - -
 /etc/network/interfaces.d/eth0 f 644 root root - - - - -
 /etc/ntp.conf                  f 644 root root - - - - -
+/etc/wpa_supplicant.conf       f 644 root root - - - - -
 /etc/ssh/authorized_keys       f 444 root root - - - - -
 /etc/ssh/sshd_config           f 444 root root - - - - -
 /root/.profile                 f 755 root root - - - - -
