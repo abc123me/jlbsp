@@ -31,12 +31,8 @@ def parse_config(cfg_tbl, gencfg, sources, depth):
 				arr = line[2:].split(' ')
 				if len(arr) != 5:
 					pass
-				key = arr[0]
-				if key in cfg_tbl:
-					cfg_tbl[key] = None
-					print("\u001B[1;33mUnsetting %s\u001B[0m" % (key))
-				else:
-					print("\u001b[1;31mWarning, %s was not set to begin with\u001b[0m" % (key))
+				cfg_tbl[arr[0]] = None
+				print("\u001B[1;33mUnsetting %s\u001B[0m" % (key))
 			else:
 				pass
 		# Handle config entries
