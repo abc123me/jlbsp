@@ -107,7 +107,7 @@ case "$1" in
 		build_board "$1"
 		;;
 	list)
-		fd '^[\w-]+\.bsp$' bsps/ -x basename {} ".bsp" \;
+		fd '^[\w-]+\.bsp$' bsps/ -x basename {} ".bsp" \; | sort
 		;;
 	help)
 		usage
