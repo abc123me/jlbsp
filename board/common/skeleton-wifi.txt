@@ -1,0 +1,1 @@
+/etc/init.d/S80wifi             f 755 root root - - - - -
