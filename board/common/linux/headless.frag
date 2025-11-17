@@ -14,4 +14,7 @@
 # CONFIG_MEDIA is not set
 # CONFIG_INPUT is not set
 # CONFIG_DRM is not set
- 
+
+# Enable /proc/config.gz
+CONFIG_IKCONFIG=y
+CONFIG_IKCONFIG_PROC=y
