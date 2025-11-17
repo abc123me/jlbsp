@@ -1,0 +1,6 @@
+kernel=zImage
+enable_uart=1
+dtoverlay=dwc2
+dtparam=uart0
+start_file=start.elf
+fixup_file=fixup.dat
