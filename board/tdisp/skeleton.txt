@@ -1,7 +1,5 @@
 # Skeleton permissions file
 
-/etc/inittab                    f 755 root root - - - - -
-/etc/init.d/S99time-display     f 755 root root - - - - -
-/etc/modprobe.d/mod595.conf     f 644 root root - - - - -
-/etc/network/interfaces.d/eth0  f 644 root root - - - - -
-/etc/network/interfaces.d/wlan0 f 644 root root - - - - -
+/etc/inittab                f 755 root root - - - - -
+/etc/init.d/S99time-display f 755 root root - - - - -
+/etc/modprobe.d/mod595.conf f 644 root root - - - - -

@@ -1,1 +1,5 @@
+# Skeleton permissions file
+
 /etc/init.d/S80wifi             f 755 root root - - - - -
+/etc/network/interfaces.d/eth0  f 644 root root - - - - -
+/etc/network/interfaces.d/wlan0 f 644 root root - - - - -
