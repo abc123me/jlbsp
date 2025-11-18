@@ -1,0 +1,4 @@
+config BR2_PACKAGE_RPI_WS281X
+	bool "C library for the WS281X"
+	help
+	  Userspace Raspberry Pi library for controlling WS281X LEDs.

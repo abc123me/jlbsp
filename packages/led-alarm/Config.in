@@ -1,0 +1,5 @@
+config BR2_PACKAGE_LED_ALARM
+	bool "LED alarm clock"
+	help
+	  This is the userspace time display app for running
+	  my led alarm clock

@@ -1,0 +1,6 @@
+config BR2_PACKAGE_RPI_WS281X_RUST
+	bool "Rust library for the WS281X"
+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+	select BR2_PACKAGE_HOST_RUSTC
+	help
+	  Userspace Raspberry Pi library for controlling WS281X LEDs.
