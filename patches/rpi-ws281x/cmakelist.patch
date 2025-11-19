@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ba5dd90..d0ed437 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,7 +9,7 @@ string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" VERSION_MICRO ${PROJECT_
+ 
+ set(HEADERDEF "${VERSION_MAJOR}_${VERSION_MINOR}_${VERSION_MICRO}")
+ 
+-project(rpi_ws281x VERSION ${PROJECT_VERSION})
++project(rpi_ws281x VERSION ${PROJECT_VERSION} LANGUAGES C)
+ 
+ option(BUILD_SHARED "Build as shared library" OFF)
+ option(BUILD_TEST "Build test application" ON)
