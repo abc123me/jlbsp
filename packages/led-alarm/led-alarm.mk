@@ -7,6 +7,7 @@
 LED_ALARM_VERSION = master
 LED_ALARM_SOURCE = led-alarm-$(LED_ALARM_VERSION).tar.gz
 LED_ALARM_SITE = $(call github,abc123me,led-alarm,$(LED_ALARM_VERSION))
+LED_ALARM_DEPENDENCIES += libconfig rpi-ws281x
 
 define LED_ALARM_BUILD_CMDS
     $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
