@@ -6,12 +6,22 @@ ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_LESS_EVIL_WIFI),y)
 	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/less-evil-wifi.psk $(TARGET_DIR)/etc/wpa_supplicant.psk ;
 endif
 
+ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_DEV),y)
+	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/ntp/ssh_host_ed25519_key     $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key ;
+	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/ntp/ssh_host_ed25519_key.pub $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key.pub ;
+endif
+
 ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_TDISP),y)
 	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/tdisp/ssh_host_ed25519_key     $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key ;
 	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/tdisp/ssh_host_ed25519_key.pub $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key.pub ;
 endif
 
 ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_NTP),y)
+	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/ntp/ssh_host_ed25519_key     $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key ;
+	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/ntp/ssh_host_ed25519_key.pub $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key.pub ;
+endif
+
+ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_LED_ALARM),y)
 	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/ntp/ssh_host_ed25519_key     $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key ;
 	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/ntp/ssh_host_ed25519_key.pub $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key.pub ;
 endif

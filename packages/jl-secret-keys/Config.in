@@ -5,6 +5,18 @@ config BR2_PACKAGE_JL_SECRET_KEYS
 
 if BR2_PACKAGE_JL_SECRET_KEYS
 
+config BR2_PACKAGE_JL_SECRET_KEYS_LESS_EVIL_WIFI
+	bool "Less evil wifi WPA supplicant"
+	help
+	  WPA supplicant files for connecting to less-evil-wifi
+
+config BR2_PACKAGE_JL_SECRET_KEYS_DEV
+	bool "Private keys for development usage"
+	default y
+	help
+	  Private keys for generic development usage
+	  These will be overwritten if any other keys are enabled
+
 config BR2_PACKAGE_JL_SECRET_KEYS_TDISP
 	bool "Private keys for time display"
 	help
@@ -15,9 +27,9 @@ config BR2_PACKAGE_JL_SECRET_KEYS_NTP
 	help
 	  Private keys for NTP server
 
-config BR2_PACKAGE_JL_SECRET_KEYS_LESS_EVIL_WIFI
-	bool "Less evil wifi WPA supplicant"
+config BR2_PACKAGE_JL_SECRET_KEYS_LED_ALARM
+	bool "Private keys for led alarm clock"
 	help
-	  WPA supplicant files for connecting to less-evil-wifi
+	  Private keys for led alarm clock
 
 endif
