@@ -2,7 +2,44 @@
 
 import os
 
-def parse_config(cfg_tbl, gencfg, sources, depth):
+def should_ignore_key(key, only):
+	if only != None:
+		if key != only:
+			return True
+		else:
+			print("\u001B[1;33mGrabbing specific config key %s\u001B[0m" % (key))
+	return False
+
+def handle_include(cfg_tbl, sources, depth, only, line):
+	grab = None
+	pos = None
+
+	if line.startswith("#include_only "):
+		line = line[14:]
+		pos = line.index(' ')
+		grab = line[:pos].strip()
+		line = line[pos:].strip()
+		print("\u001B[1;35mChecking config %s for %s\u001B[0m" % (line, grab))
+	elif line.startswith("#include "):
+		line = line[9:].strip()
+
+	if line == None:
+		print("\u001B[1;31mInvalid include!\u001B[0m")
+
+	cfg_fname = find_config(sources, line.strip("\""))
+	if cfg_fname == None:
+		return False
+
+	with open(cfg_fname, 'r') as icfg:
+		print("\u001B[1;32mParsing included config: %s\u001B[0m" % cfg_fname)
+		if parse_config(cfg_tbl, icfg, sources, depth - 1, grab):
+			print("\u001B[1;32mSuccessfully parsed config: %s\u001B[0m" % cfg_fname)
+		else:
+			return False
+
+	return True
+
+def parse_config(cfg_tbl, gencfg, sources, depth, only=None):
 	if depth < 0:
 		print("\u001B[1;31mMaximum depth reached, recursive config detected!\u001B[0m")
 		return False
@@ -12,27 +49,24 @@ def parse_config(cfg_tbl, gencfg, sources, depth):
 		line = line.strip()
 		if len(line) < 1:
 			pass
+		# Handle config specific includes
 		# Handle includes
-		elif line.startswith("#include "):
-			cfg_fname = find_config(sources, line[9:].strip("\""))
-
-			if cfg_fname == None:
+		elif line.startswith("#include"):
+			if not handle_include(cfg_tbl, sources, depth, only, line):
 				return False
-
-			with open(cfg_fname, 'r') as icfg:
-				print("\u001B[1;32mParsing included config: %s\u001B[0m" % cfg_fname)
-				if parse_config(cfg_tbl, icfg, sources, depth - 1):
-					print("\u001B[1;32mSuccessfully parsed config: %s\u001B[0m" % cfg_fname)
-				else:
-					return False
 		# Handle comments
 		elif line.startswith("#"):
 			if line.endswith(" is not set"):
 				arr = line[2:].split(' ')
 				if len(arr) != 5:
 					pass
-				cfg_tbl[arr[0]] = None
-				print("\u001B[1;33mUnsetting %s\u001B[0m" % (arr[0]))
+
+				key = arr[0]
+				if should_ignore_key(key, only):
+					continue
+
+				cfg_tbl[key] = None
+				print("\u001B[1;33mUnsetting %s\u001B[0m" % (key))
 			else:
 				pass
 		# Handle config entries
@@ -40,6 +74,7 @@ def parse_config(cfg_tbl, gencfg, sources, depth):
 			pos = line.index('=')
 			if line[pos - 1] == '+':
 				key = line[:pos-1]
+
 				val = line[pos+1:]
 				if key in cfg_tbl:
 					print("\u001B[1;33mAppending %s to \"%s\"\u001B[0m" % (val, key))
@@ -49,6 +84,9 @@ def parse_config(cfg_tbl, gencfg, sources, depth):
 					cfg_tbl[key] = val
 			else:
 				key = line[:pos]
+				if should_ignore_key(key, only):
+					continue
+
 				val = line[pos+1:]
 				if key in cfg_tbl:
 					print("\u001B[1;33mOverwriting \"%s\" with \"%s\" (was \"%s\")\u001B[0m" % (key, val, cfg_tbl[key]))
