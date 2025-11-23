@@ -1,5 +1,6 @@
 config BR2_PACKAGE_TIME_DISPLAY
 	bool "time-display"
+	depends on BR2_PACKAGE_LIBGPIOD2
 	default n
 	help
 	  This is the userspace time display app for driving
