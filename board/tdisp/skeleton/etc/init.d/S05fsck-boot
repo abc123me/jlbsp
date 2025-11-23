@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+if [ "$1" == "start"  ]; then
+	fsck.vfat /dev/mmcblk0p1
+	mount -o remount,ro /dev/root
+	fsck.ext4 /dev/root
+	mount -o remount,rw /dev/root
+fi
