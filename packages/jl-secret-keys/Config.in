@@ -19,22 +19,28 @@ config BR2_PACKAGE_JL_SECRET_KEYS_DEV
 	  Private keys for generic development usage
 	  These will be overwritten if any other keys are enabled
 
-config BR2_PACKAGE_JL_SECRET_KEYS_TDISP
-	bool "Private keys for time display"
-	default n
-	help
-	  Private keys for time display
-
 config BR2_PACKAGE_JL_SECRET_KEYS_NTP
 	bool "Private keys for NTP server"
 	default n
 	help
 	  Private keys for NTP server
 
+config BR2_PACKAGE_JL_SECRET_KEYS_TDISP
+	bool "Private keys for time display"
+	default n
+	help
+	  Private keys for time display
+
 config BR2_PACKAGE_JL_SECRET_KEYS_LED_ALARM
 	bool "Private keys for led alarm clock"
 	default n
 	help
 	  Private keys for led alarm clock
+
+config BR2_PACKAGE_JL_SECRET_KEYS_GITEA_RUNNER
+	bool "Private keys for gitea runner"
+	default n
+	help
+	  Private keys for gitea runner
 
 endif
