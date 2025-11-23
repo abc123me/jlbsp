@@ -7,16 +7,11 @@
 # The boards run off the 12V / 24V from the LED strip thanks to those
 # nice little 7805 switch mode replacement modules I salvaged, thanks Jeff!
 
-# Custom kernel here since we need a special video core chardev driver from rpi upstream
-# BR2_LINUX_KERNEL_CUSTOM_VERSION is not set
-# BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE is not set
-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-#include_only BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION raspberrypizero2w_defconfig
-
 # We need broadcom videocore drivers from the custom pi kernel to offload the gpio bit-banging
-# to the gpu / multimedia processing core of the broadcom soc - this is way over complicated :(
 BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES+="$(BR2_EXTERNAL_JLBSP_PATH)/board/rpi/linux-bcm-vcio.frag"
 
+# Make the rootfs a bit bigger
 BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
 
+# And enable the WS281X library
 BR2_PACKAGE_RPI_WS281X=y
