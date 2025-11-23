@@ -1,0 +1,48 @@
+#!/usr/bin/env sh
+
+img="$1"
+
+[ -z "$img" ] && img="/tmp/sdcard.img"
+
+if [ ! -f "$img" ]; then
+	echo "Failed to find image: $img" 1>&2
+	echo "Usage: $0 [image default=/tmp/sdcard.img]" 1>&2
+	exit 1
+fi
+
+set -eou pipefail
+
+modprobe loop
+
+dev="$(losetup -f)"
+rimg="$(realpath "$img")"
+oblk="$(realpath /dev/root | sed 's/p[0-9]//g')"
+
+if [ -b "$oblk" ] && [ -b "${oblk}p1" ] && [ -b "${oblk}p2" ] && [ ! -b "${oblk}p3" ]; then
+	echo "Partition layout is valid, creating loop device to perform upgrade"
+	losetup -P "$dev" "$img"
+	if [ -b "${dev}p1" ] && [ -b "${dev}p2" ] && [ ! -b "${dev}p3" ]; then
+		echo "Loop device created and upgrade partitions layout are valid, relocating rootfs"
+		mount -o remount,ro /
+		mkdir -p /tmp/newroot
+		mount "${dev}p2" /tmp/newroot
+		sync
+		pivot_root /tmp/newroot /tmp/newroot/mnt
+		cd /
+		mount -t sysfs sysfs /sys
+		mount -t devtmpfs devtmpfs /dev
+		mount -t proc proc /proc
+		mount -t tmpfs tmpfs /tmp
+		echo "Rootfs relocated and interfaces remounted, flashing SD card"
+		echo dd "if=/mnt/$rimg" "of=$oblk" bs=1M
+		dd "if=/mnt/$rimg" "of=$oblk" bs=1M
+		sync
+		reboot
+	else
+		echo "Loop device created but rootfs layout doesn't make sense!" 1>&2
+		exit 1
+	fi
+else
+	echo "Base block device does not exist or has a different partition layout!" 1>&2
+	exit 1
+fi
