@@ -3,10 +3,11 @@
 usage() {
 	echo "Usage: $0 <operation>"
 	echo "Operations:"
-	echo "  setup <board> - Sets up a build for a given board"
-	echo "  build <board> - Builds the given board"
-	echo "  list          - Lists all available boards"
-	echo "  help          - Shows this menu"
+	echo "  setup <boards>      - Sets up builds for the given boards"
+	echo "  build <boards>      - Builds the given boards"
+	echo "  shellcheck [format] - Runs shellcheck on all scripts with a specialized format"
+	echo "  list                - Lists all available boards"
+	echo "  help                - Shows this menu"
 }
 
 echo_cmd() { echo "$@"; "$@"; }
@@ -89,6 +90,13 @@ build_board() {
 	echo -e "\e[1;32mBuild completed!\e[0m"
 }
 
+shellcheck_all() {
+	local check=()
+	[ -n "$1" ] && check=("--format=$1")
+	mapfile -t check < <(echo "${check[@]}" && rg -l '^#!.+sh$')
+	shellcheck "${check[@]}"
+}
+
 if [ $# -lt 1 ]; then usage; exit 1; fi
 
 set -euo pipefail
@@ -98,20 +106,11 @@ BSP_DIR="$(dirname "${BASH_SOURCE}")"
 cd "$BSP_DIR"
 
 case "$1" in
-	setup)
-		shift 1
-		setup_board "$1"
-		;;
-	build)
-		shift 1
-		build_board "$1"
-		;;
-	list)
-		fd '^[\w-]+\.bsp$' bsps/ -x basename {} ".bsp" \; | sort
-		;;
-	help)
-		usage
-		;;
+	setup) shift 1; for f in "$@"; do setup_board "$f"; done ;;
+	build) shift 1; for f in "$@"; do build_board "$f"; done ;;
+	list)  fd '^[\w-]+\.bsp$' bsps/ -x basename {} ".bsp" \; | sort ;;
+	shellcheck) shift 1; set +u; shellcheck_all "$1" ;;
+	help)  usage ;;
 	*)
 		usage
 		exit 1
