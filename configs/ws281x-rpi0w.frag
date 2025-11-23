@@ -13,6 +13,10 @@
 BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 #include_only BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION raspberrypizero2w_defconfig
 
-BR2_TARGET_ROOTFS_EXT2_SIZE=150M
+# We need broadcom videocore drivers from the custom pi kernel to offload the gpio bit-banging
+# to the gpu / multimedia processing core of the broadcom soc - this is way over complicated :(
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES+="$(BR2_EXTERNAL_JLBSP_PATH)/board/rpi/linux-bcm-vcio.frag"
+
+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
 
 BR2_PACKAGE_RPI_WS281X=y

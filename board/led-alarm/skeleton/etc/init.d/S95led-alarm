@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+
+PID_FILE="/var/run/led-alarm.pid"
+
+case "$1" in
+	start)
+		# Wait until we have a network and NTP synchronization
+		# TODO: Maybe add an RTC to this at some point?
+		wait_for_iface wlan0 && wait_for_ntp
+
+		/usr/bin/led-alarm &
+		echo "$!" >"$PID_FILE"
+		;;
+	stop)
+		if [ -f "$PID_FILE" ]; then
+			kill -SIGINT "$(cat $PID_FILE)"
+			rm -f "$PID_FILE"
+		fi
+		;;
+	reload)
+		if [ -f "$PID_FILE" ]; then
+			kill -SIGUSR1 "$(cat $PID_FILE)"
+		else
+			echo "Cannot reload if not started / running!"
+			exit 1
+		fi
+		;;
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+esac

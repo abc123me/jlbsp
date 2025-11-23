@@ -32,3 +32,18 @@ wait_for_if() {
 	echo "Interface $1 was found after waiting $cnt seconds!"
 	return 0
 }
+
+# Waits up to 15 seconds for network time synchronization
+# Usage: wait_for_ntp
+wait_for_ntp() {
+	let tout=15
+	let cnt=tout
+	while true; do
+		if ! let cnt--; then echo "Time not synchronized within $tout seconds"; return 1; fi
+		[ $(date "+%Y") -gt 20 ] && break
+		sleep 1
+	done
+	let cnt=tout-cnt
+	echo "Time synchronized after waiting $cnt seconds!"
+	return 0
+}
