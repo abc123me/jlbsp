@@ -1,7 +1,6 @@
 # Skeleton permissions file
 
 /cpuset               d 755 root root - - - - -
-/etc/hostname         f 644 root root - - - - -
 /etc/init.d/S50gpsd   f 755 root root - - - - -
 /etc/init.d/S90renice f 755 root root - - - - -
 /etc/chrony.conf      f 644 root root - - - - -

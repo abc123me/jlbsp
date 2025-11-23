@@ -1,3 +1,2 @@
 # Skeleton permissions file
 
-/etc/hostname        f 644 root root - - - - -

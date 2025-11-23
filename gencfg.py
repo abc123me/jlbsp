@@ -58,8 +58,8 @@ def handle_unclude(cfg_tbl, sources, depth, line):
 		return False
 
 	with open(cfg_fname, 'r') as icfg:
-		print("\u001B[1;32mParsing included config: %s\u001B[0m" % cfg_fname)
-		if parse_config(cfg_tbl, icfg, sources, depth - 1, grab, unclude=True):
+		print("\u001B[1;35mParsing uncluded config: %s\u001B[0m" % cfg_fname)
+		if parse_config(cfg_tbl, icfg, sources, depth - 1, None, unclude=True):
 			print("\u001B[1;32mSuccessfully parsed config: %s\u001B[0m" % cfg_fname)
 		else:
 			return False
