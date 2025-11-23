@@ -8,7 +8,7 @@ on:
 
 jobs:
   shellcheck:
-    runs-on: archlinux-latest
+    runs-on: ubuntu-latest
     steps:
 #      - name: Setup container
 #        run:  pacman -S fd ripgrep shellcheck
