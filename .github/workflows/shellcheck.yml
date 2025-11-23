@@ -17,5 +17,4 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Recursively run shellcheck
-        run: ./bsp shellcheck json
-
+        run: ./bsp shellcheck
