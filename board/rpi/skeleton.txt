@@ -1,4 +1,0 @@
-# Skeleton permissions file
-
-/etc/init.d/S05fsck-boot f 755 root root - - - - -
-

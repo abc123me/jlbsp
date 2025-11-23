@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+if [ "$1" == "start"  ]; then
+	# Handle devices with eMMC based boot and root partitions
+	if realpath /dev/root | grep -qE '^/dev/mmcblk[0-9]p2$'; then
+		num="$(realpath /dev/root | sed 's/^\/dev\/mmcblk\([0-9]\)p2$/\1/g')"
+		echo "Detected /dev/root on an MMC device $num with boot/root partitions"
+		if file -sL "/dev/mmcblk${num}p1" | grep -q 'fat'; then
+			echo "Detected FAT boot partition, running FSCK on it!"
+			fsck.vfat "/dev/mmcblk${num}p1"
+		fi
+		if file -sL /dev/root | grep -q 'ext4'; then
+			echo "Detected EXT4 rootfs, running FSCK on it!"
+			mount -o remount,ro /dev/root
+			fsck.ext4 /dev/root
+			mount -o remount,rw /dev/root
+		fi
+	fi
+fi

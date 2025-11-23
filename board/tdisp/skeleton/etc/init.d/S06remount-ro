@@ -1,5 +1,0 @@
-#!/usr/bin/env sh
-
-if [ "$1" == "start" ]; then
-	mount -o remount,ro /
-fi

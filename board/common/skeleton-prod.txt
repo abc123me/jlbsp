@@ -1,0 +1,3 @@
+# Skeleton permissions file
+
+/etc/init.d/S06remount-ro f 755 root root - - - - -
