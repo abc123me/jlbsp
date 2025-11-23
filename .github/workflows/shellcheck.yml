@@ -1,0 +1,19 @@
+# .github/workflow/shellcheck.yml
+
+on:
+  push:
+    branches:
+      - master
+
+name: Run shellcheck on all scripts
+permissions: {}
+
+jobs:
+  shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recursively run shellcheck
+      run: ./bsp shellcheck json
+
