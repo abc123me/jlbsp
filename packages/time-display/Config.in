@@ -1,5 +1,6 @@
 config BR2_PACKAGE_TIME_DISPLAY
 	bool "time-display"
+	default n
 	help
 	  This is the userspace time display app for driving
 	  the 74HC595s running the Datachron 3000 panel

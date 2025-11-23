@@ -1,5 +1,6 @@
 config BR2_PACKAGE_JL_SECRET_KEYS
 	bool "Secrets and keys"
+	default n
 	help
 	  Secret keys, wifi passwords, etc used by me
 
@@ -7,6 +8,7 @@ if BR2_PACKAGE_JL_SECRET_KEYS
 
 config BR2_PACKAGE_JL_SECRET_KEYS_LESS_EVIL_WIFI
 	bool "Less evil wifi WPA supplicant"
+	default n
 	help
 	  WPA supplicant files for connecting to less-evil-wifi
 
@@ -19,16 +21,19 @@ config BR2_PACKAGE_JL_SECRET_KEYS_DEV
 
 config BR2_PACKAGE_JL_SECRET_KEYS_TDISP
 	bool "Private keys for time display"
+	default n
 	help
 	  Private keys for time display
 
 config BR2_PACKAGE_JL_SECRET_KEYS_NTP
 	bool "Private keys for NTP server"
+	default n
 	help
 	  Private keys for NTP server
 
 config BR2_PACKAGE_JL_SECRET_KEYS_LED_ALARM
 	bool "Private keys for led alarm clock"
+	default n
 	help
 	  Private keys for led alarm clock
 

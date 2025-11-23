@@ -1,6 +1,7 @@
 config BR2_PACKAGE_LED_ALARM
 	bool "LED alarm clock"
 	depends on BR2_PACKAGE_RPI_WS281X && BR2_PACKAGE_LIBCONFIG
+	default n
 	help
 	  This is the userspace time display app for running
 	  my led alarm clock
