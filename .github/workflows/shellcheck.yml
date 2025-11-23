@@ -10,8 +10,8 @@ jobs:
   shellcheck:
     runs-on: archlinux-latest
     steps:
-      - name: Setup container
-        run:  pacman -S fd ripgrep shellcheck
+#      - name: Setup container
+#        run:  pacman -S fd ripgrep shellcheck
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Recursively run shellcheck
