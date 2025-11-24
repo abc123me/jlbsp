@@ -22,7 +22,6 @@ init_board() {
 	. "bsps/${1}.bsp"
 
 	local BUILDROOT_STR="${BUILDROOT_REPO}-${BUILDROOT_VERSION}"
-	BUILDS_DIR="../builds"
 	BUILD_DIR="${BUILDS_DIR}/${1}"
 	BUILDROOT_DIR="${BUILDS_DIR}/${BUILDROOT_STR}"
 	BR2_EXTERNAL="$PWD"
@@ -104,6 +103,10 @@ set -euo pipefail
 ORIG_DIR="$PWD"
 BSP_DIR="$(dirname "${BASH_SOURCE}")"
 cd "$BSP_DIR"
+
+set +u
+[ -z "$BUILDS_DIR" ] && export BUILDS_DIR="../builds"
+set -u
 
 case "$1" in
 	setup) shift 1; for f in "$@"; do setup_board "$f"; done ;;
