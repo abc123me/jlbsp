@@ -14,6 +14,7 @@ jobs:
         run:  |
           apt-get update -y
           apt-get install -y fd-find ripgrep shellcheck
+          apt-get install -y cpio rsync bc
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Build NTP server
