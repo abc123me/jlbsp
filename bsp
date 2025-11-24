@@ -25,12 +25,15 @@ init_board() {
 	BUILD_DIR="${BUILDS_DIR}/${1}"
 	BUILDROOT_DIR="${BUILDS_DIR}/${BUILDROOT_STR}"
 	BR2_EXTERNAL="$PWD"
-	set +u; [ -z "$BSP_NAME" ] && BSP_NAME="$1"; set -u
+	set +u;
 
-	set +u
+	[ -z "$BSP_NAME" ] && \
+		BSP_NAME="$1";
+
 	if [ -z "$BR2_DL_DIR" ]; then
+		mkdir -p "${BUILDS_DIR}"
 		export BR2_DL_DIR="$(realpath "${BUILDS_DIR}/dl")"
-		mkdir -p "$BR2_DL_DIR"
+		mkdir -p "${BR2_DL_DIR}"
 		echo -e "\e[1;33mNo global DL dir is setup, created/using a local one at $BR2_DL_DIR\e[0m"
 	fi
 	set -u
