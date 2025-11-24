@@ -17,4 +17,4 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Build NTP server
-        run: ./bsp build ntp tdisp
+        run: BUILDS_DIR=builds ./bsp build ntp tdisp
