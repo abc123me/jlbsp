@@ -1,0 +1,15 @@
+#include common.frag
+#include pc_x86_64_bios_defconfig
+
+# The pc_x86_64_bios_defconfig sets some stuff for wifi
+# BR2_PACKAGE_CONNMAN is not set
+# BR2_PACKAGE_WIRELESS_REGDB is not set
+# BR2_PACKAGE_WPA_SUPPLICANT is not set
+
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV is not set
+
+BR2_PACKAGE_BASH=y
+BR2_PACKAGE_CA_CERTIFICATES=y
+BR2_PACKAGE_INTEL_MICROCODE=y
+BR2_PACKAGE_LSHW=y
