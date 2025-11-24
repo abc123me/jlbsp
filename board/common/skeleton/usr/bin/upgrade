@@ -12,37 +12,58 @@ fi
 
 set -eou pipefail
 
+# TODO: This probably could use some simplification, in fact all three of these arguments
+# are likely not necessary since we can use the symlinks on device to figure it out
+
+# do_upgrade <rootfs partition number> <image location> <block device>"
+do_upgrade() {
+	echo "Loop device created and upgrade partition layout validated, relocating rootfs"
+	mount -o remount,ro / || true
+	mkdir -p /tmp/newroot
+	mount "${dev}p${1}" /tmp/newroot
+	sync
+	pivot_root /tmp/newroot /tmp/newroot/mnt
+	cd /
+	mount -t sysfs sysfs /sys
+	mount -t devtmpfs devtmpfs /dev
+	mount -t proc proc /proc
+	mount -t tmpfs tmpfs /tmp
+	echo "Rootfs pivoted, loop device now on /, old root on /mnt, flashing SD card"
+	echo dd "if=/mnt/$2" "of=$3" bs=1M
+	dd "if=/mnt/$2" "of=$3" bs=1M
+	sync
+	reboot
+}
+err_part_layout() {
+	echo "$1 has invalid partition layout!" 1>&2
+	exit 1
+}
+
 modprobe loop
 
 dev="$(losetup -f)"
 rimg="$(realpath "$img")"
-oblk="$(realpath /dev/root | sed 's/p[0-9]//g')"
+oblk="$(realpath /dev/root | sed 's/p\?[0-9]//g')"
 
-if [ -b "$oblk" ] && [ -b "${oblk}p1" ] && [ -b "${oblk}p2" ] && [ ! -b "${oblk}p3" ]; then
-	echo "Partition layout is valid, creating loop device to perform upgrade"
-	losetup -P "$dev" "$img"
-	if [ -b "${dev}p1" ] && [ -b "${dev}p2" ] && [ ! -b "${dev}p3" ]; then
-		echo "Loop device created and upgrade partitions layout are valid, relocating rootfs"
-		mount -o remount,ro /
-		mkdir -p /tmp/newroot
-		mount "${dev}p2" /tmp/newroot
-		sync
-		pivot_root /tmp/newroot /tmp/newroot/mnt
-		cd /
-		mount -t sysfs sysfs /sys
-		mount -t devtmpfs devtmpfs /dev
-		mount -t proc proc /proc
-		mount -t tmpfs tmpfs /tmp
-		echo "Rootfs relocated and interfaces remounted, flashing SD card"
-		echo dd "if=/mnt/$rimg" "of=$oblk" bs=1M
-		dd "if=/mnt/$rimg" "of=$oblk" bs=1M
-		sync
-		reboot
-	else
-		echo "Loop device created but rootfs layout doesn't make sense!" 1>&2
-		exit 1
-	fi
+if uname -m | grep -q 'x86'; then
+	echo "X86 / AMD64 architecture detected, expecting a single /root partition with MBR"
+	if [ -b "${oblk}1" ] && [ ! -b "${oblk}2" ]; then
+		echo "Partition layout is valid, creating loop device to perform upgrade"
+		losetup -P "$dev" "$img"
+		if [ -b "${dev}p1" ] && [ ! -b "${dev}p2" ]; then
+			do_upgrade "1" "$rimg" "$oblk"
+		else err_part_layout "Upgrade image / loop device"; fi
+	else err_part_layout "Base device"; fi
+elif uname -m | grep -q 'arm'; then
+	echo "ARM architecture detected, expecting /boot + /root layout"
+	if [ -b "${oblk}p1" ] && [ -b "${oblk}p2" ] && [ ! -b "${oblk}p3" ]; then
+		echo "Partition layout is valid, creating loop device to perform upgrade"
+		losetup -P "$dev" "$img"
+		if [ -b "${dev}p1" ] && [ -b "${dev}p2" ] && [ ! -b "${dev}p3" ]; then
+			do_upgrade "2" "$rimg" "$oblk"
+		else err_part_layout "Upgrade image / loop device"; fi
+	else err_part_layout "Base device"; fi
 else
-	echo "Base block device does not exist or has a different partition layout!" 1>&2
+	echo "Unknown architecture detected, only valid for arm or x86 architectures!" 2>&1
 	exit 1
 fi
