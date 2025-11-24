@@ -13,6 +13,10 @@
 # CONFIG_SOUND is not set
 # CONFIG_MEDIA is not set
 # CONFIG_INPUT is not set
+# CONFIG_INPUT_MOUSE is not set
+# CONFIG_MOUSE_PS2 is not set
+# CONFIG_NETWORK_FILESYSTEMS is not set
+# CONFIG_EFIVAR_FS is not set
 # CONFIG_DRM is not set
 
 # Enable /proc/config.gz
@@ -22,3 +26,6 @@ CONFIG_IKCONFIG_PROC=y
 # Enable loop device as module for remote upgrades
 CONFIG_BLK_DEV_LOOP=m
 CONFIG_BLK_DEV_LOOP_MIN_COUNT=0
+
+# For some reason X86 has this off by default
+CONFIG_TMPFS=y
