@@ -12,6 +12,8 @@ fi
 
 set -eou pipefail
 
+. /usr/share/jlbsp/utils
+
 # TODO: This probably could use some simplification, in fact all three of these arguments
 # are likely not necessary since we can use the symlinks on device to figure it out
 
@@ -43,10 +45,11 @@ modprobe loop
 
 dev="$(losetup -f)"
 rimg="$(realpath "$img")"
-oblk="$(realpath /dev/root | sed 's/p\?[0-9]//g')"
 
 if uname -m | grep -q 'x86'; then
-	echo "X86 / AMD64 architecture detected, expecting a single /root partition with MBR"
+	oblk="$(realpath /dev/root | sed 's/p\?[0-9]\+$//g')"
+	echo "X86 / AMD64 architecture detected, expecting a single /root partition with MBR at ${oblk}"
+	wait_for_cancel 5
 	if [ -b "${oblk}1" ] && [ ! -b "${oblk}2" ]; then
 		echo "Partition layout is valid, creating loop device to perform upgrade"
 		losetup -P "$dev" "$img"
@@ -55,7 +58,9 @@ if uname -m | grep -q 'x86'; then
 		else err_part_layout "Upgrade image / loop device"; fi
 	else err_part_layout "Base device"; fi
 elif uname -m | grep -q 'arm'; then
-	echo "ARM architecture detected, expecting /boot + /root layout"
+	oblk="$(realpath /dev/root | sed 's/p\?[0-9]\+$//g')"
+	echo "ARM architecture detected, expecting /boot + /root layout, at ${oblk}"
+	wait_for_cancel 5
 	if [ -b "${oblk}p1" ] && [ -b "${oblk}p2" ] && [ ! -b "${oblk}p3" ]; then
 		echo "Partition layout is valid, creating loop device to perform upgrade"
 		losetup -P "$dev" "$img"
