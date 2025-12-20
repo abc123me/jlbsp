@@ -47,3 +47,16 @@ wait_for_ntp() {
 	echo "Time synchronized after waiting $cnt seconds!"
 	return 0
 }
+
+# Waits n seconds for user to cancel
+# wait_for_cancel [time default=5 seconds]
+wait_for_cancel() {
+	let tout=6
+	[ $# -ge 1 ] && let "tout=$1+1"
+	while let tout--; do
+		echo -ne "\rPress any key to cancel, $tout seconds remaining..."
+		if read -n 1 -s -t 1; then echo; return 1; fi
+	done
+	echo
+	return 0
+}
