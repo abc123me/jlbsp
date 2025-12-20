@@ -3,3 +3,8 @@
 BUILDROOT_VERSION="master"
 BUILDROOT_REPO="buildroot"
 BUILDROOT_URL="https://github.com/buildroot/${BUILDROOT_REPO}.git"
+
+DEPLOY_USER="root"
+DEPLOY_FILE="images/sdcard.img"
+DEPLOY_LOCATION="/tmp/sdcard.img"
+DEPLOY_COMMAND="upgrade"
