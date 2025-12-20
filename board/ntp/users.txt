@@ -2,3 +2,4 @@
 
 #username uid group gid password home shell groups  comment
 gps       -1  gps   -1  *        -    -     gps,tty User and group for gps server (gpsd)
+www       -1  www   -1  *        -    -     www     User and group for web server (lighttpd)

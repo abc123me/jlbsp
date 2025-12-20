@@ -5,4 +5,10 @@
 /etc/init.d/S80lighttpd   f 755 root root - - - - -
 /etc/init.d/S90renice     f 755 root root - - - - -
 /etc/chrony.conf          f 644 root root - - - - -
+/etc/lighttpd.conf        f 644 root root - - - - -
+/etc/php-fpm.conf         f 644 root root - - - - -
 /root/.config/htop/htoprc f 644 root root - - - - -
+/www/index.php            f 644 www  www  - - - - -
+/www/style.css            f 644 www  www  - - - - -
+/www/script.js            f 644 www  www  - - - - -
+/www/favicon.ico          f 644 www  www  - - - - -
