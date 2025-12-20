@@ -1,3 +1,4 @@
 #!/usr/bin/sh
 
 BSP_CONFIG="ntp.config"
+DEPLOY_TO="ntp.main.lan"
