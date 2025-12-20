@@ -2,5 +2,7 @@
 
 /cpuset                   d 755 root root - - - - -
 /etc/init.d/S50gpsd       f 755 root root - - - - -
+/etc/init.d/S80lighttpd   f 755 root root - - - - -
 /etc/init.d/S90renice     f 755 root root - - - - -
 /etc/chrony.conf          f 644 root root - - - - -
+/root/.config/htop/htoprc f 644 root root - - - - -
