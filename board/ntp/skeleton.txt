@@ -9,6 +9,7 @@
 /etc/php-fpm.conf         f 644 root root - - - - -
 /root/.config/htop/htoprc f 644 root root - - - - -
 /www/index.php            f 644 www  www  - - - - -
-/www/style.css            f 644 www  www  - - - - -
-/www/script.js            f 644 www  www  - - - - -
 /www/favicon.ico          f 644 www  www  - - - - -
+/www/script.js            f 644 www  www  - - - - -
+/www/style.css            f 644 www  www  - - - - -
+/www/jquery-3.7.1.js      f 644 www  www  - - - - -
