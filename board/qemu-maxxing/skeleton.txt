@@ -1,0 +1,2 @@
+/etc/init.d/S99qemu f 755 root root - - - - -
+/boot/grub/grub.cfg f 644 root root - - - - -
