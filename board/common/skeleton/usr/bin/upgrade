@@ -57,7 +57,7 @@ if uname -m | grep -q 'x86'; then
 			do_upgrade "1" "$rimg" "$oblk"
 		else err_part_layout "Upgrade image / loop device"; fi
 	else err_part_layout "Base device"; fi
-elif uname -m | grep -q 'arm'; then
+elif uname -m | grep -q 'arm' || uname -m | grep -q 'aarch'; then
 	oblk="$(realpath /dev/root | sed 's/p\?[0-9]\+$//g')"
 	echo "ARM architecture detected, expecting /boot + /root layout, at ${oblk}"
 	wait_for_cancel 5
