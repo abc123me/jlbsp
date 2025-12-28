@@ -58,7 +58,7 @@ wg-proxy | ✅      | RPi 5        | Raspberry pi based wireguard proxy
 
 Name                                                                    | Used By | Description
 ------------------------------------------------------------------------|---------|-------------------------------------------------------------------------
-[jl-secret-keys](https://shattereddisk.github.io/rickroll/rickroll.mp4) | all     | Git repository containing my SSH keys and wifi credentials
+[jl-secret-keys](https://shattereddisk.github.io/rickroll/rickroll.mp4) | all     | Repository containing SSH, WiFI, and VPN keys / credentials
 [driver-74hc595](https://github.com/abc123me/driver-74hc595)            | tdisp   | Driver for translating raw data into GPIO pins on the 74HC595
 [time-display](https://github.com/abc123me/time-display)                | tdisp   | Userspace app for updating the digits on my time display
 [bpi-wifi-fw](https://github.com/abc123me/bpi-m2-zero-wifi-fw)          | tdisp   | WiFi firmware for the BananaPi M2 Zero
