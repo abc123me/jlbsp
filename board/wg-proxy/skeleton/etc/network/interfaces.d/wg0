@@ -1,0 +1,5 @@
+iface wg0 inet static
+	address   192.168.8.55
+	netmask   255.255.255.0
+	pre-up    wg-quick up $IFACE
+	post-down wg-quick down $IFACE

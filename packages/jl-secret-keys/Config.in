@@ -43,4 +43,10 @@ config BR2_PACKAGE_JL_SECRET_KEYS_GITEA_RUNNER
 	help
 	  Private keys for gitea runner
 
+config BR2_PACKAGE_JL_SECRET_KEYS_WG_PROXY
+	bool "Private VPN and SSH keys for wireguard proxy"
+	default n
+	help
+	  Private SSH keys for wireguard proxy
+
 endif

@@ -52,9 +52,7 @@ Name     | Support | For          | Description
 ---------|---------|--------------|------------------------------------------
 ntp      | ✅      | RPi 2 w/ GPS | Raspberry pi based NTP server
 tdisp    | ✅      | BPi M2 Zero  | Banana pi based clock / time display
-<!---
 wg-proxy | ✅      | RPi 5        | Raspberry pi based wireguard proxy
--->
 
 ## Packages
 

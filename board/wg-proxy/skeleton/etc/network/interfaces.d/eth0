@@ -1,0 +1,4 @@
+auto eth0
+iface eth0 inet dhcp
+	post-down wg-proxyd down
+	post-up   wg-proxyd up

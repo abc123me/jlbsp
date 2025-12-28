@@ -1,0 +1,12 @@
+# Enable core options for wireguard
+CONFIG_NET_CORE=y
+CONFIG_NET_UDP_TUNNEL=y
+CONFIG_WIREGUARD=y
+
+# Enable RAW iptables support
+CONFIG_NET=y
+CONFIG_INET=y
+CONFIG_NETFILTER=y
+CONFIG_IP_NF_IPTABLES=y
+CONFIG_IP_NF_RAW=y
+

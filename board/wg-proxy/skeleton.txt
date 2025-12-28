@@ -1,0 +1,8 @@
+# Skeleton permissions file
+
+/etc/network/interfaces.d/eth0 f 644 root root - - - - -
+/etc/network/interfaces.d/wg0  f 644 root root - - - - -
+/etc/sysctl.d/forwarding.conf  f 644 root root - - - - -
+/etc/wireguard                 d 755 root root - - - - -
+/usr/bin/wg-proxyd             f 755 root root - - - - -
+

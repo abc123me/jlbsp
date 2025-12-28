@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+csv() { echo "$1" | awk -F':' "{print \$$2}"; }
+
+run_iptables() {
+	m="$1"; shift 1; for rng in "$@"; do
+		vpn_port="$(csv "$rng" 1)"; lan_addr="$(csv "$rng" 2)"; lan_port="$(csv "$rng" 3)"
+		iptables "$m" PREROUTING -t nat -p tcp -i wg0 --dport "$vpn_port" -j DNAT --to-destination "${lan_addr}:${lan_port}"
+		iptables "$m" POSTROUTING -t nat -p tcp -d "$lan_addr" --dport "$lan_port" -j MASQUERADE
+		iptables "$m" FORWARD -p tcp -d "$lan_addr" --dport "$lan_port" -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+	done
+}
+
+fwd=("80:192.168.1.12:80" "443:192.168.1.12:443")
+case "$1" in
+	up)   ifup wg0; run_iptables -A "${fwd[@]}"   ;;
+	down) run_iptables -D "${fwd[@]}"; ifdown wg0 ;;
+esac

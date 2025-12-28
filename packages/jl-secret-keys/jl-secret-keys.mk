@@ -31,6 +31,12 @@ ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_GITEA_RUNNER),y)
 	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/gitea-runner/ssh_host_ed25519_key.pub $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key.pub ;
 endif
 
+ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_WG_PROXY),y)
+	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/wg-proxy/ssh_host_ed25519_key     $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key ;
+	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/wg-proxy/ssh_host_ed25519_key.pub $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key.pub ;
+	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/wg-proxy/wireguard.conf           $(TARGET_DIR)/etc/wireguard/wg0.conf ;
+endif
+
 define JL_SECRET_KEYS_INSTALL_TARGET_CMDS
 	$(JL_SECRET_KEYS_FILES_INSTALL)
 endef
