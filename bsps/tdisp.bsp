@@ -1,3 +1,4 @@
 #!/usr/bin/sh
 
 BSP_CONFIG="tdisp.config"
+DEPLOY_TO="tdisp.main.lan"
