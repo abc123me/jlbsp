@@ -4,15 +4,26 @@ csv() { echo "$1" | awk -F':' "{print \$$2}"; }
 
 run_iptables() {
 	m="$1"; shift 1; for rng in "$@"; do
-		vpn_port="$(csv "$rng" 1)"; lan_addr="$(csv "$rng" 2)"; lan_port="$(csv "$rng" 3)"
-		iptables "$m" PREROUTING -t nat -p tcp -i wg0 --dport "$vpn_port" -j DNAT --to-destination "${lan_addr}:${lan_port}"
-		iptables "$m" POSTROUTING -t nat -p tcp -d "$lan_addr" --dport "$lan_port" -j MASQUERADE
-		iptables "$m" FORWARD -p tcp -d "$lan_addr" --dport "$lan_port" -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+		ext_if="$(csv "$rng" 1)"; ext_port="$(csv "$rng" 2)";
+		int_addr="$(csv "$rng" 2)"; int_port="$(csv "$rng" 4)"; int_if="$(csv "$rng" 5)"
+		iptables "$m" PREROUTING -t nat -p tcp -i "$ext_if" --dport "$ext_port" -j DNAT --to-destination "${int_addr}:${int_port}"
+		iptables "$m" POSTROUTING -t nat -p tcp -d "$int_addr" --dport "$int_port" -j MASQUERADE
+		iptables "$m" FORWARD -p tcp -o "$int_if" -d "$int_addr" --dport "$int_port" -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 	done
 }
 
-fwd=("80:192.168.1.12:80" "443:192.168.1.12:443")
+media_ip="192.168.1.12"
+fwd=("eth0:80:${media_ip}:80:wg0" "eth0:443:${media_ip}:443:wg0")
+route=("-net" "${media_ip}" "netmask" "255.255.255.255" "metric" "1024" "dev" "wg0")
 case "$1" in
-	up)   ifup wg0; run_iptables -A "${fwd[@]}"   ;;
-	down) run_iptables -D "${fwd[@]}"; ifdown wg0 ;;
+	up)
+		ifup wg0
+		run_iptables -A "${fwd[@]}"
+		route add "${route[@]}"
+		;;
+	down)
+		run_iptables -D "${fwd[@]}"
+		route del "${route[@]}"
+		ifdown wg0
+		;;
 esac
