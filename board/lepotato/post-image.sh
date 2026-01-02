@@ -2,6 +2,7 @@
 
 set -e
 
+# Build encrypted GXL FIT u-boot blob thing
 uboot_last="$(cat "${BINARIES_DIR}/.u-boot.bin.hash" || echo fail)"
 uboot_cur="$(cksum "${BINARIES_DIR}/u-boot.bin" || echo fail2)"
 if [ "$uboot_cur" != "$uboot_last" ] || [ ! -d "${BINARIES_DIR}/amlogic-boot-fip/out" ]; then
@@ -15,6 +16,7 @@ else
 	echo -e "\e[1;33mFIP for $2 is already built!\e[0m"
 fi
 
+# Run genimage
 echo -e "\e[1;33mRunning genimage for $2\e[0m"
 ln -sf "${BINARIES_DIR}/meson-gxl-s905x-libretech-cc.dtb" "${BINARIES_DIR}/system.dtb"
 "support/scripts/genimage.sh" -c "${BR2_EXTERNAL_JLBSP_PATH}/board/$2/genimage.cfg"
