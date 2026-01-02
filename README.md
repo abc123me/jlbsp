@@ -39,12 +39,13 @@ Future planned additional syntax:
 
 ### Developmental builds
 
-Name        | Support | Description
-------------|---------|------------------------------------------
-amd64-dev   | ⚠️       | X86 / AMD64 developmental image
-rpi5-dev    | ✅      | RPi 5 developmental image
-rpi2-dev    | ✅      | RPi 2 developmental image
-rpi0w-dev   | ✅      | RPi 0 developmental image (with wifi)
+Name         | Support | Description
+-------------|---------|------------------------------------------
+amd64-dev    | ⚠️       | X86 / AMD64 developmental image
+rpi5-dev     | ✅      | RPi 5 developmental image
+rpi2-dev     | ✅      | RPi 2 developmental image
+rpi0w-dev    | ✅      | RPi 0 developmental image (with wifi)
+lepotato-dev | ✅      | Libre Le-Potato developmental image
 
 ### Primary builds
 
