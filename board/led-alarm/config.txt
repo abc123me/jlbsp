@@ -1,0 +1,6 @@
+kernel=zImage
+enable_uart=1
+dtoverlay=i2c-rtc,ds3231
+dtparam=uart0,i2c_arm=on
+start_file=start.elf
+fixup_file=fixup.dat
