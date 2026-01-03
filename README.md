@@ -39,21 +39,37 @@ Future planned additional syntax:
 
 ### Developmental builds
 
-Name         | Support | Description
--------------|---------|------------------------------------------
-amd64-dev    | ⚠️       | X86 / AMD64 developmental image
-rpi5-dev     | ✅      | RPi 5 developmental image
-rpi2-dev     | ✅      | RPi 2 developmental image
-rpi0w-dev    | ✅      | RPi 0 developmental image (with wifi)
-lepotato-dev | ✅      | Libre Le-Potato developmental image
+Name          | Support | Description
+--------------|---------|------------------------------------------
+amd64-dev     | ⚠️🖧🖮🖵   | X86 / AMD64 developmental image
+rpi5-dev      | ✅🖧     | RPi 5 developmental image
+rpi2-dev      | ✅🖧     | RPi 2 developmental image
+rpi0w-dev     | ✅🌐    | RPi 0 developmental image (with wifi)
+lepotato-dev  | ✅🖧💾   | Libre Le-Potato developmental image
+radxa0-3e-dev | ✅🖧     | Libre Le-Potato developmental image
 
 ### Primary builds
 
 Name     | Support | For          | Description
 ---------|---------|--------------|-----------------------------------------------------------------
-ntp      | ✅      | RPi 2 w/ GPS | Local Stratum 0 GPS based NTP server
-tdisp    | ✅      | BPi M2 Zero  | 7-Segment clock / time display, needs special bpi-wifi-fw
-wg-proxy | ✅      | RPi 5        | Wireguard proxy that forwards media server / VM
+ntp      | ✅🖧🛰️   | RPi 2 w/ GPS | Local Stratum 0 GPS based NTP server
+tdisp    | ✅🌐⚙️  | BPi M2 Zero  | 7-Segment clock / time display, needs special bpi-wifi-fw
+wg-proxy | ✅🖧🧱   | RPi 5        | Wireguard proxy that forwards media server / VM
+
+### Support legend
+
+Symbol | Meaning
+-------|------------------------------
+⚠️     | Danger, not regularly tested
+✅     | Regularly built and tested
+🖧      | Has ethernet support
+🌐     | Has wireless (wifi) support
+💾     | Has eMMC support
+🖵      | Has graphics / fb support
+🖮      | Has input support
+🛰️     | Has GPS support
+🧱     | Has firewall / iptables support
+⚙️     | Has custom drivers / software
 
 ## Packages
 
