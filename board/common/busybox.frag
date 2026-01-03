@@ -10,4 +10,6 @@ CONFIG_FEATURE_DD_STATUS=y
 
 CONFIG_PGREP=y
 
+CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-t1 -A3 -b -R -O search -O staticroutes -x hostname:$(hostname)"
+
 # CONFIG_FEATURE_IPV6 is not set
