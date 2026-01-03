@@ -1,0 +1,4 @@
+#!/usr/bin/sh
+
+BSP_CONFIG="led-alarm.config"
+DEPLOY_TO="led-alarm.main.lan"
