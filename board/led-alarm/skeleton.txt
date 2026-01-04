@@ -1,4 +1,7 @@
 # Skeleton permissions file
+/data                          d 755 root root - - - - -
+/etc/init.d/S04data-mount      f 755 root root - - - - -
 /etc/init.d/S95led-alarm       f 755 root root - - - - -
-/etc/led-alarm.conf            f 644 root root - - - - -
+/etc/led-alarm-default.conf    f 644 root root - - - - -
+/usr/share/jlbsp/data-mount    f 644 root root - - - - -
 /usr/share/jlbsp/upgrade-hooks f 644 root root - - - - -

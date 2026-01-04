@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+PID_FILE="/var/run/led-alarm.pid"
+
+. "/usr/share/jlbsp/data-mount"
+
+root="$(realpath /dev/root)"
+base="$(echo "$root" | sed 's/p[0-9]\+$//g')"
+user="${base}p3"
+
+case "$1" in
+	start)
+		if ! mountpoint -q "$data_mountpoint"; then
+			[ -b "$user" ] && fsck.ext4 -y "$user"
+			mount_data_partition "$base" "$user"
+		else echo "already mounted?!"; fi
+		;;
+	stop)
+		mountpoint -q "$data_mountpoint" && sync && umount "$data_mountpoint"
+		;;
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+esac

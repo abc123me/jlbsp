@@ -1,14 +1,14 @@
 #!/usr/bin/env sh
 
 PID_FILE="/var/run/led-alarm.pid"
+CONF_FILE="/var/run/led-alarm.conf"
 
 case "$1" in
 	start)
 		if [ -f "$PID_FILE" ]; then
 			"$0" stop;
 		fi
-		/usr/bin/led-alarm &
-		echo "$!" >"$PID_FILE"
+		/usr/bin/led-alarm -c "$CONF_FILE" -p "$PID_FILE" &
 		;;
 	stop)
 		if [ -f "$PID_FILE" ]; then
