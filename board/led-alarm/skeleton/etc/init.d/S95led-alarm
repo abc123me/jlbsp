@@ -4,10 +4,9 @@ PID_FILE="/var/run/led-alarm.pid"
 
 case "$1" in
 	start)
-		# Wait until we have a network and NTP synchronization
-		# TODO: Maybe add an RTC to this at some point?
-		wait_for_iface wlan0 && wait_for_ntp
-
+		if [ -f "$PID_FILE" ]; then
+			"$0" stop;
+		fi
 		/usr/bin/led-alarm &
 		echo "$!" >"$PID_FILE"
 		;;
