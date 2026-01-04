@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+validate_led_alarm() {
+	echo "my validate $1 $2"
+	[ -b "${2}1" ] && [ -b "${2}2" ] && [ ! -b "${2}3" ] && return 0
+	return 1
+}
+
+upgrade_start() {
+	echo "start"
+	validate_func="validate_led_alarm"
+}
+upgrade_pre_remount() {
+	echo "pre remount"
+}
+upgrade_pre_dd() {
+	echo "pre dd"
+}
+upgrade_post_dd() {
+	echo "post dd"
+}

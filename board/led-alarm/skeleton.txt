@@ -1,3 +1,4 @@
 # Skeleton permissions file
 /etc/init.d/S95led-alarm       f 755 root root - - - - -
 /etc/led-alarm.conf            f 644 root root - - - - -
+/usr/share/jlbsp/upgrade-hooks f 644 root root - - - - -
