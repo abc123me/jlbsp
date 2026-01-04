@@ -5,3 +5,4 @@
 /etc/led-alarm-default.conf    f 644 root root - - - - -
 /usr/share/jlbsp/data-mount    f 644 root root - - - - -
 /usr/share/jlbsp/upgrade-hooks f 644 root root - - - - -
+/www                           d 755 root root - - - - -
