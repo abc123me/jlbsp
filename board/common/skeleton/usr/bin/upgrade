@@ -14,15 +14,30 @@ set -eou pipefail
 
 . /usr/share/jlbsp/utils
 
+if [ -f "/usr/share/jlbsp/upgrade-hooks" ]; then
+	echo "Sourcing upgrade-hooks script"
+	. "/usr/share/jlbsp/upgrade-hooks"
+fi
+
+run_hook() {
+	hook="upgrade_$1"; shift 1
+	if type "$hook" >/dev/null; then
+		echo "Running custom $hook hook"
+		"$hook" "$@"
+	fi
+}
+
 # TODO: This probably could use some simplification, in fact all three of these arguments
 # are likely not necessary since we can use the symlinks on device to figure it out
 
 # do_upgrade <rootfs partition number> <image location> <block device>"
 do_upgrade() {
 	echo "Loop device created and upgrade partition layout validated, relocating rootfs"
+	run_hook pre_remount
 	mount -o remount,ro / || true
 	mkdir -p /tmp/newroot
 	mount "${dev}p${1}" /tmp/newroot
+	run_hook post_newroot_mount
 	sync
 	pivot_root /tmp/newroot /tmp/newroot/mnt
 	cd /
@@ -30,9 +45,11 @@ do_upgrade() {
 	mount -t devtmpfs devtmpfs /dev
 	mount -t proc proc /proc
 	mount -t tmpfs tmpfs /tmp
+	run_hook pre_dd
 	echo "Rootfs pivoted, loop device now on /, old root on /mnt, flashing SD card"
 	echo dd "if=/mnt/$2" "of=$3" bs=1M
 	dd "if=/mnt/$2" "of=$3" bs=1M
+	run_hook post_dd
 	sync
 	reboot
 }
@@ -43,32 +60,42 @@ err_part_layout() {
 
 modprobe loop
 
+validate_x86() {
+	[ -b "${2}1" ] && [ ! -b "${2}2" ] && return 0
+	return 1
+}
+
+validate_arm() {
+	[ -b "${2}1" ] && [ -b "${2}2" ] && [ ! -b "${2}3" ] && return 0
+	return 1
+}
+
 dev="$(losetup -f)"
 rimg="$(realpath "$img")"
+oblk="$(realpath /dev/root | sed 's/p\?[0-9]\+$//g')"
+part_num="0"
+part_name=""
+validate_func="false"
 
 if uname -m | grep -q 'x86'; then
-	oblk="$(realpath /dev/root | sed 's/p\?[0-9]\+$//g')"
 	echo "X86 / AMD64 architecture detected, expecting a single /root partition with MBR at ${oblk}"
-	wait_for_cancel 5
-	if [ -b "${oblk}1" ] && [ ! -b "${oblk}2" ]; then
-		echo "Partition layout is valid, creating loop device to perform upgrade"
-		losetup -P "$dev" "$img"
-		if [ -b "${dev}p1" ] && [ ! -b "${dev}p2" ]; then
-			do_upgrade "1" "$rimg" "$oblk"
-		else err_part_layout "Upgrade image / loop device"; fi
-	else err_part_layout "Base device"; fi
+	part_num="1"; part_name="${oblk}"; validate_func="validate_x86"
 elif uname -m | grep -q 'arm' || uname -m | grep -q 'aarch'; then
-	oblk="$(realpath /dev/root | sed 's/p\?[0-9]\+$//g')"
 	echo "ARM architecture detected, expecting /boot + /root layout, at ${oblk}"
-	wait_for_cancel 5
-	if [ -b "${oblk}p1" ] && [ -b "${oblk}p2" ] && [ ! -b "${oblk}p3" ]; then
-		echo "Partition layout is valid, creating loop device to perform upgrade"
-		losetup -P "$dev" "$img"
-		if [ -b "${dev}p1" ] && [ -b "${dev}p2" ] && [ ! -b "${dev}p3" ]; then
-			do_upgrade "2" "$rimg" "$oblk"
-		else err_part_layout "Upgrade image / loop device"; fi
-	else err_part_layout "Base device"; fi
+	part_num="2"; part_name="${oblk}p"; validate_func="validate_arm"
 else
 	echo "Unknown architecture detected, only valid for arm or x86 architectures!" 2>&1
 	exit 1
 fi
+
+wait_for_cancel 5
+run_hook start
+if "$validate_func" "orig" "$part_name"; then
+	echo "Partition layout is valid, creating loop device to perform upgrade"
+	run_hook pre_losetup
+	losetup -P "$dev" "$img"
+	run_hook post_losetup
+	if "$validate_func" "loop" "${dev}p"; then
+		do_upgrade "$part_num" "$rimg" "$oblk"
+	else err_part_layout "Upgrade image / loop device"; fi
+else err_part_layout "Base device"; fi
