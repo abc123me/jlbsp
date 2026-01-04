@@ -1,0 +1,39 @@
+#!/usr/bin/env sh
+
+RTC_DEV="/dev/rtc0"
+PID_FILE="/var/run/rtc.pid"
+
+if [ ! -c "$RTC_DEV" ]; then             echo "[$0]: not running, target has no rtc device"; exit 0; fi
+if ! command -v ntpq >/dev/null; then    echo "[$0]: requires ntpq command";                 exit 1; fi
+if ! command -v hwclock >/dev/null; then echo "[$0]: requires hwclock command";              exit 1; fi
+
+set -e
+
+case "$1" in
+	start)
+		if [ -f "$PID_FILE" ]; then
+			echo "[$0]: Already running, attempting to stop!"
+			"$0" stop || true
+		fi
+		hwclock -u -s -f "$RTC_DEV"
+		echo "[$0]: system time initialized from rtc!"
+		(while true; do sleep 86400; "$0" update; done) &
+		echo "$!" >"$PID_FILE"
+		;;
+	stop)
+		"$0" update
+		kill -SIGTERM "$(cat "$PID_FILE")" || true
+		rm -fv "$PID_FILE"
+		exit 0
+		;;
+	update)
+		hwclock -u -w -f "$RTC_DEV"
+		echo "[$0]: rtc updated with system time!"
+		;;
+	restart) "$0" stop; "$0" start; ;;
+	*)
+		echo "Usage: $0 <start/stop/restart/update>"
+		exit 1
+		;;
+esac
+
