@@ -33,11 +33,11 @@ run_hook() {
 # do_upgrade <rootfs partition number> <image location> <block device>"
 do_upgrade() {
 	echo "Loop device created and upgrade partition layout validated, relocating rootfs"
-	run_hook pre_remount
+	run_hook pre_remount "$1" "$2" "$3" "${dev}p${1}"
 	mount -o remount,ro / || true
 	mkdir -p /tmp/newroot
 	mount "${dev}p${1}" /tmp/newroot
-	run_hook post_newroot_mount
+	run_hook post_newroot_mount "$1" "$2" "$3" "${dev}p${1}"
 	sync
 	pivot_root /tmp/newroot /tmp/newroot/mnt
 	cd /
@@ -45,11 +45,11 @@ do_upgrade() {
 	mount -t devtmpfs devtmpfs /dev
 	mount -t proc proc /proc
 	mount -t tmpfs tmpfs /tmp
-	run_hook pre_dd
+	run_hook pre_dd "$1" "$2" "$3" "/mnt"
 	echo "Rootfs pivoted, loop device now on /, old root on /mnt, flashing SD card"
 	echo dd "if=/mnt/$2" "of=$3" bs=1M
 	dd "if=/mnt/$2" "of=$3" bs=1M
-	run_hook post_dd
+	run_hook post_dd "$1" "$2" "$3" "/mnt"
 	sync
 	reboot
 }
