@@ -27,10 +27,17 @@ case "$1" in
 		exit 0
 		;;
 	update)
-		hwclock -u -w -f "$RTC_DEV"
-		echo "[$0]: rtc updated with system time!"
+		if [ "$(ntpq -p | wc -l)" -gt 0 ]; then
+			hwclock -u -w -f "$RTC_DEV"
+			echo "[$0]: rtc updated with system time!"
+		else
+			echo "[$0]: system doesn't have ntp, not updating rtc!"
+		fi
 		;;
-	restart) "$0" stop; "$0" start; ;;
+	restart)
+		"$0" stop || true
+		"$0" start
+		;;
 	*)
 		echo "Usage: $0 <start/stop/restart/update>"
 		exit 1
