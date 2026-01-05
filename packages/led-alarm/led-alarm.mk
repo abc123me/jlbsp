@@ -15,6 +15,8 @@ endef
 
 define LED_ALARM_INSTALL_TARGET_CMDS
     $(INSTALL) -D -m 0755 $(@D)/main $(TARGET_DIR)/usr/bin/led-alarm
+
+    $(INSTALL) -D -m 0755 $(@D)/web/index.php $(TARGET_DIR)/www/index.php
 endef
 
 $(eval $(generic-package))

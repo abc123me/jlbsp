@@ -1,0 +1,6 @@
+# Perform some simple pruning for lighttpd
+
+/etc/lighttpd/
+/etc/php-fpm.d/
+/etc/init.d/S50lighttpd
+/etc/php-fpm.conf.default

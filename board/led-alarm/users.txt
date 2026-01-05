@@ -1,0 +1,4 @@
+# Makeusers file for RPI LED alarm clock
+
+#username uid group gid password home shell groups  comment
+www       -1  www   -1  *        -    -     www     User and group for web server (lighttpd)
