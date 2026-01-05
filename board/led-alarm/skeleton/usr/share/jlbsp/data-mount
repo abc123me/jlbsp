@@ -20,8 +20,8 @@ mount_data_partition() {
 	mount "$2" "$data_mountpoint"
 
 	if [ ! -f "${data_mountpoint}/led-alarm.conf" ]; then
-		cp "/etc/led-alarm-default.conf" "${data_mountpoint}/led-alarm.conf"
+		cp "/etc/led-alarm.conf" "${data_mountpoint}/led-alarm.conf"
 	fi
 
-	ln -sf "${data_mountpoint}/led-alarm.conf" /var/run/led-alarm.conf
+	ln -sf "${data_mountpoint}/led-alarm.conf" "/var/run/led-alarm.conf"
 }
