@@ -5,3 +5,14 @@ config BR2_PACKAGE_LED_ALARM
 	help
 	  This is the userspace time display app for running
 	  my led alarm clock
+
+if BR2_PACKAGE_LED_ALARM
+
+config BR2_PACKAGE_LED_ALARM_WEB
+	bool "Web interface"
+	depends on BR2_PACKAGE_PHP && BR2_PACKAGE_LIBCONFIG_RW
+	default y
+	help
+	  This is the web interface for the led alarm
+
+endif

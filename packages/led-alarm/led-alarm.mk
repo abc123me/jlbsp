@@ -13,10 +13,20 @@ define LED_ALARM_BUILD_CMDS
     $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
 endef
 
-define LED_ALARM_INSTALL_TARGET_CMDS
-    $(INSTALL) -D -m 0755 $(@D)/main $(TARGET_DIR)/usr/bin/led-alarm
+# Install led-alarm binary
+LED_ALARM_FILES_INSTALL += $(INSTALL) -D -m 0755 $(@D)/main $(TARGET_DIR)/usr/bin/led-alarm ;
 
-    $(INSTALL) -D -m 0755 $(@D)/web/index.php $(TARGET_DIR)/www/index.php
+# Install default configuration file
+LED_ALARM_FILES_INSTALL += $(INSTALL) -D -m 0755 $(@D)/default.conf $(TARGET_DIR)/etc/led-alarm.conf ;
+
+ifeq ($(BR2_PACKAGE_LED_ALARM_WEB),y)
+# Install web stuff
+LED_ALARM_FILES_INSTALL += $(INSTALL) -D -m 0755 $(@D)/web/index.php $(TARGET_DIR)/www/index.php ;
+LED_ALARM_FILES_INSTALL += $(INSTALL) -D -m 0755 $(@D)/web/style.css $(TARGET_DIR)/www/style.css ;
+endif
+
+define LED_ALARM_INSTALL_TARGET_CMDS
+	$(LED_ALARM_FILES_INSTALL)
 endef
 
 $(eval $(generic-package))
