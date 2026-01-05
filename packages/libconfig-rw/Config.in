@@ -1,0 +1,10 @@
+config BR2_PACKAGE_LIBCONFIG_RW
+	bool "libconfig-rw tool"
+	depends on BR2_PACKAGE_LIBCONFIG
+	default n
+	help
+	  Simple C utility for reading / writing to libconfig configuration files
+
+	  Made for my led-alarm as I need some way to parse libconfig configurations via PHP
+
+	  https://github.com/abc123me/libconfig-rw
