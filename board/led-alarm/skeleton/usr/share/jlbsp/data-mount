@@ -2,9 +2,17 @@
 
 data_mountpoint="/data"
 
+make_data_partition() {
+	echo "Creating new data partition!"
+	echo parted "$1" -s "mkpart primary ext4 1024M 2048M"
+	parted "$1" -s "mkpart primary ext4 1024M 2048M"
+	echo "fsck.ext4 -n "$2" || mkfs.ext4 -F "$2""
+	fsck.ext4 -n "$2" || mkfs.ext4 -F "$2"
+}
+
 mount_data_partition() {
 	if [ -b "$2" ]; then
-		fsck.ext4 -n "$2" || init_data_partition "$2"
+		fsck.ext4 -y "$2" || init_data_partition "$2"
 	else
 		make_data_partition "$1" "$2"
 	fi
@@ -16,12 +24,4 @@ mount_data_partition() {
 	fi
 
 	ln -sf "${data_mountpoint}/led-alarm.conf" /var/run/led-alarm.conf
-}
-
-make_data_partition() {
-	echo "Creating new data partition!"
-	echo parted "$1" -s "mkpart primary ext4 512M 544M"
-	parted "$1" -s "mkpart primary ext4 512M 544M"
-	echo "fsck.ext4 -n "$2" || mkfs.ext4 -F "$2""
-	fsck.ext4 -n "$2" || mkfs.ext4 -F "$2"
 }

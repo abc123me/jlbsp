@@ -1,63 +1,33 @@
 #!/usr/bin/env sh
 
-data_partition=""
-
 . "/usr/share/jlbsp/data-mount"
 
 validate_led_alarm() {
-	[ -b "${2}1" ] || return 1
-	[ -b "${2}2" ] || return 1
-	case "$1" in
-		loop)
-			[ ! -b "${2}3" ] && return 0
-			;;
-		orig)
-			[ -b "${2}4" ] && return 1
-			if [ -b "${2}3" ]; then
-				echo "Found data partition, will preserve!"
-				data_partition="${2}3"
-			fi
-			return 0
-			;;
-	esac
-	echo "Validation of $1 device failed!"
-	return 1
+	if [ ! -b "${2}1" ] || [ ! -b "${2}2" ] || [ -b "${2}4" ]; then
+		echo "Fail - Missing / Unidentified partition on $1 device?!"
+		return 1;
+	fi
+	# The third "schrödinger" partition may or may not exist
+	# but on the original rootfs ONLY
+	if [ "$1" != "orig" ] && [ -b "${2}3" ]; then
+		echo "Fail - Data partition exists on $1 device?!"
+		return 1
+	fi
+	echo "Custom validation for ${2}X partitions on $1 device passed."
+	return 0
 }
 
 upgrade_start() {
-	echo "start"
 	validate_func="validate_led_alarm"
 }
-upgrade_pre_remount() {
-	if [ -n "$data_partition" ]; then
-		echo "Stopping LED alarm clock service"
-		"/etc/init.d/S95led-alarm" stop || true
-		sleep 1.5 # led-alarm doesn't always immediately exit
-		echo "Unmounting data partition at $data_mountpoint!"
-		mountpoint -q "$data_mountpoint" && umount -f "$data_mountpoint"
-		echo "Copying data partition to RAM!"
-		echo dd "if=$data_partition" "of=/tmp/data-prt.img" "bs=4M"
-		dd "if=$data_partition" "of=/tmp/data-prt.img" "bs=4M"
-		echo "Copied data partition to RAM!"
-	fi
-}
-upgrade_post_dd() {
-	base="$(echo "$3" | sed 's/p[0-9]*$//g')"
-	data="${base}p3"
 
-	partprobe
-
-	if [ ! -b "${data}" ]; then
-		make_data_partition "${base}" "${data}"
-	fi
-
-	if [ -n "$data_partition" ]; then
-		if [ "$data" != "$data_partition" ]; then
-			echo "Data partition computed name (${data}) doesn't match original name (${data_partition})"
-			return 1
-		fi
-		echo dd "if=$4/tmp/data-prt.img" "of=$data_partition" "bs=4M"
-		dd "if=$4/tmp/data-prt.img" "of=$data_partition" "bs=4M"
-		echo "Data partition restored!"
-	fi
+upgrade_pre_unmount() {
+	echo "Stopping processes"
+	"/etc/init.d/S50lighttpd" stop
+	"/etc/init.d/S95led-alarm" stop
+	echo "Giving processes 1.5 seconds to gracefully stop"
+	sleep 1.5
+	echo "Unmounting data partition!"
+	sync
+	umount -f "$data_mountpoint"
 }

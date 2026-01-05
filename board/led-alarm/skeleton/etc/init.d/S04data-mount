@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-PID_FILE="/var/run/led-alarm.pid"
-
 . "/usr/share/jlbsp/data-mount"
 
 root="$(realpath /dev/root)"
@@ -11,7 +9,6 @@ user="${base}p3"
 case "$1" in
 	start)
 		if ! mountpoint -q "$data_mountpoint"; then
-			[ -b "$user" ] && fsck.ext4 -y "$user"
 			mount_data_partition "$base" "$user"
 		else echo "already mounted?!"; fi
 		;;
