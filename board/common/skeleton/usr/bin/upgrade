@@ -22,7 +22,7 @@ fi
 run_hook() {
 	hook="upgrade_$1"; shift 1
 	if type "$hook" >/dev/null; then
-		echo "Running custom $hook hook"
+		echo -e "\e[1;36mRunning custom $hook hook\e[0m"
 		"$hook" "$@"
 	fi
 }
@@ -32,12 +32,15 @@ run_hook() {
 
 # do_upgrade <rootfs partition number> <image location> <block device>"
 do_upgrade() {
-	echo "Loop device created and upgrade partition layout validated, relocating rootfs"
+	echo -e "\e[1;33mLoop device created and upgrade partition layout validated, relocating rootfs\e[0m"
 	run_hook pre_remount "$1" "$2" "$3" "${dev}p${1}"
+	# Not sure why, but crond causes random intermittent failures in the upgrade process
+	killall -SIGINT crond || echo "Attempted and failed to stop crond"
+	swapoff -a
 	mount -o remount,ro / || true
 	mkdir -p /tmp/newroot
-	mount "${dev}p${1}" /tmp/newroot
-	run_hook post_newroot_mount "$1" "$2" "$3" "${dev}p${1}"
+	mount -o ro "${dev}p${1}" /tmp/newroot
+	run_hook pivot_root "$1" "$2" "$3" "${dev}p${1}"
 	sync
 	pivot_root /tmp/newroot /tmp/newroot/mnt
 	cd /
@@ -46,12 +49,28 @@ do_upgrade() {
 	mount -t proc proc /proc
 	mount -t tmpfs tmpfs /tmp
 	run_hook pre_dd "$1" "$2" "$3" "/mnt"
-	echo "Rootfs pivoted, loop device now on /, old root on /mnt, flashing SD card"
-	echo dd "if=/mnt/$2" "of=$3" bs=1M
-	dd "if=/mnt/$2" "of=$3" bs=1M
-	run_hook post_dd "$1" "$2" "$3" "/mnt"
-	sync
+	echo "Rootfs pivoted, loop device now on /, old root on /mnt"
+	cnt=3
+	sz="$(du -b "/mnt/$2" | awk '{print $1}')"
+	echo -e "\e[1;33mGetting crc of loopdev ramdisk!\e[0m"
+	ecrc="$(dd "if=/mnt/$2" bs=16M iflag=count_bytes count="$sz" | crc32)"
+	while [ $cnt -gt 0 ]; do
+		echo -e "\e[1;33mFlashing image!\e[0m"
+		echo dd "if=/mnt/$2" "of=$3" bs=4M conv=fsync
+		dd "if=/mnt/$2" "of=$3" bs=4M conv=fsync
+		echo -e "\e[1;33mVerifying image!\e[0m"
+		crc="$(dd if="$3" bs=4M iflag=count_bytes count="$sz" | crc32)"
+		if [ "$crc" = "$ecrc" ]; then
+			echo -e "\e[1;32mImage verified, rebooting!\e[0m"
+			break;
+		else
+			echo -e "\e[1;31mVerification failed, $crc != $ecrc, $cnt tries remaining!\e[0m"
+		fi
+		cnt=$((cnt-1))
+	done
+	run_hook reboot "$1" "$2" "$3" "/mnt"
 	reboot
+	# syncing could cause issues with the rootfs
 }
 err_part_layout() {
 	echo "$1 has invalid partition layout!" 1>&2
@@ -78,13 +97,13 @@ part_name=""
 validate_func="false"
 
 if uname -m | grep -q 'x86'; then
-	echo "X86 / AMD64 architecture detected, expecting a single /root partition with MBR at ${oblk}"
+	echo -e "\e[1;33mX86 / AMD64 architecture detected, expecting a single /root partition with MBR at ${oblk}\e[0m"
 	part_num="1"; part_name="${oblk}"; validate_func="validate_x86"
 elif uname -m | grep -q 'arm' || uname -m | grep -q 'aarch'; then
-	echo "ARM architecture detected, expecting /boot + /root layout, at ${oblk}"
+	echo -e "\e[1;33mARM architecture detected, expecting /boot + /root layout, at ${oblk}\e[0m"
 	part_num="2"; part_name="${oblk}p"; validate_func="validate_arm"
 else
-	echo "Unknown architecture detected, only valid for arm or x86 architectures!" 2>&1
+	echo -e "\e[1;31mUnknown architecture detected, only valid for arm or x86 architectures!\e[0m" 2>&1
 	exit 1
 fi
 
