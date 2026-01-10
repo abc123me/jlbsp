@@ -50,11 +50,12 @@ radxa0-3e-dev | ✅🖧     | Libre Le-Potato developmental image
 
 ### Primary builds
 
-Name     | Support | For          | Description
----------|---------|--------------|-----------------------------------------------------------------
-ntp      | ✅🖧🛰️   | RPi 2 w/ GPS | Local Stratum 0 GPS based NTP server
-tdisp    | ✅🌐⚙️  | BPi M2 Zero  | 7-Segment clock / time display, needs special bpi-wifi-fw
-wg-proxy | ✅🖧🧱   | RPi 5        | Wireguard proxy that forwards media server / VM
+Name      | Support | For          | Description
+----------|---------|--------------|-----------------------------------------------------------------
+ntp       | ✅🖧🛰️   | RPi 2 w/ GPS | Local Stratum 0 GPS based NTP server
+tdisp     | ✅🌐⚙️  | BPi M2 Zero  | 7-Segment clock / time display, needs special bpi-wifi-fw
+wg-proxy  | ✅🖧🧱   | RPi 5        | Wireguard proxy that forwards media server / VM
+led-alarm | ✅🌐⚙️   | RPi 0w       | LED alarm clock that uses a WS2812 led strip
 
 ### Support legend
 
@@ -73,9 +74,11 @@ Symbol | Meaning
 
 ## Packages
 
-Name                                                                    | Used By | Description
-------------------------------------------------------------------------|---------|-------------------------------------------------------------------------
-[jl-secret-keys](https://shattereddisk.github.io/rickroll/rickroll.mp4) | all     | Repository containing SSH, WiFI, and VPN keys / credentials
-[driver-74hc595](https://github.com/abc123me/driver-74hc595)            | tdisp   | Driver for translating raw data into GPIO pins on the 74HC595
-[time-display](https://github.com/abc123me/time-display)                | tdisp   | Userspace app for updating the digits on my time display
-[bpi-wifi-fw](https://github.com/abc123me/bpi-m2-zero-wifi-fw)          | tdisp   | WiFi firmware for the BananaPi M2 Zero
+Name                                                                    | Used By   | Description
+------------------------------------------------------------------------|-----------|-------------------------------------------------------------------------
+[jl-secret-keys](https://shattereddisk.github.io/rickroll/rickroll.mp4) | all       | Repository containing SSH, WiFI, and VPN keys / credentials
+[driver-74hc595](https://github.com/abc123me/driver-74hc595)            | tdisp     | Driver for translating raw data into GPIO pins on the 74HC595
+[time-display](https://github.com/abc123me/time-display)                | tdisp     | Userspace app for updating the digits on my time display
+[bpi-wifi-fw](https://github.com/abc123me/bpi-m2-zero-wifi-fw)          | tdisp     | WiFi firmware for the BananaPi M2 Zero
+[libconfig-rw](https://github.com/abc123me/libconfig-rw)                | led-alarm | Simple tool for reading/writing to libconfig style config files
+[led-alarm](https://github.com/abc123me/led-alarm)                      | led-alarm | LED alarm clock daemon and web files
