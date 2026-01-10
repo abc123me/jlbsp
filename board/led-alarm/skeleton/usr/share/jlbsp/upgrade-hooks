@@ -21,10 +21,10 @@ upgrade_start() {
 	validate_func="validate_led_alarm"
 }
 
-upgrade_pre_unmount() {
+upgrade_pre_remount() {
 	echo "Stopping processes"
-	"/etc/init.d/S50lighttpd" stop
-	"/etc/init.d/S95led-alarm" stop
+	/etc/init.d/S80lighttpd  stop
+	/etc/init.d/S95led-alarm stop
 	echo "Giving processes 1.5 seconds to gracefully stop"
 	sleep 1.5
 	echo "Unmounting data partition!"
