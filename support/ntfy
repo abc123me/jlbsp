@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+title="Unknown pipeline failure!"
+prior="default"
+tagsd="warning"
+
+case "$1" in
+	source)
+		title="JLBSP pipeline source failed"
+		;;
+	setup)
+		title="JLBSP pipeline setup failed"
+		;;
+	build)
+		title="JLBSP pipeline build failed"
+		;;
+	deploy)
+		title="JLBSP pipeline deploy failed"
+		prior="high"
+		tagsd="rotating_light"
+		;;
+	brick)
+		title="JLBSP pipeline deploy bricked"
+		prior="high"
+		tagsd="rotating_light"
+		;;
+	success)
+		title="JLBSP pipeline finished"
+		prior="low"
+		tagsd="tada"
+		;;
+	failed)
+		title="JLBSP pipeline finished"
+		prior="low"
+		;;
+esac
+
+curl                      \
+	-H "Title: $title"    \
+	-H "Priority: $prior" \
+	-H "Tags: $tagsd"     \
+	-d "$2"               \
+	"http://192.168.1.10:10222/jlbsp"
+
+exit 0

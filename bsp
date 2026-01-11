@@ -5,6 +5,8 @@ usage() {
 	echo "Operations:"
 	echo "  setup <boards>      - Sets up builds for the given boards"
 	echo "  build <boards>      - Builds the given boards"
+	echo "  source <boards>     - Sources files for the given boards"
+	echo "  deploy <boards>     - Runs deployment for the given boards"
 	echo "  shellcheck [format] - Runs shellcheck on all scripts with a specialized format"
 	echo "  list                - Lists all available boards"
 	echo "  help                - Shows this menu"
@@ -25,8 +27,8 @@ init_board() {
 	BUILD_DIR="${BUILDS_DIR}/${1}"
 	BUILDROOT_DIR="${BUILDS_DIR}/${BUILDROOT_STR}"
 	BR2_EXTERNAL="$PWD"
-	set +u;
 
+	set +u
 	[ -z "$BSP_NAME" ] && \
 		BSP_NAME="$1";
 
@@ -40,7 +42,7 @@ init_board() {
 
 	if [ ! -d "${BUILDROOT_DIR}/.git" ]; then
 		echo -e "\e[1;33mCloning buildroot since it didn't already exist\e[0m"
-		git clone "${BUILDROOT_URL}" "${BUILDROOT_DIR}"
+		git clone -q --single-branch "${BUILDROOT_URL}" --branch "${BUILDROOT_VERSION}" "${BUILDROOT_DIR}"
 		echo -e "\e[1;32mCloned most recent buildroot into ${BUILDROOT_STR}\e[0m"
 	else
 		local LWD="$PWD"
@@ -82,12 +84,19 @@ setup_board() {
 }
 
 build_board() {
-	setup_board "$1"
+	bsp="$1"
+	init_board "$bsp"
+	shift 1
 	echo -e "\e[1;33mBuilding BSP $BSP_NAME\e[0m"
 
+	log="$(realpath "$BUILD_DIR")/build.log"
 	make -C "$(realpath "$BUILDROOT_DIR")" \
 		O="$(realpath "$BUILD_DIR")" \
-		all
+		"$@" 2>&1 \
+        | tee -a "$log" \
+        | grep '>>>' --line-buffered --color=never \
+		| sed -u "s/>>>/[${bsp}: $@]/g" \
+		|| (err="$?"; tail -n 250 -f "$log"; exit "$err")
 
 	echo -e "\e[1;32mBuild completed!\e[0m"
 }
@@ -112,8 +121,10 @@ set +u
 set -u
 
 case "$1" in
-	setup) shift 1; for f in "$@"; do setup_board "$f"; done ;;
-	build) shift 1; for f in "$@"; do build_board "$f"; done ;;
+	setup)  shift 1; for f in "$@"; do setup_board "$f"; done ;;
+	source) shift 1; for f in "$@"; do build_board "$f" "source"; done ;;
+	build)  shift 1; for f in "$@"; do build_board "$f" "all"; done ;;
+	deploy) shift 1; for f in "$@"; do build_board "$f" "deploy"; done ;;
 	list)  fd '^[\w-]+\.bsp$' bsps/ -x basename {} ".bsp" \; | sort ;;
 	shellcheck) shift 1; set +u; shellcheck_all "$1" ;;
 	help)  usage ;;

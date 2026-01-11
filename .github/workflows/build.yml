@@ -7,15 +7,121 @@ on:
   workflow_dispatch:
 
 jobs:
-  shellcheck:
-    runs-on: ubuntu-latest
+  tests:
+    runs-on: linux-amd64
+    continue-on-error: true
     steps:
-      - name: Setup container
-        run:  |
-          apt-get update -y
-          apt-get install -y fd-find ripgrep shellcheck
-          apt-get install -y cpio rsync bc
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Build NTP server
-        run: BUILDS_DIR=builds ./bsp build ntp tdisp
+
+      - name: Shellcheck
+        run: ./bsp shellcheck
+
+  build:
+    runs-on: linux-amd64
+    continue-on-error: true
+    env:
+      PROD_BSPS: ntp tdisp led-alarm wg-proxy
+      DEV_BSPS: rpi2-dev rpi5-dev lepotato-dev radxa0-3e-dev amd64-dev
+      SSH_OPTS: -i /home/act_runner/.ssh/id_ed25519 -oBatchMode=yes
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+# Do production BSPs
+
+      - name: Setup and source production BSPs
+        timeout: 180
+        run: |
+            fail=0
+            for bsp in $PROD_BSPS; do
+              ./bsp setup $bsp  || (fail=$?; support/ntfy setup  "Failed to setup production bsp $bsp")
+              ./bsp source $bsp || (fail=$?; support/ntfy source "Failed to source production bsp $bsp")
+            done
+            if [ $fail -ne 0 ]; then touch ../failed; fi
+            test $fail -eq 0
+
+      - name: Pre-emptively test deployment
+        timeout: 30
+        run: |
+           fail=0
+           for bsp in $PROD_BSPS; do
+              source "./bsps/defaults"
+              source "./bsps/${bsp}.bsp"
+              if ping -W 3 -c 10 "${DEPLOY_TO}"; then
+                echo ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_TO}" true
+                ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_TO}" true
+                if $? -ne 0; then
+                  support/ntfy ping "BSP $bsp is inaccessible via SSH so autodeployment will fail!"
+                  fail=1
+                fi
+              else
+                support/ntfy ping "BSP $bsp is offline or inaccessible so autodeployment will fail!"
+                fail=1
+              fi
+            done
+            test $fail -eq 0
+
+      - name: Build production BSPs
+        timeout: 600
+        run: |
+            fail=0
+            for bsp in $PROD_BSPS; do
+              ./bsp build $bsp || (fail=$?; support/ntfy build "Failed to build production bsp $bsp")
+            done
+            if [ $fail -ne 0 ]; then touch ../failed; fi
+            test $fail -eq 0
+
+      - name: Deploy production BSPs
+        timeout: 30
+        run: |
+            fail=0
+            for bsp in $PROD_BSPS; do
+              source "./bsps/${bsp}.bsp"
+              if ping -W 3 -c 10 "$DEPLOY_TO"; then
+                ./bsp deploy $bsp || (fail=$?; support/ntfy deploy "Failed to deploy development bsp $bsp")
+                sleep 30
+                if ping -W 3 -c 10 "$DEPLOY_TO"; then
+                  fail=$?
+                  support/ntfy brick "Deployment appears to have bricked bsp $bsp"
+                  exit $fail
+                fi
+              else
+                support/ntfy deploy "Can't deploy bsp $bsp to an offline board!"
+              fi
+            done
+            if [ $fail -ne 0 ]; then touch ../failed; fi
+            test $fail -eq 0
+
+# Do development BSPs
+
+      - name: Setup and source development BSPs
+        timeout: 360
+        run: |
+            fail=0
+            for bsp in $DEV_BSPS; do
+              ./bsp setup $bsp  || (fail=$?; support/ntfy setup  "Failed to setup development bsp $bsp")
+              ./bsp source $bsp || (fail=$?; support/ntfy source "Failed to source development bsp $bsp")
+            done
+            if [ $fail -ne 0 ]; then touch ../failed; fi
+            test $fail -eq 0
+
+      - name: Build development BSPs
+        timeout: 600
+        run: |
+            fail=0
+            for bsp in $DEV_BSPS; do
+              ./bsp build $bsp || (fail=$?; support/ntfy build "Failed to build development bsp $bsp")
+            done
+            if [ $fail -ne 0 ]; then touch ../failed; fi
+            test $fail -eq 0
+
+# And send a finish notification
+
+      - name: Notify when finished
+        run: |
+          if [ -f ../failed ]; then
+            support/ntfy success "Pipeline build completed without error!";
+          else
+            support/ntfy failed  "Pipeline build completed with errors!";
+          fi
