@@ -21,7 +21,7 @@ jobs:
     runs-on: linux-amd64
     continue-on-error: true
     env:
-      PROD_BSPS: ntp tdisp led-alarm wg-proxy
+      PROD_BSPS: ntp tdisp led-alarm
       DEV_BSPS: rpi2-dev rpi5-dev lepotato-dev radxa0-3e-dev amd64-dev
       SSH_OPTS: -i /home/act_runner/.ssh/id_ed25519 -oBatchMode=yes
     steps:
