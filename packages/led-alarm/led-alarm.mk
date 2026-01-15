@@ -10,7 +10,10 @@ LED_ALARM_SITE = $(call github,abc123me,led-alarm,$(LED_ALARM_VERSION))
 LED_ALARM_DEPENDENCIES += libconfig rpi-ws281x
 
 define LED_ALARM_BUILD_CMDS
-    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+    $(MAKE) \
+		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig" \
+		PKG_CONFIG_SYSROOT_DIR=$(STAGING_DIR) \
+		$(TARGET_CONFIGURE_OPTS) -C $(@D) all
 endef
 
 # Install led-alarm binary

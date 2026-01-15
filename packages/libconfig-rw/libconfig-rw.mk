@@ -10,7 +10,10 @@ LIBCONFIG_RW_SITE = $(call github,abc123me,libconfig-rw,$(LIBCONFIG_RW_VERSION))
 LIBCONFIG_RW_DEPENDENCIES += libconfig rpi-ws281x
 
 define LIBCONFIG_RW_BUILD_CMDS
-    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+    $(MAKE) \
+		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig" \
+		PKG_CONFIG_SYSROOT_DIR=$(STAGING_DIR) \
+		$(TARGET_CONFIGURE_OPTS) -C $(@D) all
 endef
 
 define LIBCONFIG_RW_INSTALL_TARGET_CMDS
