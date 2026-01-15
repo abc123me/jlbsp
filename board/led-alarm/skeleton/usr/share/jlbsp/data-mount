@@ -23,5 +23,8 @@ mount_data_partition() {
 		cp "/etc/led-alarm.conf" "${data_mountpoint}/led-alarm.conf"
 	fi
 
+	chown www:www "${data_mountpoint}/led-alarm.conf"
+	chmod 644 "${data_mountpoint}/led-alarm.conf"
+
 	ln -sf "${data_mountpoint}/led-alarm.conf" "/var/run/led-alarm.conf"
 }
