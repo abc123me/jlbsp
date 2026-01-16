@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 
-BUILDROOT_VERSION="master"
+BUILDROOT_VERSION="2025.11.x"
 BUILDROOT_REPO="buildroot"
 BUILDROOT_URL="https://github.com/buildroot/${BUILDROOT_REPO}.git"
 
