@@ -1,0 +1,46 @@
+#!/usr/bin/env sh
+
+set -e
+
+SYSCFG_FS="/sys/kernel/config"
+OVERLAYS_DIR="${SYSCFG_FS}/device-tree/overlays"
+
+if ! [ -d "${OVERLAYS_DIR}" ]; then
+	echo "ConfigFS not mounted, mounting it!"
+	mount -t configfs configfs "$SYSCFG_FS"
+	if ! [ -d "${OVERLAYS_DIR}" ]; then
+		umount "$SYSCFG_FS"
+		echo "Kernel doesn't have configfs device-tree overlay patch"
+		if ! lsmod | grep -q dtbocfg; then
+			echo "Attempting to load dtbocfg kernel module"
+			modprobe dtbocfg
+			mount -t configfs configfs "$SYSCFG_FS"
+			echo "Module loaded and configfs remounted!"
+			if ! [ -d "${OVERLAYS_DIR}" ]; then
+				echo "dtbocfg loaded, configfs remounted and still doesn't have device-tree directory, WTF?!"
+				exit 1
+			fi
+		else
+			echo "dtbocfg module loaded yet configfs doesn't have device-tree directory, WTF?!"
+			exit 1
+		fi
+	fi
+fi
+
+if [ $# -lt 1 ]; then
+	echo "Usage: $0 <device tree overlays>"
+	exit 1
+fi
+
+for arg in "$@"; do
+	if ! echo "$arg" | grep -qE '\.dtbo$'; then
+		echo "dtbo does not end in .dtbo"
+		exit 1
+	fi
+
+	bname="$(basename "$arg" ".dtbo")"
+	echo "Loading DTBO: $bname"
+	mkdir -p    "${OVERLAYS_DIR}/${bname}"
+	cat "$arg" >"${OVERLAYS_DIR}/${bname}/dtbo"
+	echo 1     >"${OVERLAYS_DIR}/${bname}/status"
+done
