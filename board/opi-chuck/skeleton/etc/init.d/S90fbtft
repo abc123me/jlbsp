@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+case "$1" in
+	start)
+		load-dtbo /boot/allwinner/st7735-gpio.dtbo                   # Load the overlay
+		echo 0 >/sys/class/backlight/soc:gpio-backlight@0/bl_power   # Enable power for backlight
+		echo 0 >/sys/class/graphics/fb0/state                        # Enable framebuffer device
+		echo 1 >/sys/class/backlight/soc:gpio-backlight@0/brightness # Turn on backlight
+		;;
+	stop)
+		echo 1 >/sys/class/graphics/fb0/state                        # Disable framebuffer device
+		echo 4 >/sys/class/backlight/soc:gpio-backlight@0/bl_power   # Disable power for backlight
+		echo 0 >/sys/kernel/config/device-tree/st7735-gpio/status    # Unload the overlay
+		;;
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+	usage)
+		echo "$0 <start/stop/restart>"
+		exit 1
+		;;
+esac

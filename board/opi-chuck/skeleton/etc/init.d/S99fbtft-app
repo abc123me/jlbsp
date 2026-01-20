@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+case "$1" in
+	start)
+		TERM="xterm-256color" htop >/dev/tty0 &
+		echo $! >"/var/run/fbtft-app.pid"
+		;;
+	stop)
+		kill -SIGINT "$(cat "/var/run/fbtft-app.pid")"
+		;;
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+	usage)
+		echo "$0 <start/stop/restart>"
+		exit 1
+		;;
+esac

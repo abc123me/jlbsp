@@ -1,0 +1,5 @@
+# Skeleton permissions file
+/etc/init.d/S90fbtft              f 755 root root - - - - -
+/etc/init.d/S99fbtft-app          f 755 root root - - - - -
+/etc/ssh/ssh_host_ed25519_key     f 400 root root - - - - -
+/etc/ssh/ssh_host_ed25519_key.pub f 400 root root - - - - -
