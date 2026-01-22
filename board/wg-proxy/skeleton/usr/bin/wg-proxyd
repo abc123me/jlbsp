@@ -3,9 +3,14 @@
 csv() { echo "$1" | awk -F':' "{print \$$2}"; }
 
 run_iptables() {
-	m="$1"; shift 1; for rng in "$@"; do
-		ext_if="$(csv "$rng" 1)"; ext_port="$(csv "$rng" 2)";
-		int_addr="$(csv "$rng" 2)"; int_port="$(csv "$rng" 4)"; int_if="$(csv "$rng" 5)"
+	m="$1"
+	shift 1
+	for rng in "$@"; do
+		ext_if="$(csv "$rng" 1)"
+		ext_port="$(csv "$rng" 2)"
+		int_addr="$(csv "$rng" 3)"
+		int_port="$(csv "$rng" 4)"
+		int_if="$(csv "$rng" 5)"
 		iptables "$m" PREROUTING -t nat -p tcp -i "$ext_if" --dport "$ext_port" -j DNAT --to-destination "${int_addr}:${int_port}"
 		iptables "$m" POSTROUTING -t nat -p tcp -d "$int_addr" --dport "$int_port" -j MASQUERADE
 		iptables "$m" FORWARD -p tcp -o "$int_if" -d "$int_addr" --dport "$int_port" -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
