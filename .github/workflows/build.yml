@@ -7,9 +7,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  tests:
+  checks:
     runs-on: linux-amd64
-    continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -17,111 +16,66 @@ jobs:
       - name: Shellcheck
         run: ./bsp shellcheck
 
-  build:
+  build-bsps:
     runs-on: linux-amd64
-    continue-on-error: true
     env:
-      PROD_BSPS: ntp tdisp led-alarm
-      DEV_BSPS: rpi2-dev rpi5-dev lepotato-dev radxa0-3e-dev amd64-dev
+      PROD_BSPS: ntp tdisp led-alarm wg-proxy
+      DEPLOY_BSPS: ntp tdisp led-alarm
+      RPI_DEV_BSPS: rpi2-dev rpi5-dev rpi0w-dev
+      MISC_DEV_BSPS: lepotato-dev orangepi-zero3-dev radxa0-3e-dev
       SSH_OPTS: -i /home/act_runner/.ssh/id_ed25519 -oBatchMode=yes
+      BR2_DL_DIR: /opt/act-runner/act-runner-dl
+      BR2_CCACHE_DIR: /opt/act-runner/act-runner-ccache
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-# Do production BSPs
-
-      - name: Setup and source production BSPs
-        timeout: 180
-        run: |
-            fail=0
-            for bsp in $PROD_BSPS; do
-              ./bsp setup $bsp  || (fail=$?; support/ntfy setup  "Failed to setup production bsp $bsp")
-              ./bsp source $bsp || (fail=$?; support/ntfy source "Failed to source production bsp $bsp")
-            done
-            if [ $fail -ne 0 ]; then touch ../failed; fi
-            test $fail -eq 0
-
-      - name: Pre-emptively test deployment
+# Build production bsps
+      - name: Setup production BSPs
         timeout: 30
-        run: |
-           fail=0
-           for bsp in $PROD_BSPS; do
-              source "./bsps/defaults"
-              source "./bsps/${bsp}.bsp"
-              if ping -W 3 -c 10 "${DEPLOY_TO}"; then
-                echo ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_TO}" true
-                ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_TO}" true
-                if $? -ne 0; then
-                  support/ntfy ping "BSP $bsp is inaccessible via SSH so autodeployment will fail!"
-                  fail=1
-                fi
-              else
-                support/ntfy ping "BSP $bsp is offline or inaccessible so autodeployment will fail!"
-                fail=1
-              fi
-            done
-            test $fail -eq 0
+        run: support/pipeline.sh setup $PROD_BSPS
+
+      - name: Source production BSPs
+        timeout: 180
+        run: support/pipeline.sh source $PROD_BSPS
 
       - name: Build production BSPs
-        timeout: 600
-        run: |
-            fail=0
-            for bsp in $PROD_BSPS; do
-              ./bsp build $bsp || (fail=$?; support/ntfy build "Failed to build production bsp $bsp")
-            done
-            if [ $fail -ne 0 ]; then touch ../failed; fi
-            test $fail -eq 0
+        timeout: 180
+        run: support/pipeline.sh build $PROD_BSPS
 
       - name: Deploy production BSPs
         timeout: 30
-        run: |
-            fail=0
-            for bsp in $PROD_BSPS; do
-              source "./bsps/${bsp}.bsp"
-              if ping -W 3 -c 10 "$DEPLOY_TO"; then
-                ./bsp deploy $bsp || (fail=$?; support/ntfy deploy "Failed to deploy development bsp $bsp")
-                sleep 30
-                if ping -W 3 -c 10 "$DEPLOY_TO"; then
-                  fail=$?
-                  support/ntfy brick "Deployment appears to have bricked bsp $bsp"
-                  exit $fail
-                fi
-              else
-                support/ntfy deploy "Can't deploy bsp $bsp to an offline board!"
-              fi
-            done
-            if [ $fail -ne 0 ]; then touch ../failed; fi
-            test $fail -eq 0
+        run: support/pipeline.sh deploy $DEPLOY_BSPS
 
-# Do development BSPs
-
-      - name: Setup and source development BSPs
-        timeout: 360
-        run: |
-            fail=0
-            for bsp in $DEV_BSPS; do
-              ./bsp setup $bsp  || (fail=$?; support/ntfy setup  "Failed to setup development bsp $bsp")
-              ./bsp source $bsp || (fail=$?; support/ntfy source "Failed to source development bsp $bsp")
-            done
-            if [ $fail -ne 0 ]; then touch ../failed; fi
-            test $fail -eq 0
-
-      - name: Build development BSPs
-        timeout: 600
-        run: |
-            fail=0
-            for bsp in $DEV_BSPS; do
-              ./bsp build $bsp || (fail=$?; support/ntfy build "Failed to build development bsp $bsp")
-            done
-            if [ $fail -ne 0 ]; then touch ../failed; fi
-            test $fail -eq 0
-
-# And send a finish notification
+# Setup developmental bsps
+      - name: Setup all development BSPs
+        timeout: 30
+        run: support/pipeline.sh setup $RPI_DEV_BSPS $MISC_DEV_BSPS
 
       - name: Notify when finished
-        run: |
-          if [ -f ../failed ]; then
-            support/ntfy success "Pipeline build completed without error!";
-          else
-            support/ntfy failed  "Pipeline build completed with errors!";
-          fi
+        run: support/pipeline.sh notify "production"
+
+# Build developmental rpi based BSPs
+      - name: Source rpi based development BSPs
+        timeout: 60
+        run: support/pipeline.sh source $RPI_DEV_BSPS
+
+      - name: Build rpi based development BSPs
+        timeout: 300
+        run: support/pipeline.sh build $RPI_DEV_BSPS
+
+      - name: Notify when finished
+        run: support/pipeline.sh notify "rpi development"
+
+# Build developmental non-rpi based BSPs
+
+      - name: Source non-rpi based development BSPs
+        timeout: 60
+        run: support/pipeline.sh source $MISC_DEV_BSPS
+
+      - name: Build non-rpi based development BSPs
+        timeout: 300
+        run: support/pipeline.sh build $MISC_DEV_BSPS
+
+      - name: Notify when finished
+        run: support/pipeline.sh notify "miscellaneous development"
