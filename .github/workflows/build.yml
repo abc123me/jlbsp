@@ -16,7 +16,7 @@ jobs:
       - name: Shellcheck
         run: ./bsp shellcheck
 
-  build-bsps:
+  build:
     runs-on: linux-amd64
     env:
       PROD_BSPS: ntp tdisp led-alarm wg-proxy
@@ -24,11 +24,16 @@ jobs:
       RPI_DEV_BSPS: rpi2-dev rpi5-dev rpi0w-dev
       MISC_DEV_BSPS: lepotato-dev orangepi-zero3-dev radxa0-3e-dev
       SSH_OPTS: -i /home/act_runner/.ssh/id_ed25519 -oBatchMode=yes
-      BR2_DL_DIR: /opt/act-runner/act-runner-dl
-      BR2_CCACHE_DIR: /opt/act-runner/act-runner-ccache
+      BR2_DL_DIR: /opt/act-runner-dl
+      BR2_CCACHE_DIR: /opt/act-runner/ccache
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Clean ccache
+        run: |
+            rm -rf "${BR2_CCACHE_DIR}"
+            mkdir "${BR2_CCACHE_DIR}"
 
 # Build production bsps
       - name: Setup production BSPs
@@ -79,3 +84,6 @@ jobs:
 
       - name: Notify when finished
         run: support/pipeline.sh notify "miscellaneous development"
+
+      - name: Cleanup DL dir
+        run: find "${BR2_DL_DIR}" -atime +30 -exec rm -v "{}" \;
