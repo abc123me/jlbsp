@@ -29,6 +29,8 @@
 		// This is the base object of the flattened device tree
 		// for some devices this is amba (other arm), axi (xilinx),
 		// but can be anything depending on the manufactuer
+		// it's usually easiest to just get this by just checking
+		// in the sysfs live device tree @ /sys/firmware/device-tree
 		target-path = "/soc";
 		__overlay__ {
 			// Create a backlight device using the generic GPIO driver
@@ -63,8 +65,8 @@
 				dc-gpios = <&pio 2 10 GPIO_ACTIVE_HIGH>;   // The  A0 pin, on PC10
 				reset-gpios = <&pio 7 8 GPIO_ACTIVE_LOW>;  // The RST pin, on PH8
 				// this is noramlly the MISO pin for SPI1 but since it was unused I chose it
-				spi-max-frequency = <32000000>;            // 32 MHz is (somehow) stable
-				fps = <30>;
+				spi-max-frequency = <60000000>;            // how is this stable?!
+				fps = <60>;
 				rotate = <90>;
 				backlight = <&backlight0>;
 				buswidth = <1>; // So this is a custom property added by fbtft, because apparently they
