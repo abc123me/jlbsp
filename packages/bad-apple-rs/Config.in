@@ -1,0 +1,10 @@
+config BR2_PACKAGE_BAD_APPLE_RS
+	bool "Bad Apple using FBGL-RS"
+	default n
+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+	select BR2_PACKAGE_BAD_APPLE_FRAMES
+	select BR2_PACKAGE_HOST_RUSTC
+	help
+	  Bad Apple but uses my fbgl graphics library
+
+	  https://github.com/abc123me/bad-apple-rs

@@ -1,0 +1,9 @@
+config BR2_PACKAGE_FBGL_RS
+	bool "Rust based framebuffer graphics library"
+	default n
+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+	select BR2_PACKAGE_HOST_RUSTC
+	help
+	  Rewrite of my fbgl graphics library in rust, now with even more features!
+
+	  https://github.com/abc123me/fbgl-rs
