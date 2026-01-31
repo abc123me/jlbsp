@@ -65,7 +65,7 @@
 				// this is noramlly the MISO pin for SPI1 but since it was unused I chose it
 				spi-max-frequency = <32000000>;            // 32 MHz is (somehow) stable
 				fps = <30>;
-				rotate = <270>;
+				rotate = <90>;
 				backlight = <&backlight0>;
 				buswidth = <1>; // So this is a custom property added by fbtft, because apparently they
 				                // don't use spi-tx-bus-width, see line 1108 in drivers/staging/fbtft/fbtft-core.c
