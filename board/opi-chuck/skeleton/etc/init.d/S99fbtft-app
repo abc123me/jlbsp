@@ -2,7 +2,7 @@
 
 case "$1" in
 	start)
-		TERM="xterm-256color" htop >/dev/tty0 &
+		/usr/bin/bad-apple-rs &
 		echo $! >"/var/run/fbtft-app.pid"
 		;;
 	stop)
