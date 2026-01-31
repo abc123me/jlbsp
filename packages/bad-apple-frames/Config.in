@@ -1,0 +1,29 @@
+config BR2_PACKAGE_BAD_APPLE_FRAMES
+	bool "Bad Apple files"
+	default n
+	help
+	  Files for playing / showing the popular bad apple video / soundtrack
+
+if BR2_PACKAGE_BAD_APPLE_FRAMES
+
+config BR2_PACKAGE_BAD_APPLE_FRAMES_INSTALL_PATH
+	string "Bad apple files install location"
+	default "/usr/share/bad-apple"
+	help
+	  The path where the files are installed
+
+config BR2_PACKAGE_BAD_APPLE_FRAMES_FRAME_DATA
+	bool "Frame files for bad apple"
+	default y
+	help
+	  Each frame is stored as a JPEG
+
+	  There are 6571 frames and they start counting at 1
+
+config BR2_PACKAGE_BAD_APPLE_FRAMES_AUDIO_TRACK
+	bool "Audio track for bad apple"
+	default y
+	help
+	  Adds a music.mp3 file containing the bad apple soundtrack
+
+endif
