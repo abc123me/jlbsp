@@ -1,0 +1,4 @@
+#!/usr/bin/sh
+
+BSP_CONFIG="thinkpad390e.config"
+DEPLOY_TO="thinkpad390e.main.lan"
