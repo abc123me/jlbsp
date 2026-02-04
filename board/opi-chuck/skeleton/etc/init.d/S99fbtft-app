@@ -1,7 +1,18 @@
 #!/usr/bin/env sh
 
+ALSA_DIR="/etc/alsa/conf.d"
+ASND_DIR="/etc/alsa/asound"
+
 case "$1" in
 	start)
+		if lsusb | grep -i -q audio; then
+			mv "${ALSA_DIR}/usb.disabled" "${ALSA_DIR}/usb.conf"
+			alsactl restore -f "${ASND_DIR}/usb.state"
+		else
+			mv "${ALSA_DIR}/usb.conf" "${ALSA_DIR}/usb.disabled"
+			alsactl restore -f "${ASND_DIR}/soc.state"
+		fi
+
 		/usr/bin/bad-apple-rs &
 		echo $! >"/var/run/fbtft-app.pid"
 		;;
