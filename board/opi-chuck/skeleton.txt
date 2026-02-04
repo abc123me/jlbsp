@@ -1,4 +1,7 @@
 # Skeleton permissions file
+/etc/alsa/asound/soc.state        f 644 root root - - - - -
+/etc/alsa/asound/usb.state        f 644 root root - - - - -
+/etc/alsa/conf.d/usb.disabled     f 644 root root - - - - -
 /etc/init.d/S90fbtft              f 755 root root - - - - -
 /etc/init.d/S99fbtft-app          f 755 root root - - - - -
 /etc/ssh/ssh_host_ed25519_key     f 400 root root - - - - -
