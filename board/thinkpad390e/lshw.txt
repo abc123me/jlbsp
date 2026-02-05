@@ -1,0 +1,286 @@
+thinkpad390e
+    description: Notebook
+    product: 2626E0U
+    vendor: IBM
+    version: Not Available
+    serial: AF16P0P
+    width: 32 bits
+    capabilities: smbios-2.1 dmi-2.1
+    configuration: chassis=docking
+  *-core
+       description: Motherboard
+       product: 2626E0U
+       vendor: IBM
+       physical id: 0
+       version: Not Available
+       serial: J15G1qf6iks
+     *-firmware
+          description: BIOS
+          vendor: IBM
+          physical id: 0
+          version: R00_H1
+          date: 05/04/99
+          size: 90KiB
+          capacity: 512KiB
+          capabilities: isa pci pcmcia pnp apm upgrade shadowing cdboot acpi biosbootspecification uefi
+     *-cpu
+          description: CPU
+          product: Mobile Pentium II
+          vendor: Intel Corp.
+          physical id: 5
+          bus info: cpu@0
+          version: 6.6.10
+          serial: 0000-066A-0001-B641-FABD-5051
+          slot: MMC 2
+          size: 333MHz
+          capacity: 333MHz
+          width: 32 bits
+          clock: 100MHz
+          capabilities: fpu fpu_exception wp vme de pse tsc msr pae mce cx8 sep mtrr pge mca cmov pse36 mmx fxsr cpuid
+        *-cache:0
+             description: L1 cache
+             physical id: 9
+             slot: L1 Cache
+             size: 32KiB
+             capacity: 32KiB
+             capabilities: asynchronous internal write-back
+             configuration: level=1
+        *-cache:1
+             description: L2 cache
+             physical id: a
+             slot: L2 Cache
+             size: 256KiB
+             capacity: 256KiB
+             capabilities: external write-back
+             configuration: level=2
+     *-memory
+          description: System Memory
+          physical id: 17
+          slot: System board or motherboard
+          size: 128MiB
+          capacity: 1GiB
+        *-bank:0
+             description: DIMM DRAM Synchronous
+             physical id: 0
+             slot: CN24
+             size: 128MiB
+             width: 32 bits
+        *-bank:1
+             description: DIMM DRAM Synchronous [empty]
+             physical id: 1
+             slot: CN25
+     *-pci
+          description: Host bridge
+          product: 440BX/ZX/DX - 82443BX/ZX/DX Host bridge
+          vendor: Intel Corporation
+          physical id: 100
+          bus info: pci@0000:00:00.0
+          version: 03
+          width: 32 bits
+          clock: 33MHz
+          configuration: latency=64
+          resources: memory:f8000000-fbffffff
+        *-pci
+             description: PCI bridge
+             product: 440BX/ZX/DX - 82443BX/ZX/DX AGP bridge
+             vendor: Intel Corporation
+             physical id: 1
+             bus info: pci@0000:00:01.0
+             version: 03
+             width: 32 bits
+             clock: 66MHz
+             capabilities: pci normal_decode bus_master
+             resources: memory:fe400000-febfffff memory:f6000000-f6ffffff
+           *-display UNCLAIMED
+                description: VGA compatible controller
+                product: NM2200 [MagicGraph 256AV]
+                vendor: Neomagic Corporation
+                physical id: 0
+                bus info: pci@0000:01:00.0
+                version: 20
+                width: 32 bits
+                clock: 33MHz
+                capabilities: pm vga_controller bus_master cap_list
+                configuration: latency=128 maxlatency=255 mingnt=16
+                resources: memory:f6000000-f6ffffff memory:fe400000-fe7fffff memory:feb00000-febfffff memory:c0000-dffff
+        *-bridge:0 UNCLAIMED
+             description: Bridge
+             product: 82371AB/EB/MB PIIX4 ISA
+             vendor: Intel Corporation
+             physical id: 2
+             bus info: pci@0000:00:02.0
+             version: 02
+             width: 32 bits
+             clock: 33MHz
+             capabilities: bridge bus_master
+             configuration: latency=0
+        *-ide
+             description: IDE interface
+             product: 82371AB/EB/MB PIIX4 IDE
+             vendor: Intel Corporation
+             physical id: 2.1
+             bus info: pci@0000:00:02.1
+             version: 01
+             width: 32 bits
+             clock: 33MHz
+             capabilities: ide isa_compat_mode bus_master
+             configuration: driver=ata_piix latency=64
+             resources: irq:0 ioport:1f0(size=8) ioport:3f6 ioport:170(size=8) ioport:376 ioport:fc90(size=16)
+        *-usb
+             description: USB controller
+             product: 82371AB/EB/MB PIIX4 USB
+             vendor: Intel Corporation
+             physical id: 2.2
+             bus info: pci@0000:00:02.2
+             version: 01
+             width: 32 bits
+             clock: 33MHz
+             capabilities: uhci bus_master
+             configuration: driver=uhci_hcd latency=64
+             resources: irq:11 ioport:fca0(size=32)
+        *-bridge:1 UNCLAIMED
+             description: Bridge
+             product: 82371AB/EB/MB PIIX4 ACPI
+             vendor: Intel Corporation
+             physical id: 2.3
+             bus info: pci@0000:00:02.3
+             version: 02
+             width: 32 bits
+             clock: 33MHz
+             capabilities: bridge
+             configuration: latency=0
+        *-pcmcia:0 UNCLAIMED
+             description: CardBus bridge
+             product: PCI1251A
+             vendor: Texas Instruments
+             physical id: 3
+             bus info: pci@0000:00:03.0
+             version: 01
+             width: 32 bits
+             clock: 33MHz
+             capabilities: pcmcia cap_list
+             configuration: latency=176 maxlatency=1 mingnt=192
+             resources: memory:10000000-10000fff ioport:1400(size=256) ioport:1800(size=256) memory:8000000-bffffff memory:c000000-fffffff
+        *-pcmcia:1 UNCLAIMED
+             description: CardBus bridge
+             product: PCI1251A
+             vendor: Texas Instruments
+             physical id: 3.1
+             bus info: pci@0000:00:03.1
+             version: 01
+             width: 32 bits
+             clock: 33MHz
+             capabilities: pcmcia cap_list
+             configuration: latency=176 maxlatency=1 mingnt=192
+             resources: memory:20000000-20000fff ioport:1c00(size=256) ioport:2000(size=256) memory:14000000-17ffffff memory:18000000-1bffffff
+        *-communication UNCLAIMED
+             description: Communication controller
+             product: L56xM+S [Mars-2] WinModem 56k
+             vendor: LSI Corporation
+             physical id: 6
+             bus info: pci@0000:00:06.0
+             version: 01
+             width: 32 bits
+             clock: 33MHz
+             capabilities: pm cap_list
+             configuration: latency=0 maxlatency=14 mingnt=252
+             resources: memory:fedffc00-fedffcff ioport:fc88(size=8) ioport:f800(size=256)
+        *-multimedia UNCLAIMED
+             description: Multimedia audio controller
+             product: ES1938/ES1946/ES1969 Solo-1 Audiodrive
+             vendor: ESS Technology
+             physical id: 7
+             bus info: pci@0000:00:07.0
+             version: 02
+             width: 32 bits
+             clock: 33MHz
+             capabilities: pm cap_list
+             configuration: latency=64 maxlatency=24 mingnt=2
+             resources: ioport:fcc0(size=64) ioport:fc60(size=16) ioport:fc70(size=16) ioport:fc58(size=4) ioport:fc5c(size=4)
+     *-pnp00:00
+          product: PnP device PNP0b00
+          physical id: 1
+          capabilities: pnp
+     *-pnp00:01
+          product: PnP device PNP0303
+          physical id: 2
+          capabilities: pnp
+          configuration: driver=i8042 kbd
+     *-pnp00:02
+          product: PnP device IBM3780
+          vendor: IBM Brasil
+          physical id: 3
+          capabilities: pnp
+          configuration: driver=i8042 aux
+     *-pnp00:03
+          product: PnP device PNP0c02
+          physical id: 4
+          capabilities: pnp
+          configuration: driver=system
+     *-pnp00:04
+          product: PnP device PNP0c01
+          physical id: 6
+          capabilities: pnp
+          configuration: driver=system
+     *-pnp00:05
+          product: PnP device PNP0501
+          physical id: 7
+          capabilities: pnp
+          configuration: driver=serial
+     *-pnp00:06
+          product: PnP device IBM0071
+          vendor: IBM Brasil
+          physical id: 8
+          capabilities: pnp
+     *-pnp00:07
+          product: PnP device PNP0400
+          physical id: 9
+          capabilities: pnp
+     *-pnp00:08
+          product: PnP device PNP0700
+          physical id: a
+          capabilities: pnp
+  *-battery
+       description: Unknown Battery
+       physical id: 1
+       slot: Front
+  *-input:0
+       product: Sleep Button
+       physical id: 2
+       logical name: input0
+       logical name: /dev/input/event0
+       capabilities: platform
+  *-input:1
+       product: Lid Switch
+       physical id: 3
+       logical name: input1
+       logical name: /dev/input/event1
+       capabilities: platform
+  *-input:2
+       product: Power Button
+       physical id: 4
+       logical name: input2
+       logical name: /dev/input/event2
+       capabilities: platform
+  *-input:3
+       product: AT Translated Set 2 keyboard
+       physical id: 5
+       logical name: input3
+       logical name: /dev/input/event3
+       capabilities: i8042
+  *-input:4
+       product: TPPS/2 IBM TrackPoint
+       physical id: 6
+       logical name: input5
+       logical name: /dev/input/event4
+       capabilities: i8042
+  *-network
+       description: Ethernet interface
+       physical id: 7
+       bus info: usb@1:1
+       logical name: eth0
+       serial: 00:0e:c6:84:bf:fd
+       size: 1Gbit/s
+       capacity: 1Gbit/s
+       capabilities: ethernet physical tp mii 10bt 10bt-fd 100bt 100bt-fd 1000bt 1000bt-fd autonegotiation
+       configuration: autonegotiation=on broadcast=yes driver=ax88179_178a driverversion=6.18.5 duplex=full ip=192.168.2.192 link=yes multicast=yes port=MII speed=1Gbit/s
