@@ -31,6 +31,11 @@ ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_GITEA_RUNNER),y)
 	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/gitea-runner/ssh_host_ed25519_key.pub $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key.pub ;
 endif
 
+ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_THINKPAD_390E),y)
+	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/thinkpad390e/ssh_host_ed25519_key     $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key ;
+	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/thinkpad390e/ssh_host_ed25519_key.pub $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key.pub ;
+endif
+
 ifeq ($(BR2_PACKAGE_JL_SECRET_KEYS_WG_PROXY),y)
 	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/wg-proxy/ssh_host_ed25519_key     $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key ;
 	JL_SECRET_KEYS_FILES_INSTALL += install -D -m 0400 $(@D)/wg-proxy/ssh_host_ed25519_key.pub $(TARGET_DIR)/etc/ssh/ssh_host_ed25519_key.pub ;
