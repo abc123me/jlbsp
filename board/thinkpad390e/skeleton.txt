@@ -1,0 +1,1 @@
+/root/startx                 f 755 root root - - - - -

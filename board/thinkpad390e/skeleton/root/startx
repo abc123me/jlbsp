@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+LD_PRELOAD=$(find /usr/lib/xorg -name '*.so' | xargs | tr ' ' ':') Xorg

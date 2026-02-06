@@ -1,0 +1,2 @@
+#username uid  group    gid  password home shell groups  comment
+-         1000 jeremiah 1000 *        -    -     -       Primary user
