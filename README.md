@@ -47,15 +47,17 @@ rpi2-dev      | ✅🖧     | RPi 2 developmental image
 rpi0w-dev     | ✅🌐    | RPi 0 developmental image (with wifi)
 lepotato-dev  | ✅🖧💾   | Libre Le-Potato developmental image
 radxa0-3e-dev | ✅🖧     | Libre Le-Potato developmental image
+thinkpad390e  | ✅🖧🖮🖵 | Pentium II based Thinkpad 390E
+
 
 ### Primary builds
 
-Name      | Support | For          | Description
-----------|---------|--------------|-----------------------------------------------------------------
-ntp       | ✅🖧🛰️   | RPi 2 w/ GPS | Local Stratum 0 GPS based NTP server
-tdisp     | ✅🌐⚙️  | BPi M2 Zero  | 7-Segment clock / time display, needs special bpi-wifi-fw
-wg-proxy  | ✅🖧🧱   | RPi 5        | Wireguard proxy that forwards media server / VM
-led-alarm | ✅🌐⚙️   | RPi 0w       | LED alarm clock that uses a WS2812 led strip
+Name          | Support | For          | Description
+--------------|---------|--------------|-----------------------------------------------------------------
+ntp           | ✅🖧🛰️   | RPi 2 w/ GPS | Local Stratum 0 GPS based NTP server
+tdisp         | ✅🌐⚙️  | BPi M2 Zero  | 7-Segment clock / time display, needs special bpi-wifi-fw
+wg-proxy      | ✅🖧🧱   | RPi 5        | Wireguard proxy that forwards media server / VM
+led-alarm     | ✅🌐⚙️   | RPi 0w       | LED alarm clock that uses a WS2812 led strip
 
 ### Support legend
 
@@ -82,3 +84,6 @@ Name                                                                    | Used B
 [bpi-wifi-fw](https://github.com/abc123me/bpi-m2-zero-wifi-fw)          | tdisp     | WiFi firmware for the BananaPi M2 Zero
 [libconfig-rw](https://github.com/abc123me/libconfig-rw)                | led-alarm | Simple tool for reading/writing to libconfig style config files
 [led-alarm](https://github.com/abc123me/led-alarm)                      | led-alarm | LED alarm clock daemon and web files
+[fbgl-rs](https://github.com/abc123me/fbgl-rs)                          | N/A       | My FBGL graphics library ported to Rust
+[bad-apple-frames](https://github.com/pikapower9080/bad-apple-frames)   | N/A       | Frame and audio files for bad apple
+[bad-apple-rs](https://github.com/abc123me/bad-apple-rs)                | N/A       | Rust program that plays bad apple using fbgl-rs
