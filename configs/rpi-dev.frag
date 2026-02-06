@@ -1,5 +1,9 @@
 #include common.frag
 
+# Custom kernel here since the rpi is special
+# BR2_LINUX_KERNEL_LATEST_VERSION is not set
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+
 BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES+="$(BR2_EXTERNAL_JLBSP_PATH)/board/rpi/linux-minimal.frag"
 
 BR2_TOOLCHAIN_BUILDROOT=y
