@@ -1,4 +1,4 @@
 #!/usr/bin/sh
 
 BSP_CONFIG="wg-proxy.config"
-DEPLOY_TO="192.168.2.177"
+DEPLOY_TO="192.168.8.55"
