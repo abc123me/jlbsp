@@ -1,6 +1,8 @@
 #include common.frag
 #include pc_x86_64_bios_defconfig
 
+BR2_TARGET_ROOTFS_EXT2_SIZE="300M"
+
 # The pc_x86_64_bios_defconfig sets some stuff for wifi
 # BR2_PACKAGE_CONNMAN is not set
 # BR2_PACKAGE_WIRELESS_REGDB is not set
