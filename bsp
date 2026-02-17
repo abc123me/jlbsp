@@ -20,6 +20,10 @@ init_board() {
 		exit 1
 	fi
 
+	BSP_NAME=""
+	DEPLOY_TO=""
+	BUILDROOT_VERSION=""
+
 	. "bsps/defaults"
 	. "bsps/${1}.bsp"
 
