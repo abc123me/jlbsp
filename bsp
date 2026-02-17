@@ -131,7 +131,14 @@ case "$1" in
 			p|prod|production) cmd=("bash" "-c" ". {}; if [ -n \"\$DEPLOY_TO\" ]; then basename {} .bsp; fi") ;;
 			d|dev|develop|development) cmd=("bash" "-c" ". {}; if [ -z \"\$DEPLOY_TO\" ]; then basename {} .bsp; fi") ;;
 		esac; set -u; cmd+=(';')
-		fd '^[\w-]+\.bsp$' bsps/ -x "${cmd[@]}" | sort
+		for bsp in $(fd '^[\w-]+\.bsp$' bsps/ -x "${cmd[@]}" | sort); do
+			DEPLOY_TO="n/a"
+			BUILDROOT_VERSION="error"
+			. "bsps/defaults"
+			. "bsps/${bsp}.bsp"
+			broot="$BUILDROOT_VERSION"
+			printf "%-20s %-11s %-15s\n" "$bsp" "$broot" "$DEPLOY_TO"
+		done
 		;;
 	shellcheck) shift 1; set +u; shellcheck_all "$1" ;;
 	help)  usage ;;
