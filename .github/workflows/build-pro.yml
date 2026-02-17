@@ -1,0 +1,49 @@
+on:
+#  push:
+#    branches:
+#      - master
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: linux-amd64
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Shellcheck
+        run: ./bsp shellcheck
+
+  build:
+    runs-on: linux-amd64
+    env:
+      PROD_BSPS: ntp tdisp led-alarm wg-proxy
+      DEPLOY_BSPS: ntp tdisp led-alarm wg-proxy
+      SSH_OPTS: -i /home/act_runner/.ssh/id_ed25519 -oBatchMode=yes
+      BR2_DL_DIR: /opt/act-runner-dl
+      BR2_CCACHE_DIR: /opt/act-runner/ccache
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Clean ccache
+        run: |
+            rm -rf "${BR2_CCACHE_DIR}"
+            mkdir "${BR2_CCACHE_DIR}"
+
+# Build production bsps
+      - name: Setup production BSPs
+        timeout: 30
+        run: support/pipeline.sh setup $PROD_BSPS
+
+      - name: Source production BSPs
+        timeout: 180
+        run: support/pipeline.sh source $PROD_BSPS
+
+      - name: Build production BSPs
+        timeout: 180
+        run: support/pipeline.sh build $PROD_BSPS
+
+      - name: Deploy production BSPs
+        timeout: 30
+        run: support/pipeline.sh deploy $DEPLOY_BSPS
