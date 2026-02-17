@@ -1,4 +1,4 @@
-BR2_TARGET_ROOTFS_EXT2_SIZE="300M"
+# This is an unclude file, can only have values of "y"
 
 BR2_PACKAGE_DTBOCFG=y
 BR2_PACKAGE_FD=y
