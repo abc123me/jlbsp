@@ -42,7 +42,7 @@ init_board() {
 
 	if [ ! -d "${BUILDROOT_DIR}/.git" ]; then
 		echo -e "\e[1;33mCloning buildroot since it didn't already exist\e[0m"
-		git clone -q --single-branch "${BUILDROOT_URL}" --branch "${BUILDROOT_VERSION}" "${BUILDROOT_DIR}"
+		git clone --single-branch "${BUILDROOT_URL}" --branch "${BUILDROOT_VERSION}" "${BUILDROOT_DIR}"
 		echo -e "\e[1;32mCloned most recent buildroot into ${BUILDROOT_STR}\e[0m"
 	else
 		local LWD="$PWD"
