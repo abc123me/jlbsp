@@ -1,4 +1,7 @@
 #!/usr/bin/sh
 
+# Prefer an LTS buildroot here
+BUILDROOT_VERSION="$BUILDROOT_LTS_VERSION"
+
 BSP_CONFIG="wg-proxy.config"
 DEPLOY_TO="192.168.8.55"

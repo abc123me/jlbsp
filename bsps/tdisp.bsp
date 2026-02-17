@@ -1,4 +1,7 @@
 #!/usr/bin/sh
 
+# Prefer an LTS buildroot here
+BUILDROOT_VERSION="$BUILDROOT_LTS_VERSION"
+
 BSP_CONFIG="tdisp.config"
 DEPLOY_TO="tdisp.main.lan"
