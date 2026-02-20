@@ -25,7 +25,7 @@ LED_ALARM_FILES_INSTALL += $(INSTALL) -D -m 0755 $(@D)/default.conf $(TARGET_DIR
 ifeq ($(BR2_PACKAGE_LED_ALARM_WEB),y)
 # Install web stuff
 LED_ALARM_FILES_INSTALL += $(INSTALL) -D -m 0755 $(@D)/web/index.php $(TARGET_DIR)/www/index.php ;
-LED_ALARM_FILES_INSTALL += $(INSTALL) -D -m 0755 $(@D)/web/index.php $(TARGET_DIR)/www/libconfig-rw.php ;
+LED_ALARM_FILES_INSTALL += $(INSTALL) -D -m 0755 $(@D)/web/libconfig-rw.php $(TARGET_DIR)/www/libconfig-rw.php ;
 LED_ALARM_FILES_INSTALL += $(INSTALL) -D -m 0755 $(@D)/web/style.css $(TARGET_DIR)/www/style.css ;
 endif
 
