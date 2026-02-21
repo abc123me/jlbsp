@@ -1,0 +1,78 @@
+// This device tree overlay applies the following:
+// - backlight0: Generic GPIO backlight device on PC7
+// - fbtft0: ILI9341 display using backlight0
+
+// This should be compiled inside the linux kernel's device
+// tree build system as #define may otherwise not ber available
+
+#include <dt-bindings/gpio/gpio.h>
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@1 {
+		target = <&pio>; // The pio object is defined in the soc's device tree (sun50i-h616.dtsi)
+		                 // and references the Allwinner sunxi-pinctrl.c driver
+		__overlay__ {
+			// Define a pinctrl that will map CLK, MOSI, and CS1 pins to spi1
+			// using the internal pin muxing of the H616 SoC
+			fbtft0_spi1_pins: fbtft0-spi1-pins {
+				pins = "PH6", "PH7", "PH9";
+				function = "spi1";
+			};
+			// see Documentation/devicetree/bindings/pinctrl/allwinner,sun55i-a523-pinctrl.yaml
+		};
+	};
+
+	fragment@2 {
+		// This is the base object of the flattened device tree
+		// for some devices this is amba (other arm), axi (xilinx),
+		// but can be anything depending on the manufactuer
+		// it's usually easiest to just get this by just checking
+		// in the sysfs live device tree @ /sys/firmware/device-tree
+		target-path = "/soc";
+		__overlay__ {
+			// Create a backlight device using the generic GPIO driver
+			backlight0: gpio-backlight@0 {
+				// see Documentation/devicetree/bindings/leds/backlight/gpio-backlight.yaml
+				status = "okay";
+				compatible = "gpio-backlight";
+				// Normally there are 2 gpio cells, the allwinner PIO device has 3
+				// pin bank (0 = A, 1 = B, 2 = C, ...), pin number, pin mode
+				gpios = <&pio 2 7 GPIO_ACTIVE_HIGH>; // Backlight, Active high on PC7
+			};
+		};
+	};
+
+	fragment@3 {
+		// This is already defined for us in the sun50i-h616.dtsi
+		target = <&spi1>;
+		__overlay__ {
+			// see Documentation/devicetree/bindings/display/panel/ilitect,ili9341.yaml
+			status = "okay"; // By default this SPI bus is not enabled so it must be enabled
+
+			#address-cells = <1>; // One address cell since it only has one chip select
+			#size-cells = <0>;    // Not a memeory device so size is zero
+
+			pinctrl-names = "default"; // Redefine the default as our pinctrl since
+			pinctrl-0 = <&fbtft0_spi1_pins>; // the default one doesn't initialize CS1
+
+			fbtft0: display@0 {
+				status = "okay";                           // Enable the device
+				compatible = "ilitech,ili9341";            // Select the proper driver via its compat string
+				reg = <1>;                                 // Using CS1 / PH9 instead of CS0 / PH5
+				dc-gpios = <&pio 2 10 GPIO_ACTIVE_HIGH>;   // The  A0 pin, on PC10
+				reset-gpios = <&pio 7 8 GPIO_ACTIVE_LOW>;  // The RST pin, on PH8
+				// this is noramlly the MISO pin for SPI1 but since it was unused I chose it
+				spi-max-frequency = <50000000>;            // how is this stable?!
+				fps = <60>;
+				rotate = <270>;
+				backlight = <&backlight0>;
+				buswidth = <1>; // So this is a custom property added by fbtft, because apparently they
+				                // don't use spi-tx-bus-width, see line 1108 in drivers/staging/fbtft/fbtft-core.c
+				                // probably why it's in drivers/staging
+			};
+		};
+	};
+};
