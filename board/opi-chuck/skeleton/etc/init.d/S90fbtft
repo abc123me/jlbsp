@@ -2,7 +2,7 @@
 
 case "$1" in
 	start)
-		load-dtbo /boot/allwinner/st7735-gpio.dtbo                   # Load the overlay
+		load-dtbo /lib/firmware/st7735-gpio.dtbo                     # Load the overlay
 		echo 0 >/sys/class/backlight/soc:gpio-backlight@0/bl_power   # Enable power for backlight
 		echo 0 >/sys/class/graphics/fb0/state                        # Enable framebuffer device
 		echo 1 >/sys/class/backlight/soc:gpio-backlight@0/brightness # Turn on backlight
