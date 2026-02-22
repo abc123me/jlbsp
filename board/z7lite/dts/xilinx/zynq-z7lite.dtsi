@@ -1,0 +1,50 @@
+/dts-v1/;
+#include "zynq-7000.dtsi"
+
+/ {
+	model = "Microphase Z7 lite devboard";
+	compatible = "microphase,z7lite", "xlnx,zynq-7000";
+
+	aliases {
+		serial0 = &uart0;
+		mmc0 = &sdhci0;
+	};
+
+	memory@0 {
+		device_type = "memory";
+		reg = <0x0 0x20000000>; /* 1x4Gib / 512MiB of DDR3 */
+	};
+
+	chosen {
+		bootargs = "";
+		stdout-path = "serial0:115200n8";
+	};
+
+	usb_phy0: phy0 {
+		// USB3320C-EZK ULPI PHY
+		// https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocuments/DataSheets/USB3320-Data-Sheet-DS00001792.pdf
+		compatible = "usb-nop-xceiv"; /* TODO */
+		#phy-cells = <0>;
+	};
+};
+
+&clkc {
+	/* PS Clock runs at 33.3MHz */
+	ps-clk-frequency = <33333333>;
+};
+
+&sdhci0 {
+	status = "okay";
+	bootph-all;
+};
+
+&uart0 {
+	status = "okay";
+	bootph-all;
+};
+
+&usb0 {
+	status = "okay";
+	dr_mode = "host";
+	usb-phy = <&usb_phy0>;
+};

@@ -1,0 +1,5 @@
+/dts-v1/;
+
+#define UBOOT
+
+#include "zynq-z7lite.dtsi"
