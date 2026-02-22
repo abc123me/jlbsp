@@ -87,3 +87,4 @@ Name                                                                    | Used B
 [fbgl-rs](https://github.com/abc123me/fbgl-rs)                          | N/A       | My FBGL graphics library ported to Rust
 [bad-apple-frames](https://github.com/pikapower9080/bad-apple-frames)   | N/A       | Frame and audio files for bad apple
 [bad-apple-rs](https://github.com/abc123me/bad-apple-rs)                | N/A       | Rust program that plays bad apple using fbgl-rs
+[zynq-bit2bin](https://github.com/railnova/zynq-bit2bin)                | N/A       | Convert Xilinx FPGA bitstream from .bit to .bin
