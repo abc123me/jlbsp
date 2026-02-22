@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+case "$1" in
+	start)
+		mount -t configfs configfs /sys/kernel/config
+		mkdir /sys/kernel/config/device-tree/overlays/fpga
+		cat /lib/firmware/fpga.dtbo \
+			>/sys/kernel/config/device-tree/overlays/fpga/dtbo
+		;;
+	stop)
+		rm -r /sys/kernel/config/device-tree/overlays/fpga
+		;;
+	restart)
+		"$0" start
+		"$0" stop
+		;;
+	*)
+		echo "usage: $0 <start/stop/restart>"
+		exit 1
+		;;
+esac
