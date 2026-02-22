@@ -1,0 +1,20 @@
+/dts-v1/;
+/plugin/;
+
+/* Configuration is done in z7lite-pl.dtsi to prevent memory leaks */
+
+/ {
+	fragment@0 {
+		target = <&fpga_full>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	fragment@1 {
+		target = <&eth0>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+};

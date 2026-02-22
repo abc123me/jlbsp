@@ -3,3 +3,4 @@
 #define LINUX
 
 #include "zynq-z7lite.dtsi"
+#include "z7lite-pl.dtsi"

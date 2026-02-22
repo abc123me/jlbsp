@@ -1,4 +1,5 @@
 /dts-v1/;
+
 #include "zynq-7000.dtsi"
 
 / {
@@ -26,6 +27,8 @@
 		compatible = "usb-nop-xceiv"; /* TODO */
 		#phy-cells = <0>;
 	};
+
+	
 };
 
 &clkc {
