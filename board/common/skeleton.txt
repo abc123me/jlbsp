@@ -13,6 +13,5 @@
 /etc/ssh/sshd_config           f 444 root root - - - - -
 /root/.profile                 f 755 root root - - - - -
 /usr/bin/load-dtbo             f 755 root root - - - - -
-/usr/bin/resize                f 755 root root - - - - -
 /usr/bin/upgrade               f 755 root root - - - - -
 /usr/share/jlbsp/utils         f 755 root root - - - - -
