@@ -13,3 +13,5 @@ else
 fi
 
 alias n='nano'
+
+resize

@@ -1,0 +1,5 @@
+config BR2_PACKAGE_TTY_RESIZE
+	bool "TTY resize app"
+	default y
+	help
+	  Simple app to resize a TTY
