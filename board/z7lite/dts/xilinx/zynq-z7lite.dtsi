@@ -27,8 +27,6 @@
 		compatible = "usb-nop-xceiv"; /* TODO */
 		#phy-cells = <0>;
 	};
-
-	
 };
 
 &clkc {
