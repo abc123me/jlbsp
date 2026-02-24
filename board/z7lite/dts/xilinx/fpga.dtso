@@ -1,3 +1,5 @@
+#include <dt-bindings/gpio/gpio.h>
+
 /dts-v1/;
 /plugin/;
 
@@ -5,8 +7,8 @@
 	fragment@0 {
 		target = <&fpga_full>;
 		__overlay__ {
-			firmware-name = "fpga.bin";
 			status = "okay";
+			firmware-name = "fpga.bin";
 		};
 	};
 
@@ -15,11 +17,11 @@
 		__overlay__ {
 			eth0: ethernet@40e00000 {
 				compatible = "xlnx,axi-ethernetlite-3.0", "xlnx,xps-ethernetlite-1.00.a";
+				reg = <0x40e00000 0x10000>;
 				status = "okay";
 				device_type = "network";
 				local-mac-address = [00 0a 35 00 00 00];
 				phy-handle = <&phy0>;
-				reg = <0x40e00000 0x10000>;
 			 	xlnx,rx-ping-pong = <0x1>;
 				xlnx,tx-ping-pong = <0x1>;
 				interrupt-parent = <&intc>;
@@ -32,6 +34,59 @@
 						device_type = "ethernet-phy";
 						reg = <1>;
 					};
+				};
+			};
+		};
+	};
+
+	fragment@2 {
+		target = <&amba>;
+		__overlay__ {
+			axi_gpio0: gpio@41200000 {
+				compatible = "xlnx,xps-gpio-1.00.a";
+				reg = <0x41200000 0x10000>;
+				status = "okay";
+				gpio-controller;
+				#gpio-cells = <2>;
+			};
+		};
+	};
+
+	fragment@3 {
+		target = <&amba>;
+		__overlay__ {
+			backlight0: gpio-backlight@0 {
+				status = "okay";
+				compatible = "gpio-backlight";
+				gpios = <&axi_gpio0 0 GPIO_ACTIVE_HIGH>;
+			};
+		};
+	};
+
+	fragment@4 {
+		target = <&amba>;
+		__overlay__ {
+			axi_spi0: spi@41e00000 {
+				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+				reg = <0x41e00000 0x10000>;
+				status = "okay";
+				interrupt-parent = <&intc>;
+				interrupts = <0 30 1>;
+				bits-per-word = <8>;
+				fifo-size = <16>;
+				num-cs = <1>;
+
+				fbtft0: display@0 {
+					status = "okay";
+					compatible = "ilitech,ili9341";
+					reg = <0>;
+					dc-gpios = <&axi_gpio0 1 GPIO_ACTIVE_HIGH>;
+					reset-gpios = <&axi_gpio0 2 GPIO_ACTIVE_LOW>;
+					spi-max-frequency = <50000000>;
+					fps = <60>;
+					rotate = <270>;
+					backlight = <&backlight0>;
+					buswidth = <1>;
 				};
 			};
 		};

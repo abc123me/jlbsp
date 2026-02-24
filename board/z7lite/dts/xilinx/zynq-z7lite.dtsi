@@ -24,7 +24,7 @@
 	usb_phy0: phy0 {
 		// USB3320C-EZK ULPI PHY
 		// https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocuments/DataSheets/USB3320-Data-Sheet-DS00001792.pdf
-		compatible = "usb-nop-xceiv"; /* TODO */
+		compatible = "ulpi-phy";
 		#phy-cells = <0>;
 	};
 };
@@ -48,4 +48,16 @@
 	status = "okay";
 	dr_mode = "host";
 	usb-phy = <&usb_phy0>;
+};
+
+&qspi {
+	bootph-all;
+	status = "okay";
+	flash@0 {
+		compatible = "spansion,w25q128", "jedec,spi-nor";
+		spi-rx-bus-width = <4>;
+		spi-tx-bus-width = <4>;
+		spi-max-frequency = <50000000>;
+		reg = <0>;
+	};
 };
