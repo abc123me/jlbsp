@@ -79,14 +79,15 @@ Symbol | Meaning
 
 Name                                                                    | Used By   | Description
 ------------------------------------------------------------------------|-----------|-------------------------------------------------------------------------
-[jl-secret-keys](https://shattereddisk.github.io/rickroll/rickroll.mp4) | all       | Repository containing SSH, WiFI, and VPN keys / credentials
-[driver-74hc595](https://github.com/abc123me/driver-74hc595)            | tdisp     | Driver for translating raw data into GPIO pins on the 74HC595
-[time-display](https://github.com/abc123me/time-display)                | tdisp     | Userspace app for updating the digits on my time display
-[bpi-wifi-fw](https://github.com/abc123me/bpi-m2-zero-wifi-fw)          | tdisp     | WiFi firmware for the BananaPi M2 Zero
-[libconfig-rw](https://github.com/abc123me/libconfig-rw)                | led-alarm | Simple tool for reading/writing to libconfig style config files
-[led-alarm](https://github.com/abc123me/led-alarm)                      | led-alarm | LED alarm clock daemon and web files
-[fbgl-rs](https://github.com/abc123me/fbgl-rs)                          | N/A       | My FBGL graphics library ported to Rust
 [bad-apple-frames](https://github.com/pikapower9080/bad-apple-frames)   | N/A       | Frame and audio files for bad apple
 [bad-apple-rs](https://github.com/abc123me/bad-apple-rs)                | N/A       | Rust program that plays bad apple using fbgl-rs
-[zynq-bit2bin](https://github.com/railnova/zynq-bit2bin)                | N/A       | Convert Xilinx FPGA bitstream from .bit to .bin
+[btop](https://github.com/aristocratos/btop)                            | dev       | Better version of top, rewrite of bashtop in C++
+[bpi-wifi-fw](https://github.com/abc123me/bpi-m2-zero-wifi-fw)          | tdisp     | WiFi firmware for the BananaPi M2 Zero
+[driver-74hc595](https://github.com/abc123me/driver-74hc595)            | tdisp     | Driver for translating raw data into GPIO pins on the 74HC595
+[fbgl-rs](https://github.com/abc123me/fbgl-rs)                          | N/A       | My FBGL graphics library ported to Rust
+[jl-secret-keys](https://shattereddisk.github.io/rickroll/rickroll.mp4) | all       | Repository containing SSH, WiFI, and VPN keys / credentials
+[led-alarm](https://github.com/abc123me/led-alarm)                      | led-alarm | LED alarm clock daemon and web files
+[libconfig-rw](https://github.com/abc123me/libconfig-rw)                | led-alarm | Simple tool for reading/writing to libconfig style config files
+[time-display](https://github.com/abc123me/time-display)                | tdisp     | Userspace app for updating the digits on my time display
 [tty-resize](https://github.com/abc123me/tty-resize)                    | all       | Simple program to resize a TTY
+[zynq-bit2bin](https://github.com/railnova/zynq-bit2bin)                | N/A       | Convert Xilinx FPGA bitstream from .bit to .bin
