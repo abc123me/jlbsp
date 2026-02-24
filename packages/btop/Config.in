@@ -1,0 +1,6 @@
+config BR2_PACKAGE_BTOP
+	bool "btop (better top)"
+	default n
+	help
+	  Resource monitor that shows usage and stats for processor,
+	  memory, disks, network and processes.
