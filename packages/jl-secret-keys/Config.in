@@ -55,4 +55,10 @@ config BR2_PACKAGE_JL_SECRET_KEYS_WG_PROXY
 	help
 	  Private SSH keys for wireguard proxy
 
+config BR2_PACKAGE_JL_SECRET_KEYS_SCREEN_HAT
+	bool "Private keys for screen hat"
+	default n
+	help
+	  Private SSH keys for screen hat
+
 endif
