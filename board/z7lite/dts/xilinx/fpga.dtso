@@ -73,7 +73,7 @@
 				interrupt-parent = <&intc>;
 				interrupts = <0 30 1>;
 				bits-per-word = <8>;
-				fifo-size = <16>;
+				fifo-size = <256>;
 				num-cs = <1>;
 
 				fbtft0: display@0 {
