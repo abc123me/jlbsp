@@ -1,0 +1,231 @@
+#include <dt-bindings/gpio/gpio.h>
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@0 {
+		target = <&fpga_full>;
+		__overlay__ {
+			status = "okay";
+			firmware-name = "fpga.bin";
+		};
+	};
+
+	fragment@1 {
+		target = <&amba>;
+		__overlay__ {
+			eth0: ethernet@40e00000 {
+				compatible = "xlnx,axi-ethernetlite-3.0", "xlnx,xps-ethernetlite-1.00.a";
+				reg = <0x40e00000 0x10000>;
+				status = "okay";
+				device_type = "network";
+				local-mac-address = [00 0a 35 00 00 00];
+				phy-handle = <&phy0>;
+			 	xlnx,rx-ping-pong = <0x1>;
+				xlnx,tx-ping-pong = <0x1>;
+				interrupt-parent = <&intc>;
+		        interrupts = <0 29 1>;
+				mdio {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					phy0: phy@7 {
+						compatible = "ethernet-phy-ieee802.3-c22";
+						device_type = "ethernet-phy";
+						reg = <1>;
+					};
+				};
+			};
+		};
+	};
+
+	fragment@2 {
+		target = <&amba>;
+		__overlay__ {
+			axi_intc: interrupt-controller@41800000 {
+				compatible = "xlnx,xps-intc-1.00.a";
+				reg = <0x41800000 0x10000>;
+				status = "okay";
+				interrupt-parent = <&intc>;
+		        interrupts = <0 30 1>;
+				#interrupt-cells = <1>;
+				interrupt-controller;
+				xlnx,kind-of-intr = <0x1>;
+				xlnx,num-intr-inputs = <4>;
+			};
+		};
+	};
+
+	fragment@3 {
+		target = <&amba>;
+		__overlay__ {
+			axi_gpio0: gpio@41200000 {
+				compatible = "xlnx,xps-gpio-1.00.a";
+				reg = <0x41200000 0x10000>;
+				status = "okay";
+				gpio-controller;
+				#gpio-cells = <2>;
+			};
+		};
+	};
+
+	fragment@4 {
+		target = <&amba>;
+		__overlay__ {
+			backlight0: gpio-backlight@0 {
+				status = "okay";
+				compatible = "gpio-backlight";
+				gpios = <&axi_gpio0 0 GPIO_ACTIVE_HIGH>;
+				default-on;
+			};
+		};
+	};
+	fragment@5 {
+		target = <&amba>;
+		__overlay__ {
+			axi_spi0: spi@41e00000 {
+				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+				reg = <0x41e00000 0x10000>;
+				status = "okay";
+				interrupt-parent = <&axi_intc>;
+				interrupts = <0>;
+				bits-per-word = <8>;
+				fifo-size = <256>;
+				num-cs = <1>;
+
+				fbtft0: display@0 {
+					status = "okay";
+					compatible = "ilitech,ili9341";
+					reg = <0>;
+					dc-gpios = <&axi_gpio0 1 GPIO_ACTIVE_HIGH>;
+					reset-gpios = <&axi_gpio0 2 GPIO_ACTIVE_LOW>;
+					spi-max-frequency = <50000000>;
+					fps = <60>;
+					rotate = <270>;
+					backlight = <&backlight0>;
+					buswidth = <1>;
+				};
+			};
+		};
+	};
+
+	fragment@6 {
+		target = <&amba>;
+		__overlay__ {
+			backlight1: gpio-backlight@1 {
+				status = "okay";
+				compatible = "gpio-backlight";
+				gpios = <&axi_gpio0 3 GPIO_ACTIVE_HIGH>;
+				default-on;
+			};
+		};
+	};
+	fragment@7 {
+		target = <&amba>;
+		__overlay__ {
+			axi_spi1: spi@41e10000 {
+				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+				reg = <0x41e10000 0x10000>;
+				status = "okay";
+				interrupt-parent = <&axi_intc>;
+				interrupts = <1>;
+				bits-per-word = <8>;
+				fifo-size = <256>;
+				num-cs = <1>;
+
+				fbtft1: display@0 {
+					status = "okay";
+					compatible = "ilitech,ili9341";
+					reg = <0>;
+					dc-gpios = <&axi_gpio0 4 GPIO_ACTIVE_HIGH>;
+					reset-gpios = <&axi_gpio0 5 GPIO_ACTIVE_LOW>;
+					spi-max-frequency = <50000000>;
+					fps = <60>;
+					rotate = <270>;
+					backlight = <&backlight1>;
+					buswidth = <1>;
+				};
+			};
+		};
+	};
+
+	fragment@8 {
+		target = <&amba>;
+		__overlay__ {
+			backlight2: gpio-backlight@2 {
+				status = "okay";
+				compatible = "gpio-backlight";
+				gpios = <&axi_gpio0 6 GPIO_ACTIVE_HIGH>;
+				default-on;
+			};
+		};
+	};
+	fragment@9 {
+		target = <&amba>;
+		__overlay__ {
+			axi_spi2: spi@41e20000 {
+				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+				reg = <0x41e20000 0x10000>;
+				status = "okay";
+				interrupt-parent = <&axi_intc>;
+				interrupts = <2>;
+				bits-per-word = <8>;
+				fifo-size = <256>;
+				num-cs = <1>;
+
+				fbtft2: display@0 {
+					status = "okay";
+					compatible = "ilitech,ili9341";
+					reg = <0>;
+					dc-gpios = <&axi_gpio0 6 GPIO_ACTIVE_HIGH>;
+					reset-gpios = <&axi_gpio0 7 GPIO_ACTIVE_LOW>;
+					spi-max-frequency = <50000000>;
+					fps = <60>;
+					rotate = <270>;
+					backlight = <&backlight2>;
+					buswidth = <1>;
+				};
+			};
+		};
+	};
+
+	fragment@10 {
+		target = <&amba>;
+		__overlay__ {
+			backlight3: gpio-backlight@3 {
+				status = "okay";
+				compatible = "gpio-backlight";
+				gpios = <&axi_gpio0 9 GPIO_ACTIVE_HIGH>;
+				default-on;
+			};
+		};
+	};
+	fragment@11 {
+		target = <&amba>;
+		__overlay__ {
+			axi_spi3: spi@41e30000 {
+				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+				reg = <0x41e30000 0x10000>;
+				status = "okay";
+				interrupt-parent = <&axi_intc>;
+				interrupts = <3>;
+				bits-per-word = <8>;
+				fifo-size = <256>;
+				num-cs = <1>;
+
+				fbtft3: display@0 {
+					status = "okay";
+					compatible = "ilitech,ili9341";
+					reg = <0>;
+					dc-gpios = <&axi_gpio0 10 GPIO_ACTIVE_HIGH>;
+					reset-gpios = <&axi_gpio0 11 GPIO_ACTIVE_LOW>;
+					spi-max-frequency = <50000000>;
+					fps = <60>;
+					rotate = <270>;
+					backlight = <&backlight3>;
+					buswidth = <1>;
+				};
+			};
+		};
+	};
+};
