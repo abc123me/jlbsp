@@ -2,8 +2,10 @@
 
 set -e
 
+BOARD="$(basename "$BASE_DIR")"
+
 zynq-bit2bin \
-	<"${BR2_EXTERNAL_JLBSP_PATH}/board/z7lite/fpga.bit" \
+	<"${BR2_EXTERNAL_JLBSP_PATH}/board/${BOARD}/fpga/fpga.bit" \
 	>"${BINARIES_DIR}/fpga.bin"
 
 install -m 644 -D \
