@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+bl_set_power() {
+	for i in $(seq 0 20); do
+		dir="/sys/class/backlight/axi:gpio-backlight@$i"
+		if [ -d "$dir" ]; then
+			echo "Setting bl_power for backlight $i to $1!"
+			echo "$1" >"${dir}/bl_power"
+		else
+			echo "Done!"
+			break
+		fi
+	done
+}
+
+case "$1" in
+	on)
+		bl_set_power 0
+		;;
+	off)
+		bl_set_power 1
+		;;
+esac

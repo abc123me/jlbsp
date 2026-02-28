@@ -1,0 +1,3 @@
+# Skeleton permissions file
+
+/usr/bin/backlight f 755 root root - - - - -
