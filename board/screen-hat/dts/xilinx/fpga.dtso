@@ -69,6 +69,7 @@
 		};
 	};
 
+	/* ILI9341 display 0 */
 	fragment@4 {
 		target = <&amba>;
 		__overlay__ {
@@ -109,6 +110,7 @@
 		};
 	};
 
+	/* ILI9341 display 1 */
 	fragment@6 {
 		target = <&amba>;
 		__overlay__ {
@@ -149,6 +151,7 @@
 		};
 	};
 
+	/* ILI9341 display 2 */
 	fragment@8 {
 		target = <&amba>;
 		__overlay__ {
@@ -189,6 +192,7 @@
 		};
 	};
 
+	/* ILI9341 display 3 */
 	fragment@10 {
 		target = <&amba>;
 		__overlay__ {
@@ -219,6 +223,170 @@
 					reg = <0>;
 					dc-gpios = <&axi_gpio0 10 GPIO_ACTIVE_HIGH>;
 					reset-gpios = <&axi_gpio0 11 GPIO_ACTIVE_LOW>;
+					spi-max-frequency = <50000000>;
+					fps = <60>;
+					rotate = <270>;
+					backlight = <&backlight3>;
+					buswidth = <1>;
+				};
+			};
+		};
+	};
+
+	/* ILI9341 display 4 */
+	fragment@12 {
+		target = <&amba>;
+		__overlay__ {
+			backlight0: gpio-backlight@0 {
+				status = "okay";
+				compatible = "gpio-backlight";
+				gpios = <&axi_gpio0 12 GPIO_ACTIVE_HIGH>;
+				default-on;
+			};
+		};
+	};
+	fragment@13 {
+		target = <&amba>;
+		__overlay__ {
+			axi_spi0: spi@41e40000 {
+				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+				reg = <0x41e40000 0x10000>;
+				status = "okay";
+				interrupt-parent = <&intc>;
+				interrupts = <0 34 1>;
+				bits-per-word = <8>;
+				fifo-size = <256>;
+				num-cs = <1>;
+
+				fbtft0: display@0 {
+					status = "okay";
+					compatible = "ilitech,ili9341";
+					reg = <0>;
+					dc-gpios = <&axi_gpio0 13 GPIO_ACTIVE_HIGH>;
+					reset-gpios = <&axi_gpio0 14 GPIO_ACTIVE_LOW>;
+					spi-max-frequency = <50000000>;
+					fps = <60>;
+					rotate = <270>;
+					backlight = <&backlight0>;
+					buswidth = <1>;
+				};
+			};
+		};
+	};
+
+	/* ILI9341 display 5 */
+	fragment@14 {
+		target = <&amba>;
+		__overlay__ {
+			backlight1: gpio-backlight@1 {
+				status = "okay";
+				compatible = "gpio-backlight";
+				gpios = <&axi_gpio0 15 GPIO_ACTIVE_HIGH>;
+				default-on;
+			};
+		};
+	};
+	fragment@15 {
+		target = <&amba>;
+		__overlay__ {
+			axi_spi1: spi@41e50000 {
+				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+				reg = <0x41e50000 0x10000>;
+				status = "okay";
+				interrupt-parent = <&intc>;
+				interrupts = <0 35 1>;
+				bits-per-word = <8>;
+				fifo-size = <256>;
+				num-cs = <1>;
+
+				fbtft1: display@0 {
+					status = "okay";
+					compatible = "ilitech,ili9341";
+					reg = <0>;
+					dc-gpios = <&axi_gpio0 16 GPIO_ACTIVE_HIGH>;
+					reset-gpios = <&axi_gpio0 17 GPIO_ACTIVE_LOW>;
+					spi-max-frequency = <50000000>;
+					fps = <60>;
+					rotate = <270>;
+					backlight = <&backlight1>;
+					buswidth = <1>;
+				};
+			};
+		};
+	};
+
+	/* ILI9341 display 6 */
+	fragment@16 {
+		target = <&amba>;
+		__overlay__ {
+			backlight2: gpio-backlight@2 {
+				status = "okay";
+				compatible = "gpio-backlight";
+				gpios = <&axi_gpio0 18 GPIO_ACTIVE_HIGH>;
+				default-on;
+			};
+		};
+	};
+	fragment@17 {
+		target = <&amba>;
+		__overlay__ {
+			axi_spi2: spi@41e60000 {
+				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+				reg = <0x41e60000 0x10000>;
+				status = "okay";
+				interrupt-parent = <&intc>;
+				interrupts = <0 36 1>;
+				bits-per-word = <8>;
+				fifo-size = <256>;
+				num-cs = <1>;
+
+				fbtft2: display@0 {
+					status = "okay";
+					compatible = "ilitech,ili9341";
+					reg = <0>;
+					dc-gpios = <&axi_gpio0 19 GPIO_ACTIVE_HIGH>;
+					reset-gpios = <&axi_gpio0 20 GPIO_ACTIVE_LOW>;
+					spi-max-frequency = <50000000>;
+					fps = <60>;
+					rotate = <270>;
+					backlight = <&backlight2>;
+					buswidth = <1>;
+				};
+			};
+		};
+	};
+
+	/* ILI9341 display 7 */
+	fragment@18 {
+		target = <&amba>;
+		__overlay__ {
+			backlight3: gpio-backlight@3 {
+				status = "okay";
+				compatible = "gpio-backlight";
+				gpios = <&axi_gpio0 21 GPIO_ACTIVE_HIGH>;
+				default-on;
+			};
+		};
+	};
+	fragment@19 {
+		target = <&amba>;
+		__overlay__ {
+			axi_spi3: spi@41e70000 {
+				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+				reg = <0x41e70000 0x10000>;
+				status = "okay";
+				interrupt-parent = <&intc>;
+				interrupts = <0 37 1>;
+				bits-per-word = <8>;
+				fifo-size = <256>;
+				num-cs = <1>;
+
+				fbtft3: display@0 {
+					status = "okay";
+					compatible = "ilitech,ili9341";
+					reg = <0>;
+					dc-gpios = <&axi_gpio0 22 GPIO_ACTIVE_HIGH>;
+					reset-gpios = <&axi_gpio0 23 GPIO_ACTIVE_LOW>;
 					spi-max-frequency = <50000000>;
 					fps = <60>;
 					rotate = <270>;
