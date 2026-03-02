@@ -237,7 +237,7 @@
 	fragment@12 {
 		target = <&amba>;
 		__overlay__ {
-			backlight0: gpio-backlight@0 {
+			backlight4: gpio-backlight@4 {
 				status = "okay";
 				compatible = "gpio-backlight";
 				gpios = <&axi_gpio0 12 GPIO_ACTIVE_HIGH>;
@@ -248,7 +248,7 @@
 	fragment@13 {
 		target = <&amba>;
 		__overlay__ {
-			axi_spi0: spi@41e40000 {
+			axi_spi4: spi@41e40000 {
 				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
 				reg = <0x41e40000 0x10000>;
 				status = "okay";
@@ -258,7 +258,7 @@
 				fifo-size = <256>;
 				num-cs = <1>;
 
-				fbtft0: display@0 {
+				fbtft4: display@0 {
 					status = "okay";
 					compatible = "ilitech,ili9341";
 					reg = <0>;
@@ -267,7 +267,7 @@
 					spi-max-frequency = <50000000>;
 					fps = <60>;
 					rotate = <270>;
-					backlight = <&backlight0>;
+					backlight = <&backlight4>;
 					buswidth = <1>;
 				};
 			};
@@ -278,7 +278,7 @@
 	fragment@14 {
 		target = <&amba>;
 		__overlay__ {
-			backlight1: gpio-backlight@1 {
+			backlight5: gpio-backlight@5 {
 				status = "okay";
 				compatible = "gpio-backlight";
 				gpios = <&axi_gpio0 15 GPIO_ACTIVE_HIGH>;
@@ -289,7 +289,7 @@
 	fragment@15 {
 		target = <&amba>;
 		__overlay__ {
-			axi_spi1: spi@41e50000 {
+			axi_spi5: spi@41e50000 {
 				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
 				reg = <0x41e50000 0x10000>;
 				status = "okay";
@@ -299,7 +299,7 @@
 				fifo-size = <256>;
 				num-cs = <1>;
 
-				fbtft1: display@0 {
+				fbtft5: display@0 {
 					status = "okay";
 					compatible = "ilitech,ili9341";
 					reg = <0>;
@@ -308,7 +308,7 @@
 					spi-max-frequency = <50000000>;
 					fps = <60>;
 					rotate = <270>;
-					backlight = <&backlight1>;
+					backlight = <&backlight5>;
 					buswidth = <1>;
 				};
 			};
@@ -319,7 +319,7 @@
 	fragment@16 {
 		target = <&amba>;
 		__overlay__ {
-			backlight2: gpio-backlight@2 {
+			backlight6: gpio-backlight@6 {
 				status = "okay";
 				compatible = "gpio-backlight";
 				gpios = <&axi_gpio0 18 GPIO_ACTIVE_HIGH>;
@@ -330,7 +330,7 @@
 	fragment@17 {
 		target = <&amba>;
 		__overlay__ {
-			axi_spi2: spi@41e60000 {
+			axi_spi6: spi@41e60000 {
 				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
 				reg = <0x41e60000 0x10000>;
 				status = "okay";
@@ -340,7 +340,7 @@
 				fifo-size = <256>;
 				num-cs = <1>;
 
-				fbtft2: display@0 {
+				fbtft6: display@0 {
 					status = "okay";
 					compatible = "ilitech,ili9341";
 					reg = <0>;
@@ -349,7 +349,7 @@
 					spi-max-frequency = <50000000>;
 					fps = <60>;
 					rotate = <270>;
-					backlight = <&backlight2>;
+					backlight = <&backlight6>;
 					buswidth = <1>;
 				};
 			};
@@ -360,7 +360,7 @@
 	fragment@18 {
 		target = <&amba>;
 		__overlay__ {
-			backlight3: gpio-backlight@3 {
+			backlight7: gpio-backlight@7 {
 				status = "okay";
 				compatible = "gpio-backlight";
 				gpios = <&axi_gpio0 21 GPIO_ACTIVE_HIGH>;
@@ -371,17 +371,17 @@
 	fragment@19 {
 		target = <&amba>;
 		__overlay__ {
-			axi_spi3: spi@41e70000 {
+			axi_spi7: spi@41e70000 {
 				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
 				reg = <0x41e70000 0x10000>;
 				status = "okay";
 				interrupt-parent = <&intc>;
-				interrupts = <0 37 1>;
+				interrupts = <0 52 1>;
 				bits-per-word = <8>;
 				fifo-size = <256>;
 				num-cs = <1>;
 
-				fbtft3: display@0 {
+				fbtft7: display@0 {
 					status = "okay";
 					compatible = "ilitech,ili9341";
 					reg = <0>;
@@ -390,7 +390,7 @@
 					spi-max-frequency = <50000000>;
 					fps = <60>;
 					rotate = <270>;
-					backlight = <&backlight3>;
+					backlight = <&backlight7>;
 					buswidth = <1>;
 				};
 			};
