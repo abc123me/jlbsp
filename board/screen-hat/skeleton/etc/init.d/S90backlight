@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+case "$1" in
+	start)
+		backlight on
+		;;
+	stop)
+		backlight off
+		;;
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+	usage)
+		echo "$0 <start/stop/restart>"
+		exit 1
+		;;
+esac
