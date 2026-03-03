@@ -1,5 +1,5 @@
 # Skeleton permissions file
 
-/etc/init.d/S90backlight f 755 root root - - - - -
-/usr/bin/backlight       f 755 root root - - - - -
-/usr/bin/reset-fb        f 755 root root - - - - -
+/etc/init.d/S80init-framebuffers f 755 root root - - - - -
+/usr/bin/backlight               f 755 root root - - - - -
+/usr/bin/reset-fb                f 755 root root - - - - -
