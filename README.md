@@ -49,6 +49,7 @@ lepotato-dev  | ✅🖧💾   | Libre Le-Potato developmental image
 radxa0-3e-dev | ✅🖧     | Libre Le-Potato developmental image
 thinkpad390e  | ✅🖧🖮🖵 | Pentium II based Thinkpad 390E
 z7lite-dev    | ✅🖧⚙️   | Off-brand chinese Zynq-7010 dev board
+ultrazed-dev  | ✅🖧⚙️   | Avnet ZU3EG SOM with an UltraCarrier dev board
 
 
 ### Primary builds
