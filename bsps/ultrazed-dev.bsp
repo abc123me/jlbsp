@@ -1,0 +1,3 @@
+#!/usr/bin/sh
+
+BSP_CONFIG="ultrazed-dev.config"
