@@ -1,6 +1,6 @@
 # This is an unclude file, can only have values of "y"
 
-BR2_PACKAGE_BTOP=y
+# BR2_PACKAGE_BTOP=y disabled due to issues with cxx support
 BR2_PACKAGE_DTBOCFG=y
 BR2_PACKAGE_FD=y
 BR2_PACKAGE_PV=y
