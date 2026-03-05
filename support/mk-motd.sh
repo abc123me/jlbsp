@@ -20,7 +20,7 @@ echo -e "   Built by:  ${USER}@$(hostname)"                             >>"$file
 echo -e "   Built on:  $(date)"                                         >>"$file"
 echo -e "   Buildroot: ${BR2_VERSION_FULL}"                             >>"$file"
 echo -e "   JLBSP:     jlbsp${BR2_EXTERNAL_JLBSP_VERSION} $branch"      >>"$file"
-if [ -n "$fpga" ]; then
+if [ -e "$fpga" ]; then
 	echo -e "   FPGA MD5:  $(md5sum "$fpga" | awk "{print \$1}")"           >>"$file"
 fi
 echo -e "${divider}" >>"$file"
