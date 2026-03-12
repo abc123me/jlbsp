@@ -1,7 +1,9 @@
 on:
-#  push:
-#    branches:
-#      - master
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 0 * * 0"
   workflow_dispatch:
 
 jobs:
@@ -28,6 +30,7 @@ jobs:
 
       - name: Clean ccache
         run: |
+            rm -rf "../builds"
             rm -rf "${BR2_CCACHE_DIR}"
             mkdir "${BR2_CCACHE_DIR}"
 
@@ -47,3 +50,10 @@ jobs:
       - name: Deploy production BSPs
         timeout: 30
         run: support/pipeline.sh deploy $DEPLOY_BSPS
+
+      - name: Upload builds
+        timeout: 15
+        uses: actions/upload-artifact@v4
+        with:
+          name: SD card images
+          path: ../builds/*/images/sdcard.img

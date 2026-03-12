@@ -5,6 +5,7 @@ set -eou pipefail
 ntfy="support/ntfy"
 
 PIPELINE_MGMT_DIR="../builds/pipeline"
+FAIL_MARKER="${PIPELINE_MGMT_DIR}/fail-marker"
 mkdir -p "${PIPELINE_MGMT_DIR}"
 
 run() {
@@ -22,7 +23,8 @@ run() {
 
 		if ! ./bsp "$step" "$bsp"; then
 			echo "$?" >"${PIPELINE_MGMT_DIR}/exit-code-$bsp-$step"
-			touch "${PIPELINE_MGMT_DIR}/fail-marker"
+			touch "${FAIL_MARKER}"
+			echo -e "\e[1;31mFailed to run $step for $bsp\e[0m"
 			"$ntfy" "$step" "Failed to run $step for $bsp"
 		else
 			touch "${PIPELINE_MGMT_DIR}/stamp-$bsp-$step"
@@ -30,7 +32,7 @@ run() {
 				sleep 60 # Give the BSP some time to reboot and come online
 				source "bsps/${bsp}.bsp"
 				if ! ping -c 4 -t 1 "$DEPLOY_TO"; then
-					touch "${PIPELINE_MGMT_DIR}/fail-marker"
+					touch "${FAIL_MARKER}"
 					"$ntfy" "brick" "May have bricked bsp $bsp"
 				fi
 			fi
@@ -40,16 +42,16 @@ run() {
 
 case "$1" in
 	setup)
-		rm -f "${PIPELINE_MGMT_DIR}/fail-marker"
+		rm -f "${FAIL_MARKER}"
 		run "" "$@"
 		;;
 	source) run setup  "$@" ;;
 	build)  run source "$@" ;;
 	deploy) run build  "$@" ;;
 	notify)
-		if [ -f "${PIPELINE_MGMT_DIR}/fail-marker" ]; then
-			"$ntfy" failed  "Not all $2 BSPs built and deployed properly!"
-			rm "${PIPELINE_MGMT_DIR}/fail-marker"
+		if [ -f "${FAIL_MARKER}" ]; then
+			"$ntfy" failed  "Not all BSPs built and deployed properly!"
+			rm "${FAIL_MARKER}"
 		else
 		 	"$ntfy" success "All $2 BSPs built and deployed properly!"
 		fi
