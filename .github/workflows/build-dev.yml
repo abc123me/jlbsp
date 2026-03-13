@@ -19,7 +19,7 @@ jobs:
     env:
       RPI_DEV_BSPS: rpi2-dev rpi5-dev rpi0w-dev
       MISC_DEV_BSPS: lepotato-dev orangepi-zero3-dev radxa0-3e-dev
-      SSH_OPTS: -i /home/act_runner/.ssh/id_ed25519 -oBatchMode=yes
+      SSH_OPTS: -oBatchMode=yes
       BR2_DL_DIR: /opt/act-runner-dl
       BR2_CCACHE_DIR: /opt/act-runner/ccache
     steps:
@@ -30,6 +30,10 @@ jobs:
         run: |
             rm -rf "${BR2_CCACHE_DIR}"
             mkdir "${BR2_CCACHE_DIR}"
+
+      - name: Test SSH
+        timeout: 5
+        run: ssh $SSH_OPTS root@ntp.main.lan true
 
 # Setup developmental bsps
       - name: Setup all development BSPs

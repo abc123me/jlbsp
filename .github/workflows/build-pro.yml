@@ -34,6 +34,10 @@ jobs:
             rm -rf "${BR2_CCACHE_DIR}"
             mkdir "${BR2_CCACHE_DIR}"
 
+      - name: Test SSH
+        timeout: 5
+        run: ssh $SSH_OPTS root@ntp.main.lan true
+
 # Build production bsps
       - name: Setup production BSPs
         timeout: 30
