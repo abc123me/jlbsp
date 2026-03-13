@@ -51,11 +51,19 @@ init_board() {
 	else
 		local LWD="$PWD"
 		cd "$BUILDROOT_DIR"
-		echo -e "\e[1;33mFetching latest buildroot for ${BUILDROOT_STR}\e[0m"
-		git fetch
-		git checkout "${BUILDROOT_VERSION}"
-		git pull
-		echo -e "\e[1;32mBuildroot ${BUILDROOT_STR} has been updated!\e[0m"
+		fetch_epoch="$(stat -c %Y "${PWD}/.git/FETCH_HEAD")"
+		cur_epoch="$(date +%s)"
+		too_old="$(echo "(${cur_epoch} - ${fetch_epoch}) > 86400" | bc)"
+		if [ $too_old -ne 0 ]; then
+			echo -e "\e[1;33mBuildroot for ${BUILDROOT_STR} was over a day old!\e[0m"
+			echo -e "\e[1;33mFetching latest buildroot for ${BUILDROOT_STR}!\e[0m"
+			git fetch
+			git checkout "${BUILDROOT_VERSION}"
+			git pull
+			echo -e "\e[1;32mBuildroot ${BUILDROOT_STR} has been updated!\e[0m"
+		else
+			echo -e "\e[1;32mBuildroot ${BUILDROOT_STR} is up to date!\e[0m"
+		fi
 		cd "$LWD"
 	fi
 }
