@@ -51,7 +51,7 @@ init_board() {
 	else
 		local LWD="$PWD"
 		cd "$BUILDROOT_DIR"
-		fetch_epoch="$(stat -c %Y "${PWD}/.git/FETCH_HEAD")"
+		fetch_epoch="$(stat -c %Y ".git/FETCH_HEAD" || echo 0)"
 		cur_epoch="$(date +%s)"
 		too_old="$(echo "(${cur_epoch} - ${fetch_epoch}) > 86400" | bc)"
 		if [ $too_old -ne 0 ]; then
