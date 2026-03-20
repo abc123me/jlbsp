@@ -1,0 +1,120 @@
+#include <dt-bindings/gpio/gpio.h>
+
+#define ENABLE_DISPLAYS
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@0 {
+		target = <&fpga_full>;
+		__overlay__ {
+			status = "okay";
+			firmware-name = "fpga.bin";
+		};
+	};
+
+	/* SBC Ethernet */
+	fragment@1 {
+		target = <&amba>;
+		__overlay__ {
+			eth0: ethernet@40e00000 {
+				compatible = "xlnx,axi-ethernetlite-3.0", "xlnx,xps-ethernetlite-1.00.a";
+				reg = <0x40e00000 0x10000>;
+				status = "okay";
+				device_type = "network";
+				local-mac-address = [00 0a 35 00 00 00];
+				phy-handle = <&phy0>;
+			 	xlnx,rx-ping-pong = <0x1>;
+				xlnx,tx-ping-pong = <0x1>;
+				interrupt-parent = <&intc>;
+		        interrupts = <0 29 1>;
+				mdio {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					phy0: phy@7 {
+						compatible = "ethernet-phy-ieee802.3-c22";
+						device_type = "ethernet-phy";
+						reg = <1>;
+					};
+				};
+			};
+		};
+	};
+
+	/* Primary higher-speed AXI GPIO */
+	fragment@2 {
+		target = <&amba>;
+		__overlay__ {
+			axi_gpio0: gpio@41200000 {
+				compatible = "xlnx,xps-gpio-1.00.a";
+				reg = <0x41200000 0x10000>;
+				status = "okay";
+				gpio-controller;
+				#gpio-cells = <2>;
+			};
+		};
+	};
+
+	/* 595 Shift register "SPI" bus */
+	fragment@3 {
+		target = <&amba>;
+		__overlay__ {
+			rst_gpio_spi0: rst_gpio_spi@0 {
+				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+				reg = <0x41df0000 0x10000>;
+				status = "okay";
+				interrupt-parent = <&intc>;
+				interrupts = <0 30 1>;
+				bits-per-word = <8>;
+				fifo-size = <16>;
+				num-cs = <1>;
+
+				rst_gpio0: rst_gpio@0 {
+					compatible = "fairchild,74hc595";
+					reg = <0>;
+					#gpio-cells = <2>;
+					gpio-controller;
+					registers-number = <2>;
+					status = "okay";
+				};
+			};
+		};
+	};
+
+	/* This should be a 595 Shift register "SPI" bus */
+	fragment@4 {
+		target = <&amba>;
+		__overlay__ {
+			led_gpio_sim@0 {
+				compatible = "gpio-simulator";
+				led_gpio0: bank0 {
+					gpio-controller;
+					#gpio-cells = <2>;
+					ngpios = <16>;
+					gpio-sim,label = "fake-backlight-gpio";
+				};
+			};
+		};
+	};
+
+#ifdef ENABLE_DISPLAYS
+#START_INTERRUPT_CNT 31
+#INSERT_DISPLAY 0
+#INSERT_DISPLAY 1
+#INSERT_DISPLAY 2
+#INSERT_DISPLAY 3
+#INSERT_DISPLAY 4
+#INSERT_DISPLAY 5
+#START_INTERRUPT_CNT 52
+#INSERT_DISPLAY 6
+#INSERT_DISPLAY 7
+// #INSERT_DISPLAY 8
+// #INSERT_DISPLAY 9
+// #INSERT_DISPLAY A
+// #INSERT_DISPLAY B
+// #INSERT_DISPLAY C
+// #INSERT_DISPLAY D
+// #INSERT_DISPLAY E
+#endif
+};

@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+if [ "$1" == "start" ]; then
+	mount /dev/mmcblk0p1 /boot
+fi
