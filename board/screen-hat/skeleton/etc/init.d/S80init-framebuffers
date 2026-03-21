@@ -5,7 +5,7 @@ case "$1" in
 		for i in $(seq 0 14); do
 			reset-fb $i
 		done
-		backlight on
+#		backlight on
 		;;
 	stop)
 		backlight off
