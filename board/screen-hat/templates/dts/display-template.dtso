@@ -18,8 +18,8 @@
 				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
 				reg = <0x41e${HEX}0000 0x10000>;
 				status = "okay";
-				interrupt-parent = <&intc>;
-				interrupts = <0 ${INT} 1>;
+				interrupt-parent = <&axi_intc>;
+				interrupts = <${INT} 0>;
 				bits-per-word = <8>;
 				fifo-size = <256>;
 				num-cs = <1>;
@@ -28,7 +28,7 @@
 					status = "okay";
 					compatible = "ilitech,ili9341";
 					reg = <0>;
-					dc-gpios = <&axi_gpio0 ${NUM} GPIO_ACTIVE_HIGH>;
+					dc-gpios = <&dc_gpio0 ${NUM} GPIO_ACTIVE_HIGH>;
 					reset-gpios = <&rst_gpio0 ${NUM} GPIO_ACTIVE_LOW>;
 					spi-max-frequency = <50000000>;
 					fps = <60>;
