@@ -7,12 +7,12 @@ if [ "$1" == "start"  ]; then
 		echo "Detected /dev/root on an MMC device $num with boot/root partitions"
 		if file -sL "/dev/mmcblk${num}p1" | grep -q 'fat'; then
 			echo "Detected FAT boot partition, running FSCK on it!"
-			fsck.vfat "/dev/mmcblk${num}p1"
+			fsck.vfat -f -p "/dev/mmcblk${num}p1"
 		fi
 		if file -sL /dev/root | grep -q 'ext4'; then
 			echo "Detected EXT4 rootfs, running FSCK on it!"
 			mount -o remount,ro /dev/root
-			fsck.ext4 /dev/root
+			fsck.ext4 -f -p /dev/root
 			mount -o remount,rw /dev/root
 		fi
 	fi
