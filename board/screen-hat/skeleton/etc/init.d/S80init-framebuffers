@@ -2,13 +2,25 @@
 
 case "$1" in
 	start)
+		# Bring GPIO expander chains out of reset
+		gpioset -c 3 -t 0 14=1
+		gpioset -c 3 -t 0 15=1
+
+		# Reset the framebuffers sequentially
 		for i in $(seq 0 14); do
 			reset-fb $i
 		done
-#		backlight on
+
+		# Turn on the backlight
+		backlight on
 		;;
 	stop)
+		# Kill the backlight
 		backlight off
+
+		# Bring GPIO expander chains into reset
+		gpioset -c 3 -t 0 14=0
+		gpioset -c 3 -t 0 15=0
 		;;
 	restart)
 		"$0" stop
