@@ -6,10 +6,17 @@ case "$1" in
 		gpioset -c 3 -t 0 14=1
 		gpioset -c 3 -t 0 15=1
 
-		# Reset the framebuffers sequentially
-		for i in $(seq 0 14); do
-			reset-fb $i
+		# Reset the framebuffers
+		for i in $(seq 0 7); do
+			reset-fb $i &
+			reset-fb $((i+7)) &
+
+			while [ -n "$(jobs)" ]; do
+				sleep 0.1
+				jobs >/dev/null
+			done
 		done
+
 
 		# Turn on the backlight
 		backlight on
