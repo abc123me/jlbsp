@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+if [ "$1" == "start" ]; then
+	# For some reason the PHY is not reset on boot, this fixes that
+	ifdown eth0
+	sleep 0.1
+	ifup eth0
+fi
