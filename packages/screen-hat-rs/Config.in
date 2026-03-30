@@ -1,0 +1,9 @@
+config BR2_PACKAGE_SCREEN_HAT_RS
+	bool "Screen Hat animations using FBGL-RS"
+	default n
+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+	select BR2_PACKAGE_HOST_RUSTC
+	help
+	  Screen hat rust app
+
+	  https://github.com/abc123me/screen-hat-rs
