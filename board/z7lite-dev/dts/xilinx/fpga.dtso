@@ -52,7 +52,7 @@
 		};
 	};
 
-	fragment@3 {
+	/*fragment@3 {
 		target = <&amba>;
 		__overlay__ {
 			backlight0: gpio-backlight@0 {
@@ -90,5 +90,5 @@
 				};
 			};
 		};
-	};
+	};*/
 };
