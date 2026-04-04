@@ -1,0 +1,68 @@
+#!/usr/bin/env sh
+
+addr="0x40400000"
+ctrl="$(($addr + 0x00))"
+stat="$(($addr + 0x04))"
+ptr0="$(($addr + 0x18))"
+len0="$(($addr + 0x28))"
+
+rd() { printf "$2 (%08X): " "$1"; devmem "$1" 32; }
+
+print_dma() {
+	sync
+	rd "$ctrl" "Control"
+	rd "$stat" "Status "
+	rd "$ptr0" "Address"
+	rd "$len0" "Length "
+}
+
+case "$1" in
+	stat|status)
+		echo -e "\e[1;33mDMA Status:\e[0m"
+		print_dma
+		;;
+	rst|reset)
+		echo -e "\e[1;33mResetting DMA block!\e[0m"
+		devmem "$ctrl" 32 0x4 # Reset the IP block
+		print_dma
+		;;
+	len)
+		len="$2"; if [ -z "$len" ]; then len="0x10"; fi
+		echo -e "\e[1;33mSetting transfer length $len\e[0m"
+		devmem "$len0" 32 "$len"
+		print_dma
+		;;
+	ptr|addr|address)
+		ptr="$2"; if [ -z "$ptr" ]; then ptr="0x1FC00000"; fi
+		echo -e "\e[1;33mSetting transfer address $ptr\e[0m"
+		devmem "$ptr0" 32 "$ptr"
+		print_dma
+		;;
+	run|start)
+		echo -e "\e[1;33mStarting DMA transfer!\e[0m"
+		val=$(devmem "$ctrl" 32)
+		val=$(($val|0x1))
+		devmem "$ctrl" 32 "$val"
+		print_dma
+		;;
+	stop)
+		echo -e "\e[1;33mStopping DMA transfer!\e[0m"
+		val=$(devmem "$ctrl" 32)
+		val=$(($val&0xFFFFFFFE))
+		devmem "$ctrl" 32 "$val"
+		print_dma
+		;;
+	test)
+		echo -e "\e[1;36mRunning DMA test!\e[0m"
+		shift 1
+		"$0" reset
+		"$0" ptr "$2"
+		"$0" run
+		"$0" len "$1"
+		;;
+	*)
+		echo -e "\e[1;31mInvalid usage!\e[0m"
+		exit 1
+		;;
+esac
+sleep 0.1

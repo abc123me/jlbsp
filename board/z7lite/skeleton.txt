@@ -1,4 +1,5 @@
 # Skeleton permissions file
 
 /etc/init.d/S01load-fpga       f 755 root root - - - - -
+/usr/bin/dmatest               f 755 root root - - - - -
 
