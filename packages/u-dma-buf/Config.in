@@ -1,0 +1,9 @@
+config BR2_PACKAGE_U_DMA_BUF
+	bool "Userspace mappable DMA buffer"
+	default n
+	help
+	  u-dma-buf is a Linux device driver that allocates contiguous memory blocks in
+	  the kernel space as DMA buffers and makes them available from the user space.
+
+	  It is intended that these memory blocks are used as DMA buffers when a user
+	  application implements device driver in user space using UIO (User space I/O).

@@ -92,4 +92,5 @@ Name                                                                    | Used B
 [time-display](https://github.com/abc123me/time-display)                | tdisp      | Userspace app for updating the digits on my time display
 [screen-hat-rs](https://github.com/abc123me/screen-hat-rs)              | screen-hat | Userspace app for animations on the screen hat
 [tty-resize](https://github.com/abc123me/tty-resize)                    | all        | Simple program to resize a TTY
+[u-dma-buf](https://github.com/ikwzm/udmabuf)                           | scrren-hat | Userspace DMA buffer driver
 [zynq-bit2bin](https://github.com/railnova/zynq-bit2bin)                | N/A        | Convert Xilinx FPGA bitstream from .bit to .bin
