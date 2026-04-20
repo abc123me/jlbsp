@@ -1,0 +1,5 @@
+config BR2_PACKAGE_DMA_SCREEN_TEST
+	bool "DMA Screen test"
+	default n
+	help
+	  Userspace app that uses /dev/mem to tes the DMA screen driver
