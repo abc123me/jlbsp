@@ -44,9 +44,8 @@
 			};
 		};
 	};
-};
 
-/*	fragment@2 {
+	fragment@2 {
 		target = <&amba>;
 		__overlay__ {
 			axidma: axidma@40400000 {
@@ -58,7 +57,7 @@
 				clocks = <&clkc 15>;
 				clock-names = "s_axi_lite_aclk";
 				interrupt-parent = <&intc>;
-		        interrupts = <0 30 1>; // 0 31 1>;
+		        interrupts = <0 30 1>;
 				dma-ranges = <0x1FC00000 0x1FC00000 0x400000>;
 
 				axidma0: axidma0@40400000 {
@@ -72,27 +71,34 @@
 			};
 		};
 	};
-};
 
-/*				axidma1: axidma1@40400000 {
-					compatible = "xlnx,axi-dma-s2mm-channel";
-					dma-channels = <0x1>;
-					interrupt-parent = <&intc>;
-					interrupts = <0 31 1>;
-					xlnx,datawidth = <0x20>;
-					#dma-cells = <1>;
+	fragment@3 {
+		target = <&amba>;
+		__overlay__ {
+			reserved-memory {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				ranges;
+				dma_buf0: dma_buf@0 {
+					compatible = "shared-dma-pool";
+					reusable;
+					reg = <0x1FC00000 0x400000>;
+					label = "image_buf0";
 				};
 			};
 		};
 	};
-	fragment@3 {
+
+	fragment@4 {
 		target = <&amba>;
 		__overlay__ {
-			axidmatest_1: axidmatest@1 {
-				compatible ="xlnx,axi-dma-test-1.00.a";
-				dmas = <&axidma 0 &axidma 1>;
-				dma-names = "axidma0", "axidma1";
+			udmabuf0: udmabuf@0x00 {
+				compatible = "ikwzm,u-dma-buf";
+				memory-region = <&dma_buf0>;
+				size = <153600>; /* 320x240x2 */
+				minor-number = <0>;
+				sync-always;
 			};
 		};
 	};
-};*/
+};
