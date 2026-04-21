@@ -3,6 +3,3 @@
 /boot                            d 755 root root - - - - -
 /etc/init.d/S10mount-boot        f 755 root root - - - - -
 /etc/init.d/S50rst-ethernet      f 755 root root - - - - -
-/etc/init.d/S80init-framebuffers f 755 root root - - - - -
-/usr/bin/backlight               f 755 root root - - - - -
-/usr/bin/reset-fb                f 755 root root - - - - -
