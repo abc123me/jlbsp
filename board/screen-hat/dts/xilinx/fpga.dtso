@@ -26,7 +26,7 @@
 			 	xlnx,rx-ping-pong = <0x1>;
 				xlnx,tx-ping-pong = <0x1>;
 				interrupt-parent = <&intc>;
-		        interrupts = <0 30 1>;
+		        interrupts = <0 29 1>;
 				mdio {
 					#address-cells = <1>;
 					#size-cells = <0>;
@@ -45,7 +45,7 @@
 		target = <&amba>;
 		__overlay__ {
 			reserved-memory {
-				display-region: buffer@0 {
+				display-region@0 {
 					reg = <0x1FC00000 0x400000>;
 				};
 			};
