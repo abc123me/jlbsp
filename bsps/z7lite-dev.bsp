@@ -1,3 +1,4 @@
 #!/usr/bin/sh
 
 BSP_CONFIG="z7lite-dev.config"
+FPGA_DIR="/home/jeremiah/Programming/FPGA/Vivado/MicroPhaseZ7_Lite_Minimal"
