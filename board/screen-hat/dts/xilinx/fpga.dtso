@@ -51,4 +51,48 @@
 			};
 		};
 	};
+
+	/* AXI GPIO for backlight control */
+	fragment@3 {
+		target = <&amba>;
+		__overlay__ {
+			led_gpio0: gpio@41200000 {
+				compatible = "xlnx,xps-gpio-1.00.a";
+				reg = <0x41200000 0x10000>;
+				status = "okay";
+				#gpio-cells = <2>;
+				gpio-controller;
+				xlnx,all-outputs = <0x1>;
+				xlnx,dout-default = <0x0>;
+				xlnx,gpio-width = <0x15>; /* 14 screens with 1 mux assert line */
+				xlnx,is-dual = <0x0>;
+				gpio-line-names = "LED_0", "LED_1", "LED_2", "LED_3",
+				                  "LED_4", "LED_5", "LED_6", "LED_7",
+				                  "LED_8", "LED_9", "LED_A", "LED_B",
+				                  "LED_C", "LED_D", "ASSERT_LED_CTL";
+			};
+		};
+	};
+
+	/* AXI GPIO for reset control */
+	fragment@4 {
+		target = <&amba>;
+		__overlay__ {
+			rst_gpio0: gpio@41210000 {
+				compatible = "xlnx,xps-gpio-1.00.a";
+				reg = <0x41210000 0x10000>;
+				status = "okay";
+				#gpio-cells = <2>;
+				gpio-controller;
+				xlnx,all-outputs = <0x1>;
+				xlnx,dout-default = <0x0>;
+				xlnx,gpio-width = <0x15>; /* 14 screens with 1 mux assert line */
+				xlnx,is-dual = <0x0>;
+				gpio-line-names = "RST_0", "RST_1", "RST_2", "RST_3",
+				                  "RST_4", "RST_5", "RST_6", "RST_7",
+				                  "RST_8", "RST_9", "RST_A", "RST_B",
+				                  "RST_C", "RST_D", "ASSERT_RST_CTL";
+			};
+		};
+	};
 };
