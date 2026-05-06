@@ -3,3 +3,4 @@
 /boot                            d 755 root root - - - - -
 /etc/init.d/S10mount-boot        f 755 root root - - - - -
 /etc/init.d/S50rst-ethernet      f 755 root root - - - - -
+/etc/init.d/S90init-displays     f 755 root root - - - - -

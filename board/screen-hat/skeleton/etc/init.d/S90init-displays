@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+if [ "$1" == "start" ]; then
+	dma-screen-test 0 14
+fi
