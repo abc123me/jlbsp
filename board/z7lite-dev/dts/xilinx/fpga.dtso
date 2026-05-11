@@ -20,7 +20,13 @@
 				reg = <0x40e00000 0x10000>;
 				status = "okay";
 				device_type = "network";
-				local-mac-address = [00 0a 35 00 00 00];
+				local-mac-address = [00 0A 35 BE B0 AE];
+// Some random addresses to use for new boards:
+//				local-mac-address = [00 0A 35 F3 D5 7D];
+//				local-mac-address = [00 0A 35 BF 8D F9];
+//				local-mac-address = [00 0A 35 03 23 B9];
+//				local-mac-address = [00 0A 35 BB F5 EC];
+//				local-mac-address = [00 0A 35 DC B1 11];
 				phy-handle = <&phy0>;
 			 	xlnx,rx-ping-pong = <0x1>;
 				xlnx,tx-ping-pong = <0x1>;
@@ -51,44 +57,4 @@
 			};
 		};
 	};
-
-	/*fragment@3 {
-		target = <&amba>;
-		__overlay__ {
-			backlight0: gpio-backlight@0 {
-				status = "okay";
-				compatible = "gpio-backlight";
-				gpios = <&axi_gpio0 0 GPIO_ACTIVE_HIGH>;
-			};
-		};
-	};
-
-	fragment@4 {
-		target = <&amba>;
-		__overlay__ {
-			axi_spi0: spi@41e00000 {
-				compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
-				reg = <0x41e00000 0x10000>;
-				status = "okay";
-				interrupt-parent = <&intc>;
-				interrupts = <0 30 1>;
-				bits-per-word = <8>;
-				fifo-size = <256>;
-				num-cs = <1>;
-
-				fbtft0: display@0 {
-					status = "okay";
-					compatible = "ilitech,ili9341";
-					reg = <0>;
-					dc-gpios = <&axi_gpio0 1 GPIO_ACTIVE_HIGH>;
-					reset-gpios = <&axi_gpio0 2 GPIO_ACTIVE_LOW>;
-					spi-max-frequency = <50000000>;
-					fps = <60>;
-					rotate = <270>;
-					backlight = <&backlight0>;
-					buswidth = <1>;
-				};
-			};
-		};
-	};*/
 };
