@@ -21,7 +21,7 @@
 				reg = <0x40e00000 0x10000>;
 				status = "okay";
 				device_type = "network";
-				local-mac-address = [00 0a 35 00 00 00];
+				local-mac-address = [00 0A 35 C7 D6 2B];
 				phy-handle = <&phy0>;
 			 	xlnx,rx-ping-pong = <0x1>;
 				xlnx,tx-ping-pong = <0x1>;
