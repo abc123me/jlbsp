@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+if [ "$1" == "start" ] && [ -c "/dev/fb0" ]; then
+	fb-test
+fi

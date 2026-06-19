@@ -1,0 +1,3 @@
+# Skeleton permissions file
+
+/etc/init.d/S90fb-test        f 755 root root - - - - -
