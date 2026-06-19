@@ -45,20 +45,22 @@
 		};
 	};
 
+	/* AXI DMA for driving displays */
 	fragment@2 {
 		target = <&amba>;
 		__overlay__ {
 			axidma: axidma@40400000 {
 				compatible = "xlnx,axi-dma-1.00.a";
-				#dma-cells = <1>;
 				reg = <0x40400000 0x10000>;
 				xlnx,addrwidth = <0x20>;
 				xlnx,datawidth = <0x20>;
 				clocks = <&clkc 15>;
 				clock-names = "s_axi_lite_aclk";
 				interrupt-parent = <&intc>;
-		        interrupts = <0 30 1>;
+				interrupts = <0 30 1>;
 				dma-ranges = <0x1FC00000 0x1FC00000 0x400000>;
+				dma-names = "axidma0";
+				#dma-cells = <1>;
 
 				axidma0: axidma0@40400000 {
 					compatible = "xlnx,axi-dma-mm2s-channel";
@@ -72,32 +74,20 @@
 		};
 	};
 
+	/* Distributed DMA framebuffer driver */
 	fragment@3 {
 		target = <&amba>;
 		__overlay__ {
-			reserved-memory {
-				#address-cells = <1>;
-				#size-cells = <1>;
-				ranges;
-				dma_buf0: dma_buf@0 {
-					compatible = "shared-dma-pool";
-					reusable;
-					reg = <0x1FC00000 0x400000>;
-					label = "image_buf0";
-				};
-			};
-		};
-	};
-
-	fragment@4 {
-		target = <&amba>;
-		__overlay__ {
-			udmabuf0: udmabuf@0x00 {
-				compatible = "ikwzm,u-dma-buf";
-				memory-region = <&dma_buf0>;
-				size = <153600>; /* 320x240x2 */
-				minor-number = <0>;
-				sync-always;
+			framebuffer0: ddmafb@0 {
+				compatible = "ddma-framebuffer";
+				status = "okay";
+				framerate = <60>;
+				width = <480>;
+				height = <640>;
+				stride = <960>;
+				format = "r5g6b5";
+				dmas = <&axidma 0>;
+				dma-names = "axidma0";
 			};
 		};
 	};
