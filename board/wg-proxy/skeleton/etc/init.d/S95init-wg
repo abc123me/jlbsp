@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if [ "$1" = "start" ]; then
+	. "/usr/share/jlbsp/utils"
+	wait_for_if eth0
+
+	tries=0
+	/etc/init.d/S49ntp stop
+	while ! has_ntp; do
+		ntpdate "$(cat /etc/ntp.conf | awk '{print $2}')"
+		sleep 3
+	done
+	/etc/init.d/S49ntp start
+
+	/usr/bin/wg-proxyd up
+fi

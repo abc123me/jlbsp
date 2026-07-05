@@ -18,17 +18,27 @@ run_iptables() {
 }
 
 media_ip="192.168.1.12"
-fwd=("eth0:80:${media_ip}:80:wg0" "eth0:443:${media_ip}:443:wg0")
-route=("-net" "${media_ip}" "netmask" "255.255.255.255" "metric" "1024" "dev" "wg0")
+eth_if="eth0"
+vpn_if="wg0"
+
+runfn="/var/run/.wg-proxyd-${vpn_if}"
+fwd=("${eth_if}:80:${media_ip}:80:${vpn_if}" "${eth_if}:443:${media_ip}:443:${vpn_if}")
+route=("-net" "${media_ip}" "netmask" "255.255.255.255" "metric" "1024" "dev" "${vpn_if}")
+vpn_addr=$(cat "/etc/wireguard/${vpn_if}.conf" | grep Endpoint | awk '{print $NF}' | awk -F':' '{print $1}')
+
 case "$1" in
 	up)
-		ifup wg0
+		if [ -f "${runfn}" ]; then "$0" down || rm -f "${runfn}"; fi
+		ifup "${vpn_if}"
+		sleep 3
 		run_iptables -A "${fwd[@]}"
 		route add "${route[@]}"
+		touch "${runfn}"
 		;;
 	down)
 		run_iptables -D "${fwd[@]}"
 		route del "${route[@]}"
-		ifdown wg0
+		ifdown "${vpn_if}"
+		rm -f "${runfn}"
 		;;
 esac
