@@ -33,6 +33,11 @@ wait_for_if() {
 	return 0
 }
 
+# Checks if the system has ntp
+has_ntp() {
+	test $(date "+%Y") -gt 2020
+}
+
 # Waits up to 15 seconds for network time synchronization
 # Usage: wait_for_ntp
 wait_for_ntp() {
@@ -40,7 +45,7 @@ wait_for_ntp() {
 	let cnt=tout
 	while true; do
 		if ! let cnt--; then echo "Time not synchronized within $tout seconds"; return 1; fi
-		[ $(date "+%Y") -gt 20 ] && break
+		has_ntp && break
 		sleep 1
 	done
 	let cnt=tout-cnt

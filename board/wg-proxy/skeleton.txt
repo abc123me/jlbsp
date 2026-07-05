@@ -1,5 +1,6 @@
 # Skeleton permissions file
 
+/etc/init.d/S95init-wg         f 755 root root - - - - -
 /etc/network/interfaces.d/eth0 f 644 root root - - - - -
 /etc/network/interfaces.d/wg0  f 644 root root - - - - -
 /etc/ntp.conf                  f 644 root root - - - - -
@@ -7,5 +8,6 @@
 /etc/wireguard                 d 755 root root - - - - -
 /usr/bin/wg-proxyd             f 755 root root - - - - -
 
-# HOTFIX - Disable this since it breaks something
+# HOTFIX - For some reason these break everything
 /etc/init.d/S06remount-ro      f 644 root root - - - - -
+/etc/init.d/S55rtc             f 644 root root - - - - -
