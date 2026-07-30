@@ -120,10 +120,10 @@
 			framebuffer0: ddmafb@0 {
 				compatible = "ddma-framebuffer";
 				status = "okay";
-				framerate = <30>;
+				framerate = <60>;
 				width = <3360>;
-				height = <320>;
 				stride = <6720>;
+				height = <320>;
 				format = "r5g6b5";
 				dmas = <&axidma 0>;
 				dma-names = "axidma0";
