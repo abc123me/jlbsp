@@ -82,9 +82,9 @@
 				compatible = "ddma-framebuffer";
 				status = "okay";
 				framerate = <60>;
-				width = <480>;
-				height = <640>;
-				stride = <960>;
+				width = <960>;
+				height = <320>;
+				stride = <1920>;
 				format = "r5g6b5";
 				dmas = <&axidma 0>;
 				dma-names = "axidma0";
