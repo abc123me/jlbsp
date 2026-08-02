@@ -1,0 +1,53 @@
+#include <dt-bindings/gpio/gpio.h>
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	/* AXI DMA for driving displays */
+	fragment@1 {
+		target = <&amba>;
+		__overlay__ {
+			axidma: axidma@40400000 {
+				compatible = "xlnx,axi-dma-1.00.a";
+				reg = <0x40400000 0x10000>;
+				xlnx,addrwidth = <0x20>;
+				xlnx,datawidth = <0x20>;
+				clocks = <&clkc 15>;
+				clock-names = "s_axi_lite_aclk";
+				interrupt-parent = <&intc>;
+				interrupts = <0 30 1>;
+				dma-ranges = <0x1FC00000 0x1FC00000 0x400000>;
+				dma-names = "axidma0";
+				#dma-cells = <1>;
+
+				axidma0: axidma0@40400000 {
+					compatible = "xlnx,axi-dma-mm2s-channel";
+					dma-channels = <0x1>;
+					interrupt-parent = <&intc>;
+					interrupts = <0 30 1>;
+					xlnx,datawidth = <0x20>;
+					#dma-cells = <1>;
+				};
+			};
+		};
+	};
+
+	/* Distributed DMA framebuffer driver */
+	fragment@2 {
+		target = <&amba>;
+		__overlay__ {
+			framebuffer0: ddmafb@0 {
+				compatible = "ddma-framebuffer";
+				status = "okay";
+				framerate = <60>;
+				width = <3360>;
+				stride = <6720>;
+				height = <320>;
+				format = "r5g6b5";
+				dmas = <&axidma 0>;
+				dma-names = "axidma0";
+			};
+		};
+	};
+};

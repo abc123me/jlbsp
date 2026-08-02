@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+if [ "$1" = "start" ]; then
+	gpioset -t 0 "ASSERT_IO_READY=1"
+	sleep 3
+
+	mkdir /sys/kernel/config/device-tree/overlays/displays
+	cat /lib/firmware/displays.dtbo \
+		>/sys/kernel/config/device-tree/overlays/displays/dtbo
+fi
