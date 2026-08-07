@@ -2,4 +2,9 @@
 
 if [ "$1" == "start" ]; then
 	fb-test
+	sleep 1
+	mkdir -p /tmp/screen-hat
+	ln -s /usr/share/screen-hat /tmp/screen-hat/assets
+	cd /tmp/screen-hat/
+	screen-hat-rs 2>&1 >/var/log/screen-hat.log &
 fi

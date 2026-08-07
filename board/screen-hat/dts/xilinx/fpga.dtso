@@ -86,7 +86,7 @@
 	};
 
 	/* AXI GPIO for IO inputs */
-	fragment@3 {
+	fragment@4 {
 		target = <&amba>;
 		__overlay__ {
 			inp_gpio0: gpio@41220000 {
@@ -99,7 +99,7 @@
 				xlnx,dout-default = <0x0>;
 				xlnx,gpio-width = <0x16>;
 				xlnx,is-dual = <0x0>;
-				gpio-line-names = "DISPLAYS_READY";
+				gpio-line-names = "DISPLAYS_READY", "PL_KEY_1", "PL_KEY_2";
 			};
 		};
 	};
