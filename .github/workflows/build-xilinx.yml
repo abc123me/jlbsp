@@ -1,0 +1,40 @@
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 0 * * 2"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: linux-amd64
+    env:
+      BSP_NAMES: z7lite-dev ultrazed-dev screen-hat
+      SSH_OPTS: -oBatchMode=yes
+      BR2_DL_DIR: /opt/act-runner-bsp/dl
+      BR2_CCACHE_DIR: /opt/act-runner-bsp/ccache
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup BSP
+        timeout: 30
+        run: ./bsp setup ${BSP_NAMES}
+
+      - name: Source BSPs
+        timeout: 300
+        run: ./bsp source ${BSP_NAMES}
+
+      - name: Build Ultrazed
+        timeout: 300
+        run: ./bsp build "ultrazed-dev"
+
+      - name: Build Z7 Lite
+        timeout: 300
+        run: ./bsp build "z7lite-dev"
+
+      - name: Build screen hat
+        timeout: 300
+        run: ./bsp build "screen-hat"
+
