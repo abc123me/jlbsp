@@ -1,0 +1,19 @@
+config BR2_PACKAGE_DOOM_ASCII
+	bool "doom-ascii"
+	help
+	  Text-based DOOM in your terminal!
+
+	  doom-ascii is a source port of doomgeneric that renders the
+	  game using ASCII characters, Unicode block elements, or
+	  Unicode braille patterns, drawn with ANSI escape codes. It
+	  has no external library dependencies (no SDL, no ncurses)
+	  and has no sound.
+
+	  You will need to separately provide a DOOM IWAD file (game
+	  data), e.g. the freely redistributable doom1.wad shareware
+	  IWAD, and place it where the game can find it at runtime
+	  (its own directory, or a directory pointed to by the
+	  DOOMWADDIR environment variable). The IWAD is not
+	  distributed by this package.
+
+	  https://github.com/wojciech-graj/doom-ascii

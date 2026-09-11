@@ -84,6 +84,7 @@ Name                                                                    | Used B
 [bad-apple-rs](https://github.com/abc123me/bad-apple-rs)                | N/A        | Rust program that plays bad apple using fbgl-rs
 [btop](https://github.com/aristocratos/btop)                            | dev        | Better version of top, rewrite of bashtop in C++
 [bpi-wifi-fw](https://github.com/abc123me/bpi-m2-zero-wifi-fw)          | tdisp      | WiFi firmware for the BananaPi M2 Zero
+[doom-ascii](https://github.com/wojciech-graj/doom-ascii)               | N/A        | Text-based DOOM in your terminal
 [driver-74hc595](https://github.com/abc123me/driver-74hc595)            | tdisp      | Driver for translating raw data into GPIO pins on the 74HC595
 [fbgl-rs](https://github.com/abc123me/fbgl-rs)                          | N/A        | My FBGL graphics library ported to Rust
 [jl-secret-keys](https://shattereddisk.github.io/rickroll/rickroll.mp4) | all        | Repository containing SSH, WiFI, and VPN keys / credentials
