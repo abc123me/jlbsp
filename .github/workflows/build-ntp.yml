@@ -12,8 +12,8 @@ jobs:
     env:
       BSP_NAME: ntp
       SSH_OPTS: -oBatchMode=yes
-      BR2_DL_DIR: /opt/act-runner-dl
-      BR2_CCACHE_DIR: /opt/act-runner/ccache
+      BR2_DL_DIR: /opt/act-runner-bsp/dl
+      BR2_CCACHE_DIR: /opt/act-runner-bsp/ccache
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,9 +33,3 @@ jobs:
       - name: Deploy BSP
         timeout: 5
         run: ./bsp deploy "${BSP_NAME}" || support/ntfy "brick" "Bricked BSP ${BSP_NAME}"
-
-      - name: Cleanup DL dir
-        run: find "${BR2_DL_DIR}" -atime +30 -exec rm -v "{}" \;
-
-      - name: Cleanup cache dir
-        run: find "${BR2_CCACHE_DIR}" -atime +30 -exec rm -v "{}" \;

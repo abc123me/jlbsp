@@ -1,0 +1,24 @@
+# Runs a server cleanup on the 15th day of every month
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/cleanup.yml
+  schedule:
+    - cron: "0 0 * * 15"
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: linux-amd64
+    env:
+      BR2_DL_DIR: /opt/act-runner-bsp/dl
+      BR2_CCACHE_DIR: /opt/act-runner-bsp/ccache
+    steps:
+      - name: Cleanup DL dir
+        run: find "${BR2_DL_DIR}" -atime +30 -print -delete
+
+      - name: Cleanup cache dir
+        run: find "${BR2_CCACHE_DIR}" -atime +30 -print -delete
