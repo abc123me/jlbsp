@@ -1,0 +1,44 @@
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: linux-amd64
+    env:
+      BSP_NAMES: rpi0w-dev rpi2-dev rpi5-dev rpi5-nvme-dev
+      SSH_OPTS: -oBatchMode=yes
+      BR2_DL_DIR: /opt/act-runner-bsp/dl
+      BR2_CCACHE_DIR: /opt/act-runner-bsp/ccache
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup BSPs
+        timeout: 30
+        run: ./bsp setup ${BSP_NAMES}
+
+      - name: Source BSPs
+        timeout: 300
+        run: ./bsp source ${BSP_NAMES}
+
+      - name: Build RPi 0W
+        timeout: 300
+        run: ./bsp build "rpi0w-dev"
+
+      - name: Build RPi 2
+        timeout: 300
+        run: ./bsp build "rpi2-dev"
+
+      - name: Build RPi 5
+        timeout: 300
+        run: ./bsp build "rpi5-dev"
+
+      - name: Build RPi 5 (NVMe)
+        timeout: 300
+        run: ./bsp build "rpi5-nvme-dev"
+
