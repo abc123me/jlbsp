@@ -101,12 +101,12 @@ build_board() {
 	shift 1
 	echo -e "\e[1;33mBuilding BSP $BSP_NAME\e[0m"
 
-	log="$(realpath "$BUILD_DIR")/build.log"
-	make -C "$(realpath "$BUILDROOT_DIR")" \
-		O="$(realpath "$BUILD_DIR")" \
-		"$@" 2>&1 \
+	local bdir="$(realpath "$BUILD_DIR")"
+	log="${bdir}/build.log"
+	echo make -C "$bdir" "$@"
+	make -C "$bdir" "$@" 2>&1 \
         | tee -a "$log" \
-        | grep '>>>' --line-buffered --color=never \
+        | (grep '>>>' --line-buffered --color=never || [ "$?" == "1" ]) \
 		| sed -u "s/>>>/[${bsp}: $@]/g" \
 		|| (err="$?"; tail -n 250 "$log"; exit "$err")
 
