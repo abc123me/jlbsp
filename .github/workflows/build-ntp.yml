@@ -11,7 +11,6 @@ jobs:
     runs-on: linux-amd64
     env:
       BSP_NAME: ntp
-      SSH_OPTS: -oBatchMode=yes
       BR2_DL_DIR: /opt/act-runner-bsp/dl
       BR2_CCACHE_DIR: /opt/act-runner-bsp/ccache
     steps:
@@ -28,8 +27,8 @@ jobs:
 
       - name: Build BSP
         timeout: 300
-        run: ./bsp build "${BSP_NAME}" || support/ntfy "build" "Couldn't build BSP ${BSP_NAME}"
+        run: ./bsp build "${BSP_NAME}" || (support/ntfy "build" "Couldn't build BSP ${BSP_NAME}"; exit 1)
 
       - name: Deploy BSP
         timeout: 5
-        run: ./bsp deploy "${BSP_NAME}" || support/ntfy "brick" "Bricked BSP ${BSP_NAME}"
+        run: ./bsp deploy "${BSP_NAME}" </dev/null || (support/ntfy "brick" "Bricked BSP ${BSP_NAME}"; exit 1)
