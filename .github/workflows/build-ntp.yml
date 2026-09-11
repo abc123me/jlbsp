@@ -1,0 +1,41 @@
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: linux-amd64
+    env:
+      BSP_NAME: ntp
+      SSH_OPTS: -oBatchMode=yes
+      BR2_DL_DIR: /opt/act-runner-dl
+      BR2_CCACHE_DIR: /opt/act-runner/ccache
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup BSP
+        timeout: 30
+        run: ./bsp setup $BSP
+
+      - name: Source BSP
+        timeout: 120
+        run: ./bsp source $BSP
+
+      - name: Build BSP
+        timeout: 300
+        run: ./bsp build $BSP || support/ntfy "build" "Couldn't build BSP $bsp"
+
+      - name: Deploy BSP
+        timeout: 5
+        run: ./bsp deploy $BSP || support/ntfy "brick" "Bricked BSP $bsp"
+
+      - name: Cleanup DL dir
+        run: find "${BR2_DL_DIR}" -atime +30 -exec rm -v "{}" \;
+
+      - name: Cleanup cache dir
+        run: find "${BR2_CCACHE_DIR}" -atime +30 -exec rm -v "{}" \;
