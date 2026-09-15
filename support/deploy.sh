@@ -11,6 +11,9 @@ v() { echo "$@"; "$@"; }
 
 if [ -n "$DEPLOY_TO" ]; then
 	addr="${DEPLOY_USER}@${DEPLOY_TO}"
+	if [ -n "$DEPLOY_ADDR" ]; then
+		addr="${DEPLOY_ADDR}"
+	fi
 	if [ -z "${SSH_OPTS}" ]; then
 		v scp "${BASE_DIR}/${DEPLOY_FILE}" "${addr}:${DEPLOY_LOCATION}"
 		v ssh "${addr}" "${DEPLOY_COMMAND}" "${DEPLOY_LOCATION}"

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+alg="cksum"
+iname="sdcard.img"
+
+sd_img="${BINARIES_DIR}/${iname}"
+qemu_img="${BINARIES_DIR}/.qemu.${iname}"
+qemu_sum="${BINARIES_DIR}/.${iname}.${alg}"
+
+# Generate the QEMU SD card image
+csum="$(cksum "${sd_img}")"
+osum="$(cat "$qemu_sum" || true)"
+if [ -z "$osum" ] || [ "$osum" != "$csum" ]; then
+	echo -e "\e[1;33mGenerating new QEMU SD card image!\e[0m"
+	cp "${sd_img}" "${qemu_img}"
+	qemu-img resize -f raw "${qemu_img}" 256M
+	echo "$csum" > "${qemu_sum}"
+	echo -e "\e[1;32mGenerated QEMU SD card image!\e[0m"
+else
+	echo -e "\e[1;32mReusing old QEMU SD card image!\e[0m"
+fi
+
+# Generate the RAM name
+rpath="$(realpath "${BINARIES_DIR}"/..)"
+bname="$(basename "${rpath}")"
+ramf="/dev/shm/qemu-${bname}"
+trap 'rm -f "${ramf}"' EXIT
+
+# Run QEMU for the board
+echo -e "\e[1;33mStarting QEMU, Shared memory will be placed at $ramf\e[0m"
+qemu-system-arm \
+	-M xilinx-zynq-a9 \
+	-object "memory-backend-file,id=mem,size=512M,mem-path=${ramf},share=on" \
+	-machine memory-backend=mem \
+    -display none \
+	-serial mon:stdio \
+    -kernel "${BINARIES_DIR}/uImage" \
+    -dtb "${BINARIES_DIR}/z7lite-qemu.dtb" \
+    -append "console=ttyPS0,115200 root=/dev/mmcblk0p2 rw rootwait qemu=1" \
+	-net nic -net user,id=net0,hostfwd=tcp::2222-:22 \
+    -drive file="${qemu_img}",if=sd,format=raw

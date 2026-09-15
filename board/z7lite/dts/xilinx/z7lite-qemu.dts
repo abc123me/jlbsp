@@ -1,0 +1,18 @@
+/dts-v1/;
+
+#define LINUX
+#define QEMU
+
+#include "zynq-z7lite.dtsi"
+
+&gem0 {
+	// Use the GEM since the PL ethernet will not be accessible
+	status = "okay";
+	// And a fake PHY to go with it
+	phy-mode = "rgmii-id";
+	fixed-link {
+		speed = <1000>;
+		full-duplex;
+	};
+};
+
