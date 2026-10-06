@@ -1,0 +1,23 @@
+diff --git a/ssh-keygen.c b/ssh-keygen.c
+index 6667a5c..5785e16 100644
+--- a/ssh-keygen.c
++++ b/ssh-keygen.c
+@@ -997,15 +997,15 @@ do_gen_all_hostkeys(struct passwd *pw)
+ 		char *key_type_display;
+ 		char *path;
+ 	} key_types[] = {
+-#ifdef WITH_OPENSSL
++/*#ifdef WITH_OPENSSL
+ 		{ "rsa", "RSA" ,_PATH_HOST_RSA_KEY_FILE },
+ 		{ "ecdsa", "ECDSA",_PATH_HOST_ECDSA_KEY_FILE },
+ #endif /* WITH_OPENSSL */
+ 		{ "ed25519", "ED25519",_PATH_HOST_ED25519_KEY_FILE },
+-#ifdef USE_MLDSA
++/*#ifdef USE_MLDSA
+ 		{ "mldsa44-ed25519", "MLDSA44-ED25519",
+ 		     _PATH_HOST_MLDSA44_ED25519_KEY_FILE },
+-#endif
++#endif*/
+ 		{ NULL, NULL, NULL }
+ 	};
+ 
