@@ -91,7 +91,7 @@
 		__overlay__ {
 			inp_gpio0: gpio@41220000 {
 				compatible = "xlnx,xps-gpio-1.00.a";
-				reg = <0x41210000 0x10000>;
+				reg = <0x41220000 0x10000>;
 				status = "okay";
 				#gpio-cells = <2>;
 				gpio-controller;
