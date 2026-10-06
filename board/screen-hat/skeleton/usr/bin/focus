@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+echo xdotool search --class "$1" windowfocus
+xdotool search --class "$1" windowfocus
+

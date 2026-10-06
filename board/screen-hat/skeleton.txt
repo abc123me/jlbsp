@@ -6,3 +6,4 @@
 /etc/init.d/S50rst-ethernet      f 755 root root - - - - -
 /etc/init.d/S90init-displays     f 755 root root - - - - -
 /etc/X11/xorg.conf               f 644 root root - - - - -
+/usr/bin/focus                   f 755 root root - - - - -
