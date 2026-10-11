@@ -5,30 +5,33 @@ on:
 
 jobs:
   fix-issue:
-    if: gitea.event.label.name == 'ai-fix'
+    if: gitea.event.issue.labels[0].name == 'ai-fix'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.AI_BOT_TOKEN }}
-          fetch-depth: 0
+      - name: Test API
+        run: curl "${{ secrets.LOCALAI_URL }}/models"
+
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Install aider
-        run: pip install aider-chat
+        run: |
+          python3 -m venv /tmp/venv
+          /tmp/venv/bin/pip install aider-chat
 
       - name: Make the change
         env:
           OPENAI_API_BASE: ${{ secrets.LOCALAI_URL }}
           OPENAI_API_KEY: ${{ secrets.LOCALAI_KEY }}
-          MODEL_NAME: qwen3.8-27b
+          MODEL_NAME: gemma-4-12b-it-q4
         run: |
           git config user.name "ai-bot"
           git config user.email "ai-bot@example.com"
-          git checkout -b ai/issue-${{ gitea.event.issue.number }}
-          aider --model openai/${MODEL_NAME} --yes-always --no-auto-lint \
+          git checkout -b "ai/issue-${{ gitea.event.issue.number }}"
+          /tmp/venv/bin/aider --model "openai/${MODEL_NAME}" --yes-always --no-auto-lint \
             --message "Resolve this issue. Title: ${{ gitea.event.issue.title }}. Details: ${{ gitea.event.issue.body }}"
 
-      - name: Push and open PR
+      - name: Create the PR
         env:
           TOKEN: ${{ secrets.AI_BOT_TOKEN }}
         run: |
