@@ -1,0 +1,44 @@
+name: AI fix
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  fix:
+    if: github.event.label.name == 'ai-fix'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.AI_BOT_TOKEN }}
+          fetch-depth: 0
+
+      - name: Install aider
+        run: pip install aider-chat
+
+      - name: Make the change
+        env:
+          OPENAI_API_BASE: ${{ secrets.LOCALAI_URL }}
+          OPENAI_API_KEY: ${{ secrets.LOCALAI_KEY }}
+          MODEL_NAME: qwen3.8-27b
+        run: |
+          git config user.name "ai-bot"
+          git config user.email "ai-bot@example.com"
+          git checkout -b ai/issue-${{ github.event.issue.number }}
+          aider --model openai/${MODEL_NAME} --yes-always --no-auto-lint \
+            --message "Resolve this issue. Title: ${{ github.event.issue.title }}. Details: ${{ github.event.issue.body }}"
+
+      - name: Push and open PR
+        env:
+          TOKEN: ${{ secrets.AI_BOT_TOKEN }}
+        run: |
+          BRANCH=ai/issue-${{ github.event.issue.number }}
+          git push origin "$BRANCH"
+          jq -n --arg t "AI: ${{ github.event.issue.title }}" \
+                --arg h "$BRANCH" \
+                --arg b "Automated attempt at #${{ github.event.issue.number }}. Please review carefully." \
+                '{title:$t, head:$h, base:"main", body:$b}' > pr.json
+          curl -s -X POST \
+            "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/pulls" \
+            -H "Authorization: token $TOKEN" \
+            -H "Content-Type: application/json" -d @pr.json
