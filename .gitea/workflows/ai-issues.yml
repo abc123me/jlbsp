@@ -5,16 +5,16 @@ on:
 
 jobs:
   fix-issue:
-    if: gitea.event.label.name == 'ai-fix'
+    if: gitea.event.issue.labels[0].name == 'ai-fix'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.AI_BOT_TOKEN }}
-          fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Install aider
-        run: pip install aider-chat
+        run: |
+          python3 -m venv /tmp/venv
+          /tmp/venv/bin/pip install aider-chat
 
       - name: Make the change
         env:
@@ -25,7 +25,7 @@ jobs:
           git config user.name "ai-bot"
           git config user.email "ai-bot@example.com"
           git checkout -b ai/issue-${{ gitea.event.issue.number }}
-          aider --model openai/${MODEL_NAME} --yes-always --no-auto-lint \
+          /tmp/venv/bin/aider --model "openai/${MODEL_NAME}" --yes-always --no-auto-lint \
             --message "Resolve this issue. Title: ${{ gitea.event.issue.title }}. Details: ${{ gitea.event.issue.body }}"
 
       - name: Push and open PR
