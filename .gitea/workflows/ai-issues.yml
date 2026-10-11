@@ -1,11 +1,11 @@
-name: AI fix
+name: AI Issue handling
 on:
   issues:
     types: [labeled]
 
 jobs:
-  fix:
-    if: github.event.label.name == 'ai-fix'
+  fix-issue:
+    if: gitea.event.label.name == 'ai-fix'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,21 +24,21 @@ jobs:
         run: |
           git config user.name "ai-bot"
           git config user.email "ai-bot@example.com"
-          git checkout -b ai/issue-${{ github.event.issue.number }}
+          git checkout -b ai/issue-${{ gitea.event.issue.number }}
           aider --model openai/${MODEL_NAME} --yes-always --no-auto-lint \
-            --message "Resolve this issue. Title: ${{ github.event.issue.title }}. Details: ${{ github.event.issue.body }}"
+            --message "Resolve this issue. Title: ${{ gitea.event.issue.title }}. Details: ${{ gitea.event.issue.body }}"
 
       - name: Push and open PR
         env:
           TOKEN: ${{ secrets.AI_BOT_TOKEN }}
         run: |
-          BRANCH=ai/issue-${{ github.event.issue.number }}
+          BRANCH=ai/issue-${{ gitea.event.issue.number }}
           git push origin "$BRANCH"
-          jq -n --arg t "AI: ${{ github.event.issue.title }}" \
+          jq -n --arg t "AI: ${{ gitea.event.issue.title }}" \
                 --arg h "$BRANCH" \
-                --arg b "Automated attempt at #${{ github.event.issue.number }}. Please review carefully." \
+                --arg b "Automated attempt at #${{ gitea.event.issue.number }}. Please review carefully." \
                 '{title:$t, head:$h, base:"main", body:$b}' > pr.json
           curl -s -X POST \
-            "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/pulls" \
+            "${{ gitea.server_url }}/api/v1/repos/${{ gitea.repository }}/pulls" \
             -H "Authorization: token $TOKEN" \
             -H "Content-Type: application/json" -d @pr.json
