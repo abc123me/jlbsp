@@ -2,6 +2,7 @@ name: AI Issue handling
 on:
   issues:
     types: [labeled]
+  workflow_dispatch:
 
 jobs:
   fix-issue:
