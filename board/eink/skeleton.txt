@@ -1,0 +1,2 @@
+# Skeleton permissions file
+/etc/init.d/S90eink            f 755 root root - - - - -

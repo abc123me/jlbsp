@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+case "$1" in
+	start)
+		echo start
+		;;
+	stop)
+		echo stop
+		;;
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+	*)
+		echo "Usage: $0 <start/stop/restart>"
+		;;
+esac
